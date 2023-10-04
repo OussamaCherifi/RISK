@@ -8,7 +8,6 @@ using namespace std;
 
 //create Warzone card types
 
-class Cards {
 enum CardType {BOMB, BLOCKADE, REINFORCEMENT, AIRLIFT, DIPLOMACY, UNKNOWN};
 
 class Cards{
