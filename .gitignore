@@ -33,3 +33,4 @@
 
 # misc
 /.idea
+/cmake-build-debug
