@@ -1,8 +1,9 @@
 #include <iostream>
-
+#include "CardsDriver.cpp"
 using namespace std;
 
 int main() {
+    testCards();
     cout << "MainDriver.cpp";
 
     // todo call all five test*() free functions
