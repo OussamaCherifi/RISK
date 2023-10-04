@@ -15,7 +15,7 @@ private:
     CardType type;
 public:
     Cards(CardType type);
-    void play();
+    void play() const;
     CardType getType() const;
     string getTypeAsString() const;
 };
@@ -26,7 +26,7 @@ private:
 public:
     Deck();
     Cards draw();
-    const int getCardNum();
+    int getCardNum();
     void addCard(const Cards& card);
 };
 
@@ -37,7 +37,7 @@ public:
     void addCard(const Cards& card);
     void removeCard(int index);
     const Cards& getCard(int index);
-    const int getCardNum();
+    int getCardNum();
 };
 
 #endif //CARDS_H

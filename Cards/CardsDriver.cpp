@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #include "Cards.h"
 using namespace std;
 
@@ -21,5 +20,4 @@ void testCards() {
         hand.removeCard(0);
     }
 }
-=======
->>>>>>> parent of eb6b507 (Cards part)
+

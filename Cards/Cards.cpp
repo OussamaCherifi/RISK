@@ -1,5 +1,4 @@
 #include "Cards.h"
-<<<<<<< HEAD
 #include <cstdlib>
 #include <ctime>
 #include <random>
@@ -13,7 +12,7 @@ CardType Cards::getType() const{
     return type;
 }
 //plays the card, the orders made by different cards will be implemented in future assignment
-void Cards::play(){
+void Cards::play() const{
     cout<<"A "<< getTypeAsString()<<" card was played."<<endl;
 }
 string Cards::getTypeAsString() const{
@@ -38,7 +37,7 @@ Deck::Deck(){
     for (int i=0; i<5; ++i){
         cards.emplace_back(static_cast<CardType>(i));
     }
-    srand(static_cast<unsigned>(time(nullptr)));
+    srand(time(nullptr));
     shuffle(cards.begin(), cards.end(), std::mt19937(std::random_device()()));
 }
 //draw a card from the deck as long as it is not empty
@@ -52,7 +51,7 @@ Cards Deck::draw(){
     return drawn;
 }
 //get number of cards in deck
-const int Deck::getCardNum() {
+int Deck::getCardNum() {
     return cards.size();
 }
 void Deck::addCard(const Cards& card1){
@@ -69,13 +68,11 @@ void Hand::removeCard(int index){
     }
 }
 // get number of cards in hand
-const int Hand::getCardNum(){
+int Hand::getCardNum(){
     return hands.size();
 }
 //get a card from the hand
 const Cards& Hand::getCard(int index){
     return hands[index];
 }
-=======
-// carlo
->>>>>>> parent of eb6b507 (Cards part)
+
