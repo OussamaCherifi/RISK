@@ -1,13 +1,36 @@
 #ifndef CARDS_H
 #define CARDS_H
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
 
+//create Warzone card types
 
 class Cards {
+enum CardType {BOMB, BLOCKADE, REINFORCEMENT, AIRLIFT, DIPLOMACY, UNKNOWN};
 
+class Cards{
+private:
+    CardType type;
+public:
+    Cards(CardType type);
+    void play();
+    CardType getType() const;
+    string getTypeAsString() const;
 };
 
+class Deck{
+private:
+    vector<Cards> cards;
+public:
+    Deck();
+    Cards draw();
+    const int getCardNum();
+    void addCard(const Cards& card);
+};
 
-<<<<<<< HEAD
 class Hand{
 private:
     vector <Cards> hands;
@@ -17,6 +40,5 @@ public:
     const Cards& getCard(int index);
     const int getCardNum();
 };
-=======
->>>>>>> parent of eb6b507 (Cards part)
+
 #endif //CARDS_H
