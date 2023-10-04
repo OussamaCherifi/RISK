@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.26)
 project(A1_COMP345)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 include_directories(Cards)
 include_directories(GameEngine)
