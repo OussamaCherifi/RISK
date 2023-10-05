@@ -14,7 +14,8 @@ class Cards{
 private:
     CardType type;
 public:
-    Cards(CardType type);
+    Cards(CardType t);
+    Cards(const Cards& c1);
     void play() const;
     CardType getType() const;
     string getTypeAsString() const;
@@ -25,6 +26,7 @@ private:
     vector<Cards> cards;
 public:
     Deck();
+    Deck(const Deck& d1);
     Cards draw();
     int getCardNum();
     void addCard(const Cards& card);
@@ -34,6 +36,8 @@ class Hand{
 private:
     vector <Cards> hands;
 public:
+    Hand();
+    Hand(const Hand& h1);
     void addCard(const Cards& card);
     void removeCard(int index);
     const Cards& getCard(int index);

@@ -1,13 +1,15 @@
 #include "Cards.h"
-#include <cstdlib>
-#include <ctime>
 #include <random>
+#include <chrono>
 using namespace std;
 
-Cards::Cards(CardType type) {
-    this->type=type;
-}
+//copy constructor for cards
+Cards::Cards(const Cards& c1):type(c1.type){}
 
+//constructor for Cards
+Cards::Cards(CardType t) {
+    this->type=t;
+}
 CardType Cards::getType() const{
     return type;
 }
@@ -31,14 +33,16 @@ string Cards::getTypeAsString() const{
             return "Not Valid";
     }
 }
+//copy constructor for Deck
+Deck::Deck(const Deck& d1):cards(d1.cards){}
 
 Deck::Deck(){
     //create and shuffle deck
     for (int i=0; i<5; ++i){
         cards.emplace_back(static_cast<CardType>(i));
     }
-    srand(time(nullptr));
-    shuffle(cards.begin(), cards.end(), std::mt19937(std::random_device()()));
+    unsigned seed = chrono::system_clock::now().time_since_epoch().count();
+    shuffle(cards.begin(), cards.end(), default_random_engine(seed));
 }
 //draw a card from the deck as long as it is not empty
 Cards Deck::draw(){
@@ -54,9 +58,12 @@ Cards Deck::draw(){
 int Deck::getCardNum() {
     return cards.size();
 }
+//add a card to your hand
 void Deck::addCard(const Cards& card1){
     cards.push_back(card1);
 }
+//copy constructor for Hand
+Hand::Hand(const Hand&h1):hands(h1.hands){}
 // add a card to your hand
 void Hand::addCard(const Cards& card){
     hands.push_back(card);
