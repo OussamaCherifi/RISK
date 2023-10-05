@@ -1,13 +1,16 @@
 #include <iostream>
 #include "Cards.h"
+#include "GameEngine.h"
 using namespace std;
 
 int main() {
-    testCards();
-    cout << "MainDriver.cpp";
+    cout << ">>> Warzone - Assignment 1 <<<" << endl;
 
-    // todo call all five test*() free functions
-    //
+    // testLoadMaps();
+    // testPlayers();
+    // testOrdersLists();
+    testCards();
+    testGameStates();
 }
 
 /*
