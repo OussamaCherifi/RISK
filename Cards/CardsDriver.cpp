@@ -20,4 +20,3 @@ void testCards() {
         hand.removeCard(0);
     }
 }
-

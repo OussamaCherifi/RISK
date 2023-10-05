@@ -39,5 +39,6 @@ public:
     const Cards& getCard(int index);
     int getCardNum();
 };
+void testCards();
 
 #endif //CARDS_H
