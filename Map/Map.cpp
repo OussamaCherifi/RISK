@@ -5,6 +5,7 @@
 #include <tuple>
 #include <exception>
 #include "Map.h"
+#include <sstream>
 
 using namespace std;
 
@@ -299,7 +300,7 @@ public:
     }
 };
 
-Map *MapLoader::createMapfromFile(const string &mapFileName)
+Map *MapLoader::createMapfromFile(string mapFileName)
 {
     ifstream mapFile(mapFileName);
     if (!mapFile.is_open())

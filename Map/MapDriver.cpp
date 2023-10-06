@@ -4,21 +4,23 @@
 
 using namespace std;
 
-int main() {
+int main()
+{
     // Load a valid map from a file
     string fileName = "mapFiles/001_I72_Ghtroc 720.map";
-    Map* testMap = MapLoader::createMapfromFile(fileName);
+    Map *testMap = MapLoader::createMapfromFile(fileName);
 
     // Display map properties
     cout << "Map properties" << endl;
     cout << "===" << endl;
     cout << *testMap << endl;
-    
+
     // Display continents
     cout << "Continents" << endl;
     cout << "==========" << endl;
 
-    for (Continent* c : testMap->getContinents()) {
+    for (Continent *c : testMap->getContinents())
+    {
         cout << *c << endl;
     }
 
@@ -26,7 +28,8 @@ int main() {
     cout << "Territories" << endl;
     cout << "===========" << endl;
 
-    for (Territory* t : testMap->getTerritories()) {
+    for (Territory *t : testMap->getTerritories())
+    {
         cout << *t << endl;
     }
 
@@ -40,5 +43,3 @@ int main() {
 
     return 0;
 }
-
-
