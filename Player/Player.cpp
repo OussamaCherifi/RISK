@@ -19,6 +19,9 @@ Player::Player(const Player &p){
     this->ordersList = p.ordersList;
 }
 
+//destructor
+Player::~Player() {}
+
 //assignment operator
  Player& Player::operator=(const Player& p){
     this->territoryList = p.territoryList;
