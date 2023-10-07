@@ -8,105 +8,113 @@ class OrdersList
 {
 public:
     OrdersList();
+    ~OrdersList();
     OrdersList() = default;
     int getSize();
-    void add(Orders *other);
+    void addList(Orders *something);
     void remove(int i);
     void move(int start, int end);
-    ostream &displayOrderList(ostream &myOrderList);
-    OrdersList &operator=(const OrdersList &other);
-    ~OrdersList();
+    ostream &displayOrderList(ostream &currentOrderList);
+    OrdersList &operator=(const OrdersList &something);
+    
 
 private:
     std::vector<Orders *> listOfOrders;
-    friend ostream &operator<<(ostream &myOrderList, OrdersList &otherList);
+    friend ostream &operator<<(ostream &currentOrderList, OrdersList &somethingList);
 };
 
 class Orders
 {
 public:
     Orders();
-    Orders() = default;
     virtual Orders *copy() const = 0;
     virtual void execute() = 0;
     virtual bool validate() = 0;
-    virtual ostream &displayOrder(ostream &myOrder) const = 0;
+    virtual ostream &displayOrder(ostream &currentOrder) const = 0;
     virtual ~Orders() = default;
 
 private:
-    friend ostream &operator<<(ostream &myOrder, Orders &O);
+    friend ostream &operator<<(ostream &currentOrder, Orders &O);
 };
+
+//Deploy,Advance, Bomb,Blockade,Airlift and Negotiate are all subclasses of Orders
 class Deploy : public Orders
 {
+public:
+    int data;
     Deploy();
-    ~Deploy() override{};
-    Deploy() = default;
-    void execute() = 0;
-    bool validate() = 0;
-    Deploy(const Deploy &copyDeploy) = default;
-    Deploy &operator=(const Deploy &copyDeploy) = default;
-    ostream &displayOrder(ostream &myOrder) const override;
+    ~Deploy() override;
+    Deploy *copy() const override;
+    void execute() override;
+    bool validate() override;
+    ostream &displayOrder(ostream &currentOrder) const override;
+    Deploy &operator=(const Deploy &something);
 };
 
 class Advance : public Orders
 {
+
 public:
+    int data;
     Advance();
-    ~Advance() override{};
-    Advance() = default;
-    void execute() = 0;
-    bool validate() = 0;
-    Advance(const Advance &copyAdvance) = default;
-    Advance &operator=(const Advance &copyAdvance) = default;
-    ostream &displayOrder(ostream &myOrder) const override;
+    ~Advance() override;
+    Advance *copy() const override;
+    void execute() override;
+    bool validate() override;
+    ostream &displayOrder(ostream &currentOrder) const override;
+    Advance &operator=(const Advance &something);
 };
 class Bomb : public Orders
 {
+
 public:
+    int data;
     Bomb();
-    ~Bomb() override{};
-    Bomb() = default;
-    Bomb(const Bomb &copyBomb) = default;
-    void execute() = 0;
-    bool validate() = 0;
-    Bomb &operator=(const Bomb &copyBomb) = default;
-    ostream &displayOrder(ostream &myOrder) const override;
+    ~Bomb() override;
+    Bomb *copy() const override;
+    void execute() override;
+    bool validate() override;
+    ostream &displayOrder(ostream &currentOrder) const override;
+    Bomb &operator=(const Bomb &something);
 };
+
 class Blockade : public Orders
 {
 public:
+    int data;
     Blockade();
-    ~Blockade() override{};
-    Blockade() = default;
-    void execute() = 0;
-    bool validate() = 0;
-    Blockade(const Blockade &copyBlockade) = default;
-    Blockade &operator=(const Blockade &copyBlockade) = default;
-    ostream &displayOrder(ostream &myOrder) const override;
+    ~Blockade() override;
+    Blockade *copy() const override;
+    void execute() override;
+    bool validate() override;
+    ostream &displayOrder(ostream &currentOrder) const override;
+    Blockade &operator=(const Blockade &something);
 };
+
 class Airlift : public Orders
 {
 public:
+    int data;
     Airlift();
-    ~Airlift() override{};
-    Airlift() = default;
-    void execute() = 0;
-    bool validate() = 0;
-    Airlift(const Airlift &copyAirlift) = default;
-    Airlift &operator=(const Airlift &copyAirlift) = default;
-    ostream &displayOrder(ostream &myOrder) const override;
+    ~Airlift() override;
+    Airlift *copy() const override;
+    void execute() override;
+    bool validate() override;
+    ostream &displayOrder(ostream &currentOrder) const override;
+    Airlift &operator=(const Airlift &something);
 };
+
 class Negotiate : public Orders
 {
 public:
+    int data;
     Negotiate();
-    ~Negotiate() override{};
-    Negotiate() = default;
-    void execute() = 0;
-    bool validate() = 0;
-    Negotiate(const Negotiate &copyNegotiate) = default;
-    Negotiate &operator=(const Negotiate &copyNegotiate) = default;
-    ostream &displayOrder(ostream &myOrder) const override;
+    ~Negotiate() override;
+    Negotiate *copy() const override;
+    void execute() override;
+    bool validate() override;
+    ostream &displayOrder(ostream &currentOrder) const override;
+    Negotiate &operator=(const Negotiate &something);
 };
 
-#endif // ORDERS_H
+#endif 
