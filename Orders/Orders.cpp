@@ -10,47 +10,52 @@ Orders::Orders() {}
 OrdersList::OrdersList() {}
 OrdersList::~OrdersList() {}
 
-void OrdersList::addList(Orders *O)
-{
-    listOfOrders.push_back(O);
-}
 int OrdersList::getSize()
 {
+    cout<<"inside getsize";
     return listOfOrders.size();
 }
+void OrdersList::addList(Orders *O)
+{
+    cout<<"inside addlist";
+    listOfOrders.push_back(O);
+}
+
 void OrdersList::remove(int i)
 {
-    int listSize = this->getSize();
+    cout<<"inside remove";
+    int sizeList = this->getSize();
 
-    if (listSize == 0)
+    if (sizeList == 0)
     {
         cout << "list is empty\n";
         return;
     }
 
-    if (i < 0 || i >= listSize)
+    if (i < 0 || i >= sizeList)
     {
         cout << "out of bounds\n";
         return;
     }
 
-    auto myPtr = listOfOrders.begin();
+    auto thisPointer = listOfOrders.begin();
     for (int j = 0; j < i; j++)
     {
-        ++myPtr;
+        ++thisPointer;
     }
 
-    delete *myPtr;
-    listOfOrders.erase(myPtr);
+    delete *thisPointer;
+    listOfOrders.erase(thisPointer);
 }
 void ::OrdersList::move(int start, int end)
 {
-    int listSize = this->getSize() - 1;
-    if (start < 0 || start >= listSize || end < 0 || end >= listSize)
+    cout<<"inside move";
+    int sizeList = this->getSize() - 1;
+    if (start < 0 || start >= sizeList || end < 0 || end >= sizeList)
     {
         cout << "out of bounds";
     }
-    else if (listSize == 0)
+    else if (sizeList == 0)
     {
         cout << "error";
     }
@@ -86,7 +91,7 @@ OrdersList &OrdersList::operator=(const OrdersList &somethingCopy)
 
 
 // Deploy constructors, destructor and methods
-Deploy::Deploy() {}
+Deploy::Deploy() { cout<<"inside deploy constructor";}
 Deploy::~Deploy() {}
 Deploy *Deploy::copy() const { return new Deploy(*this); }
 void Deploy::execute()
@@ -109,7 +114,7 @@ ostream &Deploy::displayOrder(ostream &myOrder) const
 }
 
 // Advance
-Advance::Advance() {}
+Advance::Advance() {cout<<"inside advance constructor";}
 Advance::~Advance() {}
 Advance *Advance::copy() const { return new Advance(*this); }
 void Advance::execute()
@@ -131,7 +136,7 @@ ostream &Advance::displayOrder(ostream &myOrder) const
 }
 
 // Bomb
-Bomb::Bomb() {}
+Bomb::Bomb() {cout<<"inside bomb constructor";}
 Bomb::~Bomb() {}
 Bomb *Bomb::copy() const { return new Bomb(*this); }
 void Bomb::execute()
@@ -153,7 +158,7 @@ ostream &Bomb::displayOrder(ostream &myOrder) const
 }
 
 // Blockade
-Blockade::Blockade() {}
+Blockade::Blockade() {cout<<"inside blockade constructor";}
 Blockade::~Blockade() {}
 Blockade *Blockade::copy() const { return new Blockade(*this); }
 void Blockade::execute()
@@ -175,7 +180,7 @@ ostream &Blockade::displayOrder(ostream &myOrder) const
 }
 
 // Airlift
-Airlift::Airlift() {}
+Airlift::Airlift() {cout<<"inside airlift constructor";}
 Airlift::~Airlift() {}
 Airlift *Airlift::copy() const { return new Airlift(*this); }
 void Airlift::execute()
@@ -197,7 +202,7 @@ ostream &Airlift::displayOrder(ostream &myOrder) const
 }
 
 // Negotiate
-Negotiate::Negotiate() {}
+Negotiate::Negotiate() {cout<<"inside negotiate constructor";}
 Negotiate::~Negotiate() {}
 Negotiate *Negotiate::copy() const { return new Negotiate(*this); }
 void Negotiate::execute()
