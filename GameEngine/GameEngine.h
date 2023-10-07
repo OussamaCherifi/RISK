@@ -4,7 +4,7 @@
 
 #include <vector>
 
-class Command;
+using namespace std;
 
 class Transition;
 
@@ -12,50 +12,90 @@ class State;
 
 class GameEngine;
 
-class Command {
+class Transition {
 public:
-    Command(std::string *commandName);
-    virtual ~Command() = default;
-    std::string *getCommandName();
-    std::string *setCommandName(std::string *commandName);
+    // constructor
+    Transition(State *to, string command);
+
+    // copy constructor
+    Transition(const Transition &other);
+
+    // destructor
+    ~Transition() = default;
+
+    string getTriggerCommand();
+
+    State *getTargetState();
+
+    friend ostream &operator<<(ostream &os, Transition *transition);
 
 private:
-    std::string *mCommandName;
+    State *mToState;
+    string mTriggerCommand;
 };
 
 class State {
 public:
-    State(std::string *commandName);
-    void addTransition(Command *command, State *targetPhase);
-    void handle(Command *command);
-    std::string *getStateName();
-    std::string *setStateName(std::string *stateName);
+    // constructor
+    explicit State(string name, string phaseName = "N/A");
+
+    // copy constructor
+    State(const State &other);
+
+    // destructor
+    ~State() {
+        // delete all transitions
+        for (Transition *t: mTransitions) {
+            delete t;
+        }
+
+    }
+
+    State *handle(const string &command);
+
+    void addTransition(string, State *toState);
+
+    vector<Transition *> getTransitions();
+
+    string getStateName();
+
+    string getPhaseName();
+
+    friend ostream &operator<<(ostream &os, State *state);
 
 private:
-    std::string *mStateName;
-    std::vector<Transition *> mTransitions;
-};
-
-class Transition {
-public:
-    Transition(State *from, State *to, Command *command);
-    bool isValid(Command *command) const;
-    State *getTargetState() const;
-
-private:
-    State *mFromState;
-    State *mToState;
-    Command *mTriggerCommand;
+    string mName;
+    string mPhaseName;
+    vector<Transition *> mTransitions;
 };
 
 class GameEngine {
 public:
-    void setup();
+    GameEngine();
 
-    void handle(Command *command);
+    GameEngine(const GameEngine &other);
+
+    ~GameEngine() {
+        // delete all states
+        for (State *s: mStates) {
+            delete s;
+        }
+    }
+
+
+    State *setup();
+
+    void addState(State *state);
+
+    void handle(const string &command);
+
+    State *getCurrentState();
+
+    friend ostream &operator<<(ostream &os, GameEngine *gameEngine);
 
 private:
     State *mCurrentState;
+    vector<State *> mStates;
 };
 
 void testGameStates();
