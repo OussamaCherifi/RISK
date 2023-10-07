@@ -1,20 +1,18 @@
 #ifndef PLAYER_H
 #define PLAYER_H
-#include "Map.h";
-#include "Cards.h";
-#include "Orders.h";
+#include "Map\Map.h"
+#include "Cards\Cards.h"
+#include "Orders\Orders.h"
 #include<vector>
 
-using namespace std;
 
 //create players
-
 class Player 
 { 
     private:
         vector<Territory*> territoryList;
-        Hand *ptr_hand;
-        OrdersList* ptr_ordersList;
+        Hand *hand;
+        OrdersList* ordersList;
 
     public:
         //constructors
@@ -25,12 +23,12 @@ class Player
         Player& operator= (const Player& p);
 
         //stream insertion operator
-        friend ostream& operator<<(ostream& os, const Player& p);
+        friend std::ostream &operator<<(std::ostream &out, const Player &p);
 
         //getters
         vector<Territory*> getTerritoryList();
-        Hand* getPtrHand();
-        OrdersList* getPtrOrdersList();
+        Hand* getHand();
+        OrdersList* getOrdersList();
 
         //add territories to the collection
         void addTerritory(Territory* t);
@@ -38,7 +36,6 @@ class Player
         vector<Territory*> toDefend();
         vector<Territory*> toAttack();
         void issueOrder();
-
 };
 
 
