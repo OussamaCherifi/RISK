@@ -19,6 +19,9 @@ class Player
         Player();
         Player(const Player &p);
 
+        //destructor
+        ~Player();
+
         //assignment operator
         Player& operator= (const Player& p);
 
@@ -37,6 +40,8 @@ class Player
         vector<Territory*> toAttack();
         void issueOrder();
 };
+
+void testPlayers();
 
 
 #endif

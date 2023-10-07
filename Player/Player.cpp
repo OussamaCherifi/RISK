@@ -19,6 +19,9 @@ Player::Player(const Player &p){
     this->ordersList = p.ordersList;
 }
 
+//destructor
+Player::~Player() {}
+
 //assignment operator
  Player& Player::operator=(const Player& p){
     this->territoryList = p.territoryList;
@@ -75,6 +78,6 @@ vector<Territory*> Player::toAttack(){
 void Player::issueOrder(){
     //arbitrary order for now
     Deploy* o1 = new Deploy();
-    ordersList->add(o1);
+    ordersList->addList(o1);
 }
 // tiffany
