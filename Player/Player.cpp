@@ -75,6 +75,6 @@ vector<Territory*> Player::toAttack(){
 void Player::issueOrder(){
     //arbitrary order for now
     Deploy* o1 = new Deploy();
-    ordersList->add(o1);
+    ordersList->addList(o1);
 }
 // tiffany

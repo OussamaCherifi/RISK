@@ -38,5 +38,7 @@ class Player
         void issueOrder();
 };
 
+void testPlayers();
+
 
 #endif
