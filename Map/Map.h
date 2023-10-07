@@ -4,124 +4,84 @@
 #include <string>
 #include "Player\Player.h"
 
-// using namespace std;
 
-// class Player;
 
-// The territory class represents a node in the graph
-class Territory
-{
+class Territory {
+public:
+    Territory(const std::string& name, const std::string& cont, int x, int y)
+        : playerOwner(name), territoryName(name), continent(cont), xCoord(x), yCoord(y), visited(false) {
+        neighbors = new std::vector<Territory*>;
+        numArmies = new int;
+        *numArmies = 0;
+    }
+
+    Territory(const Territory& copy) {
+        playerOwner = copy.playerOwner;
+        territoryName = copy.territoryName;
+        continent = copy.continent;
+        xCoord = copy.xCoord;
+        yCoord = copy.yCoord;
+        visited = copy.visited;
+        neighbors = new std::vector<Territory*>(*copy.neighbors);
+        numArmies = new int(*copy.numArmies);
+    }
+
+    ~Territory() {
+        delete neighbors;
+        delete numArmies;
+    }
+
+    int getXCoord() const { return xCoord; }
+    int getYCoord() const { return yCoord; }
+    void setXCoord(int newX) { xCoord = newX; }
+    void setYCoord(int newY) { yCoord = newY; }
+    const std::string& getPlayer() const { return *playerOwner; }
+    void setPlayer(const std::string& newName) { *playerOwner = newName; }
+    const std::string& getName() const { return *territoryName; }
+    const std::string& getContinent() const { return *continent; }
+
+    void addNeighbor(Territory* neighbor) {
+        neighbors->push_back(neighbor);
+    }
+
+    void deleteVariables() {
+        delete playerOwner;
+        delete territoryName;
+        delete continent;
+    }
+
+    void streamInsertion() {
+        std::cout << "Territory name: " << *territoryName << "; Position: " << xCoord << ", " << yCoord
+            << "; Continent " << *continent << ". Owned by: " << *playerOwner << ", with " << *numArmies
+            << " armies." << std::endl;
+    }
 
 private:
-    Player *owner;
-    int numberOfArmies;
-    int countryIndex;
-    std::string name;
-    int parent;
-
-    int x;
-    int y;
-
-    std::vector<Territory *> adjacentCountries;
-
-public:
-    Territory();
-    Territory(const Territory &t);
-    Territory(Player *owner, int numberOfArmies, int countryIndex, const std::string &name, int parent, int x, int y);
-    Territory(Player *owner, int numberOfArmies, int countryIndex, const std::string &name, int parent, const std::vector<Territory *> &adjacentCountries, int x, int y);
-    Territory(int numberOfArmies, int countryIndex, const std::string &name, int parent, int x, int y);
-    Territory(int countryIndex, const std::string &name, int parent, int x, int y);
-
-    Territory &operator=(const Territory &t);
-
-    friend std::ostream &operator<<(std::ostream &out, const Territory &t);
-
-    bool operator==(const Territory &other) const;
-
-    int getIndex() const;
-    Player *getOwner() const;
-    int getNumberOfArmies() const;
-    const std::string &getName() const;
-    int getContinent() const;
-    const std::vector<Territory *> &getAdjacentTerritories() const;
-    int getX() const;
-    int getY() const;
-
-    void setOwner(Player *player);
-    void setNumberOfArmies(int numArmies);
-    void setName(const std::string &newName);
-    void setAdjacentTerritories(const std::vector<Territory *> &territories);
-    void setX(int newX);
-    void setY(int newY);
-
-    void addAdjacentCountry(Territory *territory);
-    bool isAdjacent(const Territory *territory) const;
+    std::string* playerOwner;
+    std::string* territoryName;
+    std::string* continent;
+    int xCoord;
+    int yCoord;
+    bool visited;
+    std::vector<Territory*>* neighbors;
+    int* numArmies;
 };
 
-class MapLoader
-{
-private:
-public:
-    static Map *createMapfromFile(string fileName);
-};
-
-// This class is used to represent a continent in Warzone, storing the details in the game's map file.
-class Continent
-{
-
-private:
-    int continentIndex;
-    int armies;
-    std::string name;
-
-public:
-    Continent();
-    Continent(int continentIndex, const std::string &name, int armies);
-    Continent(const Continent &c);
-
-    Continent &operator=(const Continent &c);
-
-    friend std::ostream &operator<<(std::ostream &out, const Continent &c);
-
-    int getIndex() const;
-    int getArmies() const;
-    const std::string &getName() const;
-};
 
 class Map
 {
 private:
-    std::vector<Continent *> continents;
-    std::vector<Territory *> territories;
-    std::vector<std::tuple<int, int>> borders;
-    bool valid;
-
+    std::string *pName; // name/title of a given map
 public:
-    Map();
-    Map(const Map &m);
-    Map(const std::vector<Continent *> &continents, const std::vector<Territory *> &territories, const std::vector<std::tuple<int, int>> &borders);
-
-    Map &operator=(const Map &m);
-
-    friend std::ostream &operator<<(std::ostream &out, const Map &m);
-
-    const std::vector<Continent *> &getContinents() const;
-    const std::vector<Territory *> &getTerritories() const;
-    const std::vector<std::tuple<int, int>> &getBorders() const;
-    bool isValid() const;
-
-    std::vector<std::tuple<int, int>> getBordersByCountry(const Territory &country) const;
-    std::vector<Territory *> getTerritoriesByContinent(int continent) const;
-
-    void setContinents(const std::vector<Continent *> &continents);
-    void setTerritories(const std::vector<Territory *> &territories);
-    void setBorders(const std::vector<std::tuple<int, int>> &borders);
-
-    void addContinent(Continent *continent);
-    void addTerritory(Territory *territory);
-    void addBorder(const std::tuple<int, int> &border);
-
-    void validate();
-
-    ~Map();
+    Map();                                        // default constructor
+    Map(const Map &orig);                         // Copy constructor
+    virtual ~Map();                               // destructor
+    std::vector<Continent *> Continents;          // Vector containing pointers to continents
+    std::vector<Territory *> Territories;         // Vector containing pointers to territories
+    bool validate();                              // method that validates a given map
+    bool isMapConnected();                        // method that checks if a map is a connected graph
+    void setName(std::string title);              // set the name of a given map
+    std::string getName();                        // get the name of a given map
+    Territory *getTerritoryById(int territoryID); // get a territory by id
+   
 };

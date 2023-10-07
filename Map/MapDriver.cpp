@@ -4,42 +4,29 @@
 
 using namespace std;
 
-int main()
-{
-    // Load a valid map from a file
-    string fileName = "mapFiles/001_I72_Ghtroc 720.map";
-    Map *testMap = MapLoader::createMapfromFile(fileName);
 
-    // Display map properties
-    cout << "Map properties" << endl;
-    cout << "===" << endl;
-    cout << *testMap << endl;
+class MapDriver {
+public:
+    static void testLoadMaps() {
+        MapLoader mapDriver;
 
-    // Display continents
-    cout << "Continents" << endl;
-    cout << "==========" << endl;
+        std::string mapFile1 = "../MapFiles/001_I72_Ghtroc 720.map";
+        Map mapTest1;
 
-    for (Continent *c : testMap->getContinents())
-    {
-        cout << *c << endl;
+        if (mapDriver.createMapFromFile(mapFile1, mapTest1)) {
+            std::cout << "Successful creation of a map from " << mapFile1 << std::endl;
+            if (mapTest1.validate()) {
+                std::cout << "Map from " << mapFile1 << " is valid!" << std::endl;
+            } else {
+                std::cout << "Map from " << mapFile1 << " is invalid!" << std::endl;
+            }
+        } else {
+            std::cout << "Unsuccessful creation of a map from " << mapFile1 << std::endl;
+        }
     }
+};
 
-    // Display countries
-    cout << "Territories" << endl;
-    cout << "===========" << endl;
-
-    for (Territory *t : testMap->getTerritories())
-    {
-        cout << *t << endl;
-    }
-
-    cout << "Map successfully generated from the map file!" << endl;
-
-    // Additional functionality (if needed)
-    testMap->validate();
-
-    // Clean up allocated memory
-    delete testMap;
-
+int main() {
+    MapDriver::testLoadMaps();
     return 0;
 }
