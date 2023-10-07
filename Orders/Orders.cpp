@@ -6,6 +6,85 @@ using namespace std;
 ostream &operator<<(ostream &myOrder, Orders &something);
 Orders::Orders() {}
 
+// For OrdersList
+OrdersList::OrdersList() {}
+OrdersList::~OrdersList() {}
+
+void OrdersList::addList(Orders *O)
+{
+    listOfOrders.push_back(O);
+}
+int OrdersList::getSize()
+{
+    return listOfOrders.size();
+}
+void OrdersList::remove(int i)
+{
+    int listSize = this->getSize();
+
+    if (listSize == 0)
+    {
+        cout << "list is empty\n";
+        return;
+    }
+
+    if (i < 0 || i >= listSize)
+    {
+        cout << "out of bounds\n";
+        return;
+    }
+
+    auto myPtr = listOfOrders.begin();
+    for (int j = 0; j < i; j++)
+    {
+        ++myPtr;
+    }
+
+    delete *myPtr;
+    listOfOrders.erase(myPtr);
+}
+void ::OrdersList::move(int start, int end)
+{
+    int listSize = this->getSize() - 1;
+    if (start < 0 || start >= listSize || end < 0 || end >= listSize)
+    {
+        cout << "out of bounds";
+    }
+    else if (listSize == 0)
+    {
+        cout << "error";
+    }
+    else
+    {
+        Orders *temp = listOfOrders[start];
+        listOfOrders[start] = listOfOrders[end];
+        listOfOrders[end] = temp;
+    }
+}
+
+ostream &OrdersList::displayOrderList(ostream &myOrderList)
+{
+    myOrderList << "Orders List: \n";
+
+    for (Orders *orderObject : listOfOrders)
+    {
+        myOrderList << "/" << *orderObject << '\n';
+    }
+    return myOrderList;
+    cout << "inside display orderslist";
+}
+
+ostream &operator<<(ostream &myOrderList, OrdersList &aList)
+{
+    return aList.displayOrderList(myOrderList);
+    cout << "inside operator";
+}
+OrdersList &OrdersList::operator=(const OrdersList &somethingCopy)
+{
+    return *this;
+}
+
+
 // Deploy constructors, destructor and methods
 Deploy::Deploy() {}
 Deploy::~Deploy() {}
@@ -137,82 +216,4 @@ ostream &Negotiate::displayOrder(ostream &myOrder) const
 {
     myOrder << "running Negotiate";
     return myOrder;
-}
-
-// For OrdersList
-OrdersList::OrdersList() {}
-OrdersList::~OrdersList() {}
-
-void OrdersList::addList(Orders *O)
-{
-    listOfOrders.push_back(O);
-}
-int OrdersList::getSize()
-{
-    return listOfOrders.size();
-}
-void OrdersList::remove(int i)
-{
-    int listSize = this->getSize();
-
-    if (listSize == 0)
-    {
-        cout << "list is empty\n";
-        return;
-    }
-
-    if (i < 0 || i >= listSize)
-    {
-        cout << "out of bounds\n";
-        return;
-    }
-
-    auto myPtr = listOfOrders.begin();
-    for (int j = 0; j < i; j++)
-    {
-        ++myPtr;
-    }
-
-    delete *myPtr;
-    listOfOrders.erase(myPtr);
-}
-void ::OrdersList::move(int start, int end)
-{
-    int listSize = this->getSize() - 1;
-    if (start < 0 || start >= listSize || end < 0 || end >= listSize)
-    {
-        cout << "out of bounds";
-    }
-    else if (listSize == 0)
-    {
-        cout << "error";
-    }
-    else
-    {
-        Orders *temp = listOfOrders[start];
-        listOfOrders[start] = listOfOrders[end];
-        listOfOrders[end] = temp;
-    }
-}
-
-ostream &OrdersList::displayOrderList(ostream &myOrderList)
-{
-    myOrderList << "Orders List: \n";
-
-    for (Orders *orderObject : listOfOrders)
-    {
-        myOrderList << "/" << *orderObject << '\n';
-    }
-    return myOrderList;
-    cout << "inside display orderslist";
-}
-
-ostream &operator<<(ostream &myOrderList, OrdersList &aList)
-{
-    return aList.displayOrderList(myOrderList);
-    cout << "inside operator";
-}
-OrdersList &OrdersList::operator=(const OrdersList &somethingCopy)
-{
-    return *this;
 }
