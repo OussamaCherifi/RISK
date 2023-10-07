@@ -36,7 +36,7 @@ ostream &operator<<(ostream &out, const Player &p){
     for(Territory* territory : p.territoryList){
         out << *territory << ", "; 
     }
-    out << "\n Player's hand: " << p.hand;
+    out << "Player's hand has " << p.hand->getCardNum() << " cards";
     out << "\n Player's Orderslist: " << p.ordersList;
     return out;
 }
