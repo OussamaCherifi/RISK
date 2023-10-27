@@ -1,32 +1,38 @@
 #include <iostream>
 #include "Map.h"
-#include "Player/Player.h"
+#include "MapDriver.h"
+#include "Map.h"
+#include <iostream>
 
 using namespace std;
 
 
-class MapDriver {
-public:
-    static void testLoadMaps() {
-        MapLoader mapDriver;
-
-        std::string mapFile1 = "../MapFiles/001_I72_Ghtroc 720.map";
-        Map mapTest1;
-
-        if (mapDriver.createMapFromFile(mapFile1, mapTest1)) {
-            std::cout << "Successful creation of a map from " << mapFile1 << std::endl;
-            if (mapTest1.validate()) {
-                std::cout << "Map from " << mapFile1 << " is valid!" << std::endl;
-            } else {
-                std::cout << "Map from " << mapFile1 << " is invalid!" << std::endl;
-            }
-        } else {
-            std::cout << "Unsuccessful creation of a map from " << mapFile1 << std::endl;
-        }
-    }
-};
 
 int main() {
-    MapDriver::testLoadMaps();
+    // Create a Map object
+    Map map;
+
+    // Test the MapLoader class to load a map from a file
+    MapLoader mapLoader;
+
+    // Provide the filename of a map file you want to load
+    string mapFileName = "../mapFiles/001_I72_Ghtroc 720.map";  // Replace with your actual map file name
+
+    // Try to load the map from the file
+    bool mapLoaded = mapLoader.createMapFromFile(mapFileName, &map);
+
+    if (mapLoaded) {
+        cout << "Map loaded successfully!" << endl;
+
+        // Now, you can test various Map and Territory functionalities
+        // For example, you can print the map and its territories:
+        map.insertInStream();
+
+        // You can also perform other operations on the map and its territories.
+
+    } else {
+        cout << "Error: Map loading failed. Please check your map file." << endl;
+    }
+
     return 0;
 }
