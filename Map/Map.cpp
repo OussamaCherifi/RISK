@@ -141,8 +141,7 @@ bool MapLoader::createMapFromFile(string& fileName, Map* mapToCreate) {
     vector<vector<string>> adjacentListInfo;
 
     while (!inputFile.eof()) {
-        // First pass: assign territories their name, coordinates, and continent
-        // Skip over empty lines, as they don't matter
+        //assign territories their name, coordinates, and continent and skip over the empty lines
         if (getline(inputFile, nextLine) && !nextLine.empty()) {
             try {
                 // Remove spaces
@@ -161,7 +160,7 @@ bool MapLoader::createMapFromFile(string& fileName, Map* mapToCreate) {
                 mapToCreate->territories->push_back(newTerritory);
                 territoryList.insert(make_pair(newTerritory->getName(), newTerritory));
 
-                // If the continent number is negative or the continent cannot be found, reject the file
+                // If the continent number is negative or the continent cannot be found we need to reject the file
                 continentInfo[elements[3]] -= 1;
                 if (continentInfo[elements[3]] < 0) {
                     inputFile.close();
