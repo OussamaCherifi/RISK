@@ -167,7 +167,7 @@ bool MapLoader::createMapFromFile(string& fileName, Map* mapToCreate) {
                     return false;
                 }
 
-                // Add the remaining elements, which should be the neighbors, to the neighbor info list
+                // Add the remaining adjacent territories to the adjacent list
                 elements.erase(elements.begin(), elements.begin() + 4);
                 adjacentListInfo.push_back(elements);
             }
