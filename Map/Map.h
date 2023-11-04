@@ -5,7 +5,7 @@
 #include <map>
 #include <iterator>
 #include <stack>
-
+#pragma once
 
 using namespace std;
 
@@ -17,10 +17,11 @@ private:
     string *player;
     string *territoryName;
     string *continent;
-    bool* visited;
+
     int* numberOfArmies;
 
 public:
+    bool* visited;
     //delcare constructor with parameters and copy constructor
     Territory(string name, string cont, int x, int y);
     Territory(Territory *copy);
@@ -48,6 +49,12 @@ public:
     void addAdjacent(Territory* neighbor);
 };
 
+//this is to test that the loader works fine
+class MapDriver
+{
+public:
+    static void testLoadMaps();
+};
 
 
 class Map{
@@ -55,10 +62,9 @@ class Map{
 public:
     Map();
     Map(const Map& copy);
-
     //declare methods
     bool validate();
-    bool isTerritoryConnected();
+    bool isMapConnected();
     void insertInStream();
 
     vector<Territory*>* territories;
@@ -66,7 +72,7 @@ public:
 
 class MapLoader {
 public:
-    bool createMapFromFile(string& fileName, Map* mapToLoad);
+    bool createMapFromFile(string& fileName, Map* map2make);
 };
 
 
