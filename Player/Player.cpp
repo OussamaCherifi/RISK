@@ -19,6 +19,9 @@ Player::Player(const Player &p){
     this->ordersList = p.ordersList;
 }
 
+//destructor
+Player::~Player() {}
+
 //assignment operator
  Player& Player::operator=(const Player& p){
     this->territoryList = p.territoryList;
@@ -33,8 +36,8 @@ ostream &operator<<(ostream &out, const Player &p){
     for(Territory* territory : p.territoryList){
         out << *territory << ", "; 
     }
-    out << "\n Player's hand: " << p.hand;
-    out << "\n Player's Orderslist: " << p.ordersList;
+    out << "Player's hand has " << p.hand->getCardNum() << " cards";
+    out << "\n Player's Orderslist has " << p.ordersList->getSize() << " orders";
     return out;
 }
     
