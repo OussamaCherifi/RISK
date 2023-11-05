@@ -10,20 +10,20 @@ include_directories(Orders)
 include_directories(Player)
 
 add_executable(A1_COMP345
-#        Cards/Cards.cpp
-#        Cards/Cards.h
-#        Cards/CardsDriver.cpp
-#        GameEngine/GameEngine.cpp
-#        GameEngine/GameEngine.h
-#        GameEngine/GameEngineDriver.cpp
+        Cards/Cards.cpp
+        Cards/Cards.h
+        Cards/CardsDriver.cpp
+        GameEngine/GameEngine.cpp
+        GameEngine/GameEngine.h
+        GameEngine/GameEngineDriver.cpp
         Map/Map.cpp
         Map/Map.h
         Map/MapDriver.cpp
-#        Orders/Orders.cpp
-#        Orders/Orders.h
-#        Orders/OrdersDriver.cpp
-#        Player/Player.cpp
-#        Player/Player.h
-#        Player/PlayerDriver.cpp
-#        MainDriver.cpp
+        Orders/Orders.cpp
+        Orders/Orders.h
+        Orders/OrdersDriver.cpp
+        Player/Player.cpp
+        Player/Player.h
+        Player/PlayerDriver.cpp
+        MainDriver.cpp
 )
