@@ -8,20 +8,22 @@ class OrdersList
 {
 public:
     OrdersList();
-    ~OrdersList();
-    OrdersList() = default;
+    OrdersList() = default; 
     int getSize();
     void addList(Orders *something);
     void remove(int i);
     void move(int start, int end);
-    ostream &displayOrderList(ostream &currentOrderList);
+    ostream &displayOrderList(ostream &myOrderList);
     OrdersList &operator=(const OrdersList &something);
-    
+    ~OrdersList();
+    // OrdersList::OrdersList(){};
 
 private:
     std::vector<Orders *> listOfOrders;
-    friend ostream &operator<<(ostream &currentOrderList, OrdersList &somethingList);
+    friend ostream &operator<<(ostream &myOrderList, OrdersList &something);
 };
+
+
 
 class Orders
 {
@@ -34,7 +36,7 @@ public:
     virtual ~Orders() = default;
 
 private:
-    friend ostream &operator<<(ostream &currentOrder, Orders &O);
+    friend ostream &operator<<(ostream &currentOrder, Orders &test);
 };
 
 //Deploy,Advance, Bomb,Blockade,Airlift and Negotiate are all subclasses of Orders
@@ -53,7 +55,6 @@ public:
 
 class Advance : public Orders
 {
-
 public:
     int data;
     Advance();
@@ -66,7 +67,6 @@ public:
 };
 class Bomb : public Orders
 {
-
 public:
     int data;
     Bomb();

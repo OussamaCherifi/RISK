@@ -4,11 +4,6 @@
 using namespace std;
 
 ostream &operator<<(ostream &myOrder, Orders &something);
-Orders::Orders() {}
-
-// For OrdersList
-OrdersList::OrdersList() {}
-OrdersList::~OrdersList() {}
 
 int OrdersList::getSize()
 {
