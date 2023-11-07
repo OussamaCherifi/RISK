@@ -25,4 +25,5 @@ add_executable(A1_COMP345
         Player/Player.cpp
         Player/Player.h
         Player/PlayerDriver.cpp
-        MainDriver.cpp)
+        MainDriver.cpp
+)

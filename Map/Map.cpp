@@ -1,403 +1,292 @@
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <vector>
-#include <tuple>
-#include <exception>
 #include "Map.h"
-#include <sstream>
+#include <algorithm>
+#include <fstream>
 
-using namespace std;
 
-class Continent
-{
-private:
-    int continentIndex;
-    int armies;
-    string name;
 
-public:
-    // Default constructor
-    Continent() : continentIndex(0), armies(0), name("") {}
+using namespace std; // Adding this to use the 'std' namespace
 
-    // constructor with parameters
-    Continent(int index, const string &continentName, int bonusArmies)
-        : continentIndex(index), armies(bonusArmies), name(continentName) {}
-
-    // Copy constructor
-    Continent(const Continent &other)
-        : continentIndex(other.continentIndex), armies(other.armies), name(other.name) {}
-
-    // Getter methods
-    int getIndex() const { return continentIndex; }
-    int getArmies() const { return armies; }
-    const string &getName() const { return name; }
-
-    // Assignment operator overload
-    Continent &operator=(const Continent &other)
-    {
-        if (this != &other)
-        {
-            continentIndex = other.continentIndex;
-            armies = other.armies;
-            name = other.name;
-        }
-        return *this;
+    // Parameterized constructor
+    Territory::Territory(string name, string cont, int x, int y) {
+        territoryName = new string(name);
+        continent = new std::string(cont);
+        xCoordinate = new int(x);
+        yCoordinate = new int(y);
+        visited = new bool(false);
+        numberOfArmies = new int(0);
+        adjacentTerritories = new vector<Territory*>;
     }
 
-    friend ostream &operator<<(ostream &out, const Continent &c)
-    {
-        out << "Continent " << c.name << " with index " << c.continentIndex
-            << " applies an army bonus of " << c.armies << " when a player controls all of its countries." << endl;
-        return out;
-    }
-};
-
-class Territory
-{
-private:
-    Player *owner;
-    int numberOfArmies;
-    int countryIndex;
-    vector<Territory *> adjacentCountries;
-    string name;
-    int parent;
-    int x;
-    int y;
-
-public:
-    // Constructors
-    Territory() : owner(nullptr), numberOfArmies(0), countryIndex(0), name(""), parent(0), x(0), y(0) {}
-
-    Territory(const Territory &t) : owner(t.owner), numberOfArmies(t.numberOfArmies),
-                                    countryIndex(t.countryIndex), adjacentCountries(t.adjacentCountries),
-                                    name(t.name), parent(t.parent), x(t.x), y(t.y) {}
-    Territory(Player *owner, int numberOfArmies, int countryIndex, string name, int parent, int x, int y)
-        : owner(owner), numberOfArmies(numberOfArmies), countryIndex(countryIndex), name(name),
-          parent(parent), x(x), y(y) {}
-    Territory(Player *owner, int numberOfArmies, int countryIndex, string name, int parent,
-              vector<Territory *> adjacentCountries, int x, int y)
-        : owner(owner), numberOfArmies(numberOfArmies), countryIndex(countryIndex), name(name),
-          parent(parent), adjacentCountries(adjacentCountries), x(x), y(y) {}
-    Territory(int numberOfArmies, int countryIndex, string name, int parent, int x, int y)
-        : owner(nullptr), numberOfArmies(numberOfArmies), countryIndex(countryIndex), name(name),
-          parent(parent), x(x), y(y) {}
-    Territory(int countryIndex, string name, int parent, int x, int y)
-        : owner(nullptr), numberOfArmies(0), countryIndex(countryIndex), name(name),
-          parent(parent), x(x), y(y) {}
-
-    Territory &operator=(const Territory &t)
-    {
-        if (this != &t)
-        {
-            owner = t.owner;
-            numberOfArmies = t.numberOfArmies;
-            countryIndex = t.countryIndex;
-            adjacentCountries = t.adjacentCountries;
-            name = t.name;
-            parent = t.parent;
-            x = t.x;
-            y = t.y;
-        }
-        return *this;
+// Copy constructor
+    Territory::Territory(Territory* copy) {
+        territoryName = new std::string(copy->getName());
+        continent = new std::string(copy->getContinent());
+        xCoordinate = new int(copy->getxCoordinate());
+        yCoordinate = new int(copy->getYCoordinate());
+        player = new std::string(copy->getPlayer());
+        visited = new bool(false);
+        numberOfArmies = new int(0);
+        adjacentTerritories = copy->adjacentTerritories;
     }
 
-    // Getters
-    int getIndex()
-    {
-        return countryIndex;
-    }
-    Player *getOwner()
-    {
-        return owner;
-    }
-    int getNumberOfArmies()
-    {
-        return numberOfArmies;
-    }
-    string getName()
-    {
-        return name;
-    }
-    int getContinent()
-    {
-        return parent;
-    }
-    vector<Territory *> getAdjacentTerritories()
-    {
-        return adjacentCountries;
-    }
-    int getX()
-    {
-        return x;
-    }
-    int getY()
-    {
-        return y;
+Territory::~Territory() {
+    //deallocates all variables to not have memory leaks or dangling pointers
+    delete player;
+    player = nullptr;
+    delete territoryName;
+    territoryName = nullptr;
+    delete continent;
+    continent = nullptr;
+    delete xCoordinate;
+    xCoordinate = nullptr;
+    delete yCoordinate;
+    yCoordinate = nullptr;
+    delete numberOfArmies;
+    numberOfArmies = nullptr;
+    delete adjacentTerritories;
+    adjacentTerritories = nullptr;
+    delete visited;
+    visited = nullptr;
+}
+
+    // Add an adjacent territory to the vector
+    void Territory::addAdjacent(Territory* adjacent) {
+        adjacentTerritories->push_back(adjacent);
     }
 
-    // Output operator
-    friend ostream &operator<<(ostream &out, const Territory &t)
-    {
-        out << t.name << " is the country with index " << t.countryIndex
-            << " and is located at position (" << t.x << ", " << t.y << ")." << endl;
-        return out;
+    // Define a stream insertion operator as a friend function
+    void Territory::insertInStream() {
+        cout << "Territory name: " << *territoryName << "; Position: " << *xCoordinate << ", " << *yCoordinate
+             << "; Continent " << *continent << ". Owned by: " << *player << ", with " << *numberOfArmies
+             << " armies." << endl;
     }
 
-    // Comparison operator
-    friend bool operator==(const Territory &lhs, const Territory &rhs)
-    {
-        return lhs.countryIndex == rhs.countryIndex;
+    //Adding getters and setters for territory class variables
+    string Territory::getName() const {
+        return *territoryName;
+    }
+    string Territory::getContinent() const {
+        return *continent;
+    }
+    int Territory::getxCoordinate() const {
+        return *xCoordinate; }
+
+    int Territory::getYCoordinate() const {
+        return *yCoordinate; }
+
+    void Territory::setXCoordinate(int* newX) {
+        delete xCoordinate;
+        xCoordinate = newX;
+    }
+    string Territory::getPlayer() const {
+        return *player;
     }
 
-    // Setters
-    void setOwner(Player *player)
-    {
-        owner = player;
+    void Territory::setYCoordinate(int* newY) {
+        delete yCoordinate;
+        yCoordinate = newY;
     }
-    void setNumberOfArmies(int numArmies)
-    {
-        numberOfArmies = numArmies;
+    void Territory::setPlayer(string* newName) {
+        delete player;
+        player = newName;
     }
-    void setName(string newName)
-    {
-        name = newName;
+
+//map constructors
+    Map::Map() {
+        territories = new vector<Territory*>;
     }
-    void setAdjacentTerritories(vector<Territory *> territories)
-    {
-        adjacentCountries = territories;
+
+    Map::Map(const Map& copy) {
+    // Perform a deep copy of the territories vector
+    territories = new vector<Territory*>(*copy.territories);
     }
-    void setX(int newX)
-    {
-        x = newX;
+
+    void Map::insertInStream() {
+    std::cout << "Territories: [" << std::endl;
+    for (Territory* var : *territories) {
+        var->insertInStream();
     }
-    void setY(int newY)
-    {
-        y = newY;
-    }
-    void addAdjacentCountry(Territory *territory)
-    {
-        adjacentCountries.push_back(territory);
-    }
-    bool isAdjacent(Territory *territory)
-    {
-        for (auto t : adjacentCountries)
-        {
-            if (t == territory)
-            {
-                return true;
-            }
-        }
+    std::cout << "]" << std::endl;
+}
+
+bool Map::isMapConnected() {
+    if (territories->empty()) {
         return false;
     }
 
-    // Destructor
-    ~Territory()
-    {
-        adjacentCountries.clear();
-    }
-};
-
-class Map
-{
-private:
-    vector<Continent *> continents;
-    vector<Territory *> countries;
-    vector<tuple<int, int>> borders;
-    bool valid;
-
-public:
-    Map() {}
-    Map(const Map &m) : continents(m.continents), countries(m.countries), borders(m.borders), valid(m.valid) {}
-    Map(vector<Continent *> continents, vector<Territory *> countries, vector<tuple<int, int>> borders)
-        : continents(continents), countries(countries), borders(borders), valid(false) {}
-
-    Map &operator=(const Map &m)
-    {
-        if (this != &m)
-        {
-            continents = m.continents;
-            countries = m.countries;
-            borders = m.borders;
-            valid = m.valid;
-        }
-        return *this;
+    // Reset visited flag for all territories
+    for (Territory* node : *territories) {
+        *node->visited = false;
     }
 
-    friend ostream &operator<<(ostream &out, const Map &m)
-    {
-        out << "MAP PROPERTIES: # of continents=" << m.continents.size() << ", # of countries=" << m.countries.size() << endl;
-        return out;
-    }
+    std::stack<Territory*> stack;
+    stack.push((*territories)[0]);
 
-    vector<Continent *> getContinents()
-    {
-        return continents;
-    }
-    vector<Territory *> getTerritories()
-    {
-        return countries;
-    }
-    vector<tuple<int, int>> getBorders()
-    {
-        return borders;
-    }
-    bool isValid()
-    {
-        return valid;
-    }
+    while (!stack.empty()) {
+        Territory* node = stack.top();
+        stack.pop();
 
-    vector<tuple<int, int>> getBordersByCountry(Territory country)
-    {
-        vector<tuple<int, int>> bordersByCountry;
-        for (tuple<int, int> border : borders)
-        {
-            if (get<0>(border) == country.getIndex())
-            {
-                bordersByCountry.push_back(border);
+        if (!node->visited) {
+            *node->visited = true;
+            for (Territory* neighbor : *node->adjacentTerritories) {
+                stack.push(neighbor);
             }
         }
-        return bordersByCountry;
     }
 
-    vector<Territory *> getTerritoriesByContinent(int continent)
-    {
-        vector<Territory *> continentCountries;
-        for (Territory *t : countries)
-        {
-            if (t->getContinent() == continent)
-            {
-                continentCountries.push_back(t);
+    // Check if all territories have been visited
+    for (Territory* node : *territories) {
+        if (!node->visited) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool Map::validate() {
+    //Ensure that all territories are connected.
+    if (!isMapConnected()) {
+        return false;
+    }
+    std::map<std::string, Map> continentGraphs;
+
+    //Allocate nodes to their respective continent graphs.
+    for (Territory* node : *territories) {
+        // Check if a graph already exists.
+        if (continentGraphs.find(node->getContinent()) == continentGraphs.end()) {
+            continentGraphs[node->getContinent()] = Map();
+        }
+        continentGraphs[node->getContinent()].territories->push_back(node);
+    }
+
+    // Check the connectivity of each continent graph.
+    for (auto& continentEntry : continentGraphs) {
+        Map& continentMap = continentEntry.second;
+        if (!continentMap.isMapConnected()) {
+            return false;
+        }
+    }
+
+    // Ensure that all territories belong to at least one continent.
+    for (Territory* territory : *territories) {
+        if (territory->getContinent().empty()) {
+            return false;
+        }
+    }
+
+    // If all checks pass, the map is valid.
+    return true;
+}
+
+
+
+
+
+bool MapLoader::createMapFromFile(string& fileName, Map* mapToCreate) {
+    std::ifstream inputFile;
+    inputFile.open(fileName);
+
+    // the following conditions reject the file
+    // Reject if we cant open the file
+    if (!inputFile.is_open()) {
+        cout << "There was an error opening this file" << endl;
+        //        std::cout << "Current working directory: " << std::filesystem::current_path() << std::endl;
+        return false;  // Return an error code
+    }
+
+    //return error if the first line of the file is not "[Map]"
+    string nextLine;
+    if (!getline(inputFile, nextLine) || nextLine != "[Map]") {
+        inputFile.close();
+        return false;
+    }
+
+    // Skip all the lines until we reach "[Continents]", and reject the file if we cannot reach it
+    while (nextLine != "[Continents]") {
+        if (!getline(inputFile, nextLine)) {
+            inputFile.close();
+            return false;
+        }
+    }
+    //here the document wasn't rejected YET so we can start processing the data
+
+    // Parse the continent data until we reach an empty line or the "[Territories]" section.
+    // Create associations between continent names and their corresponding territory counts
+    map<string, int> continentInfo;
+    while (nextLine != "[Territories]") {
+        if (!getline(inputFile, nextLine)) {
+            //reject the file if we find no [territory] line
+            inputFile.close();
+            return false;
+        }
+        try {
+
+            if (!nextLine.empty() && nextLine != "[Territories]") {
+                int index = nextLine.find("=");
+                // Remove spaces and add continent to the list
+                string substring = nextLine.substr(0, index);
+                substring.erase(remove(substring.begin(), substring.end(), ' '), substring.end());
+                continentInfo.insert(make_pair(substring, stoi(nextLine.substr(index + 1))));
             }
         }
-        return continentCountries;
+        catch (const exception& e) {
+            inputFile.close();
+            return false;
+        }
     }
 
-    void setContinents(vector<Continent *> continents)
-    {
-        this->continents = continents;
-    }
-    void setTerritories(vector<Territory *> territories)
-    {
-        countries = territories;
-    }
-    void setBorders(vector<tuple<int, int>> borders)
-    {
-        this->borders = borders;
-    }
+    // Reach the "[Territories]" line and begin looping until the end of the file and reject the file if there is no "[Territories]" line
+    map<string, Territory*> territoryList;
+    vector<vector<string>> adjacentListInfo;
 
-    void addContinent(Continent *continent)
-    {
-        continents.push_back(continent);
-    }
-    void addTerritory(Territory *territory)
-    {
-        countries.push_back(territory);
-    }
-    void addBorder(tuple<int, int> border)
-    {
-        borders.push_back(border);
-    }
-};
+    while (!inputFile.eof()) {
+        //assign territories their name, coordinates, and continent and skip over the empty lines
+        if (getline(inputFile, nextLine) && !nextLine.empty()) {
+            try {
+                // Remove spaces
+                nextLine.erase(remove_if(nextLine.begin(), nextLine.end(), ::isspace), nextLine.end());
+                // Split the string using commas
+                vector<string> elements;
+                size_t start = 0, end;
 
-Map *MapLoader::createMapfromFile(string mapFileName)
-{
-    ifstream mapFile(mapFileName);
-    if (!mapFile.is_open())
-    {
-        cerr << "Error: Unable to open map file " << mapFileName << endl;
-        return nullptr;
-    }
-
-    string currentLine;
-    string delimiter = " ";
-    int currentContinent = 0;
-
-    vector<Continent *> tempContinents;
-    vector<Territory *> tempCountries;
-    vector<tuple<int, int>> tempBorders;
-
-    try
-    {
-        while (getline(mapFile, currentLine))
-        {
-            if (currentLine == "[continents]")
-            {
-                while (getline(mapFile, currentLine))
-                {
-                    if (currentLine.empty())
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        istringstream lineStream(currentLine);
-                        string name;
-                        int armyValue;
-                        lineStream >> name >> armyValue;
-                        Continent *c = new Continent(++currentContinent, name, armyValue);
-                        tempContinents.push_back(c);
-                    }
+                while ((end = nextLine.find(',', start)) != string::npos) {
+                    elements.push_back(nextLine.substr(start, end - start));
+                    start = end + 1;
                 }
-            }
-            else if (currentLine == "[countries]")
-            {
-                while (getline(mapFile, currentLine))
-                {
-                    if (currentLine.empty())
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        istringstream lineStream(currentLine);
-                        int countryNumber;
-                        string countryName;
-                        int continent, x, y;
-                        lineStream >> countryNumber >> countryName >> continent >> x >> y;
-                        Territory *t = new Territory(countryNumber, countryName, continent, x, y);
-                        tempCountries.push_back(t);
-                    }
+                elements.push_back(nextLine.substr(start));
+                // Create a territory from the initial elements and add it to the map list
+                Territory* newTerritory = new Territory(elements[0], elements[3], stoi(elements[1]), stoi(elements[2]));
+                mapToCreate->territories->push_back(newTerritory);
+                territoryList.insert(make_pair(newTerritory->getName(), newTerritory));
+
+                // If the continent number is negative or the continent cannot be found we need to reject the file
+                continentInfo[elements[3]] -= 1;
+                if (continentInfo[elements[3]] < 0) {
+                    inputFile.close();
+                    return false;
                 }
+
+                // Add the remaining adjacent territories to the adjacent list
+                elements.erase(elements.begin(), elements.begin() + 4);
+                adjacentListInfo.push_back(elements);
             }
-            else if (currentLine == "[borders]")
-            {
-                while (getline(mapFile, currentLine))
-                {
-                    if (currentLine.empty())
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        istringstream lineStream(currentLine);
-                        int countryNumber;
-                        lineStream >> countryNumber;
+            catch (const exception& e) {
+                inputFile.close();
+                return false;
+            }
+        }
+    }
 
-                        vector<int> adjCountries;
-                        int sharedBorder;
-                        while (lineStream >> sharedBorder)
-                        {
-                            adjCountries.push_back(sharedBorder);
-
-                            // Add edge tuple to the map
-                            tempBorders.emplace_back(countryNumber, sharedBorder);
-
-                            // Add territory pointer to the current node
-                            tempCountries[countryNumber - 1]->addAdjacentCountry(tempCountries[sharedBorder - 1]);
-                        }
-                    }
+    //Link territories with their adjacent territories; File rejection occurs
+    // if a territory lacks neighbors which means an incomplete connection.
+    if (mapToCreate->territories->size() == adjacentListInfo.size() && mapToCreate->territories->size() > 0) {
+        for (int i = 0; i < adjacentListInfo.size(); i++) {
+            if (adjacentListInfo[i].size() > 0) {
+                for (const string &neighbor: adjacentListInfo[i]) {
+                    mapToCreate->territories->at(i)->addAdjacent(territoryList[neighbor]);
                 }
             }
         }
-
-        mapFile.close();
-        Map *m = new Map(tempContinents, tempCountries, tempBorders);
-        return m;
-    }
-    catch (const exception &e)
-    {
-        cerr << "Error: " << e.what() << endl;
-        return nullptr;
     }
 }
