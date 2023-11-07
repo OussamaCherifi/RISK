@@ -93,6 +93,12 @@ public:
 
     friend ostream &operator<<(ostream &os, GameEngine *gameEngine);
 
+    //for Assignment 2, Part 3 - Tiffany
+    void mainGameLoop();
+    void reinforcementPhase();
+    void issueOrdersPhase();
+    void executeOrdersPhase();
+
 private:
     State *mCurrentState;
     vector<State *> mStates;
