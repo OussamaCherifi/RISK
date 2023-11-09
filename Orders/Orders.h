@@ -4,27 +4,6 @@
 #include <iostream>
 using namespace std;
 
-class OrdersList
-{
-public:
-    OrdersList();
-    OrdersList() = default; 
-    int getSize();
-    void addList(Orders *something);
-    void remove(int i);
-    void move(int start, int end);
-    ostream &displayOrderList(ostream &myOrderList);
-    OrdersList &operator=(const OrdersList &something);
-    ~OrdersList();
-    // OrdersList::OrdersList(){};
-
-private:
-    std::vector<Orders *> listOfOrders;
-    friend ostream &operator<<(ostream &myOrderList, OrdersList &something);
-};
-
-
-
 class Orders
 {
 public:
@@ -37,6 +16,24 @@ public:
 
 private:
     friend ostream &operator<<(ostream &currentOrder, Orders &test);
+};
+
+class OrdersList
+{
+public:
+    OrdersList();
+    int getSize();
+    void addList(Orders *something);
+    void remove(int i);
+    void move(int start, int end);
+    ostream &displayOrderList(ostream &myOrderList);
+    OrdersList &operator=(const OrdersList &something);
+    ~OrdersList();
+    // OrdersList::OrdersList(){};
+
+private:
+    std::vector<Orders *> listOfOrders;
+    friend ostream &operator<<(ostream &myOrderList, OrdersList &something);
 };
 
 //Deploy,Advance, Bomb,Blockade,Airlift and Negotiate are all subclasses of Orders
