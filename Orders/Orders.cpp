@@ -2,8 +2,15 @@
 #include <Vector>
 #include <iostream>
 using namespace std;
+Orders::Orders(){}
 
-ostream &operator<<(ostream &myOrder, Orders &something);
+
+OrdersList::OrdersList(){}
+
+
+ostream &operator<<(ostream &myOrder, Orders &something){
+    return something.displayOrder(myOrder);
+}
 
 int OrdersList::getSize()
 {
@@ -42,7 +49,7 @@ void OrdersList::remove(int i)
     delete *thisPointer;
     listOfOrders.erase(thisPointer);
 }
-void ::OrdersList::move(int start, int end)
+void::OrdersList::move(int start, int end)
 {
     cout<<"inside move";
     int sizeList = this->getSize() - 1;
