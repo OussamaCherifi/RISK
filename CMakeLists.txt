@@ -8,6 +8,7 @@ include_directories(GameEngine)
 include_directories(Map)
 include_directories(Orders)
 include_directories(Player)
+include_directories(LoggingObserver)
 
 add_executable(A1_COMP345
         Cards/Cards.cpp

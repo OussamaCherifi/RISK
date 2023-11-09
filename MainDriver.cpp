@@ -2,16 +2,19 @@
 #include "Cards.h"
 #include "GameEngine.h"
 #include "Map.h"
+#include "LoggingObserver.h"
 #include "Orders.h"
+
 using namespace std;
 
 int main() {
     cout << ">>> Warzone - Assignment 1 <<<" << endl;
 
-     testLoadMaps();
-     testPlayers();
-     testOrdersLists();
+    testLoadMaps();
+    testPlayers();
+    testOrdersLists();
     testCards();
+    testLoggingObserver();
     testGameStates();
 }
 
