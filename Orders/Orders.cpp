@@ -2,8 +2,15 @@
 #include <Vector>
 #include <iostream>
 using namespace std;
+Orders::Orders(){}
 
-ostream &operator<<(ostream &myOrder, Orders &something);
+
+OrdersList::OrdersList(){}
+
+
+ostream &operator<<(ostream &myOrder, Orders &something){
+    return something.displayOrder(myOrder);
+}
 
 int OrdersList::getSize()
 {
@@ -42,7 +49,7 @@ void OrdersList::remove(int i)
     delete *thisPointer;
     listOfOrders.erase(thisPointer);
 }
-void ::OrdersList::move(int start, int end)
+void::OrdersList::move(int start, int end)
 {
     cout<<"inside move";
     int sizeList = this->getSize() - 1;
@@ -96,7 +103,7 @@ void Deploy::execute()
         cout << "validate Deploy";
     }
 }
-bool Deploy::validate() {}
+bool Deploy::validate() {return true;}
 Deploy &Deploy::operator=(const Deploy &something) {
     if (this != &something) {this->data = something.data;}
     return *this;
@@ -119,11 +126,11 @@ void Advance::execute()
         cout << "validate Advance";
     }
 }
-bool Advance::validate() {}
+bool Advance::validate() {return true;}
 Advance &Advance::operator=(const Advance &something) {
     if (this != &something) {this->data = something.data;}
     return *this;
-    }
+}
 ostream &Advance::displayOrder(ostream &myOrder) const
 {
     myOrder << "running advance";
@@ -141,8 +148,8 @@ void Bomb::execute()
         cout << "validate Bomb";
     }
 }
-bool Bomb::validate() {}
-Bomb &Bomb::operator=(const Bomb &something) { 
+bool Bomb::validate() {return true;}
+Bomb &Bomb::operator=(const Bomb &something) {
     if (this != &something) {this->data = something.data;}
     return *this;
 }
@@ -163,8 +170,8 @@ void Blockade::execute()
         cout << "validate Blockade";
     }
 }
-bool Blockade::validate() {}
-Blockade &Blockade::operator=(const Blockade &something) { 
+bool Blockade::validate() {return true;}
+Blockade &Blockade::operator=(const Blockade &something) {
     if (this != &something) {this->data = something.data;}
     return *this;
 }
@@ -185,7 +192,7 @@ void Airlift::execute()
         cout << "validate Airlift";
     }
 }
-bool Airlift::validate() {}
+bool Airlift::validate() {return true;}
 Airlift &Airlift::operator=(const Airlift &something) {
     if (this != &something) {this->data = something.data;}
     return *this;
@@ -207,11 +214,11 @@ void Negotiate::execute()
         cout << "validate Negotiate";
     }
 }
-bool Negotiate::validate() {}
-Negotiate &Negotiate::operator=(const Negotiate &something) { 
+bool Negotiate::validate() {return true;}
+Negotiate &Negotiate::operator=(const Negotiate &something) {
     if (this != &something) {this->data = something.data;}
     return *this;
- }
+}
 ostream &Negotiate::displayOrder(ostream &myOrder) const
 {
     myOrder << "running Negotiate";

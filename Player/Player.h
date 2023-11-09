@@ -1,10 +1,11 @@
 #ifndef PLAYER_H
 #define PLAYER_H
-#include "Map\Map.h"
-#include "Cards\Cards.h"
-#include "Orders\Orders.h"
+#include "Map.h"
+#include "Cards.h"
+#include "Orders.h"
 #include<vector>
 
+using namespace std; 
 
 //create players
 class Player 
@@ -26,12 +27,12 @@ class Player
         Player& operator= (const Player& p);
 
         //stream insertion operator
-        friend std::ostream &operator<<(std::ostream &out, const Player &p);
+        friend ostream &operator<<(ostream &out, const Player &p);
 
         //getters
         vector<Territory*> getTerritoryList();
-        Hand* getHand();
-        OrdersList* getOrdersList();
+        Hand *getHand();
+        OrdersList *getOrdersList();
 
         //add territories to the collection
         void addTerritory(Territory* t);
