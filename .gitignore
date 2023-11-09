@@ -31,11 +31,7 @@
 *.out
 *.app
 
-# builds
-cmake-build-debug/
-cmake-build-release/
-
 # misc
 /.idea
 /.vscode
-/cmake-build-debug
+cmake*/
