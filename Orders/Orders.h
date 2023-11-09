@@ -4,7 +4,6 @@
 #include <iostream>
 using namespace std;
 
-
 class Orders
 {
 public:
