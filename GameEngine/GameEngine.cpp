@@ -107,22 +107,27 @@ string State::getPhaseName() { return mPhaseName; }
 
 //For Assignment 2, Part 3 - Tiffany
 void GameEngine::mainGameLoop(){
-    // int totalNumTerr
-    // if (map != nullptr) # = map->getTerritories().size;
+    int numTerr = 0;
+    if (map != nullptr) numTerr = map->territories->size();
 
-    // bool playerHasAllTerritories = false;
+    bool playerHasAllTerritories = false;
 
-    //do
-    // for (Player* p : players)
-    //check if player has all the territories (check if p.territories.size == totalNUmTerr)
-    // check if current player has no territories (check if == 0)
-    //if else and finally else
-    
-        reinforcementPhase();
-        issueOrdersPhase();
-        executeOrdersPhase();
+    while(!playerHasAllTerritories){
+        for (Player* p : players){
+            if (p->getTerritoryList().size() == numTerr){
+                //player wins
+            }
+            else if (p->getTerritoryList().size() == 0){
+                //remove player
+            }
+            else{
+                reinforcementPhase();
+                issueOrdersPhase();
+                executeOrdersPhase();
+            }
+        }
 
-    //while(!playerHasAllTerritories)
+    }
     
 }
 
