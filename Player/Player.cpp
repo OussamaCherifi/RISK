@@ -34,7 +34,7 @@ Player::~Player() {}
 ostream &operator<<(ostream &out, const Player &p){
     out << "Territories owned by player";
     for(Territory* territory : p.territoryList){
-        out << *territory << ", "; 
+        out << "territory" << ", "; 
     }
     out << "Player's hand has " << p.hand->getCardNum() << " cards";
     out << "\n Player's Orderslist has " << p.ordersList->getSize() << " orders";
@@ -46,10 +46,10 @@ ostream &operator<<(ostream &out, const Player &p){
 vector<Territory*> Player::getTerritoryList(){
     return territoryList;
 }
-Hand* Player::getHand(){
+Hand *Player::getHand(){
     return hand;
 }
-OrdersList* Player::getOrdersList(){
+OrdersList *Player::getOrdersList(){
     return ordersList;
 }
 

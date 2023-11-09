@@ -3,6 +3,9 @@
 
 
 #include <vector>
+#include "Map.h"
+#include "Player.h"
+
 
 using namespace std;
 
@@ -102,6 +105,8 @@ public:
 private:
     State *mCurrentState;
     vector<State *> mStates;
+    vector<Player*> players; // players in the game
+    Map *map; // pointer to the map
 };
 
 void testGameStates();
