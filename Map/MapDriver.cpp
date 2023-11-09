@@ -5,12 +5,7 @@
 
 using namespace std;
 
-int main() {
-    MapDriver::testLoadMaps();
-    return 0;
-}
-
-void MapDriver::testLoadMaps(){
+void testLoadMaps(){
     MapLoader driver = MapLoader();
 
     // Get the current working directory, which is typically the directory of the C++ project

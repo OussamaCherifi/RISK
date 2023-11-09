@@ -49,12 +49,7 @@ public:
     void addAdjacent(Territory* neighbor);
 };
 
-//this is to test that the loader works fine
-class MapDriver
-{
-public:
-    static void testLoadMaps();
-};
+void testLoadMaps();
 
 
 class Map{

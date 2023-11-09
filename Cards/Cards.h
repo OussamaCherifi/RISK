@@ -36,7 +36,7 @@ class Hand{
 private:
     vector <Cards> hands;
 public:
-    Hand();
+    Hand() = default;
     Hand(const Hand& h1);
     void addCard(const Cards& card);
     void removeCard(int index);

@@ -114,4 +114,6 @@ public:
     Negotiate &operator=(const Negotiate &something);
 };
 
+void testOrdersLists();
+
 #endif 
