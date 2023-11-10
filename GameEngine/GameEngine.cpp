@@ -175,3 +175,51 @@ ostream &operator<<(ostream &os, GameEngine *gameEngine) {
 
     return os;
 }
+
+void startupPhase() {
+
+    std::string choice;
+    bool running = true;
+
+    MapLoader driver = MapLoader();
+    Map *mapTest = new Map();
+
+    while(running) {
+
+        // Display the menu
+        std::cout << "Command Menu:\n";
+        std::cout << "1. loadmap <filename>\n";
+        std::cout << "2. validateMap\n";
+        std::cout << "3. addplayer\n";
+        std::cout << "4. gamestart\n";
+        std::cout << "Enter your choice: ";
+
+        // Get user's choice as a string
+        std::cin >> choice;
+
+
+        if (choice == "1") {
+            std::cout << "Enter the Name of the map you wish to load: ";
+            std::string mapChoice;
+
+            // Get user's choice of map
+            std::cin >> mapChoice;
+
+            std::string filepath = generateAbsolutePath(mapChoice);
+            driver.createMapFromFile(filepath, mapTest);
+
+        } else if (choice == "2") {
+            std::cout << "You selected Option 2\n";
+            mapTest->validate();
+
+        } else if (choice == "3") {
+            std::cout << "You selected Option 3\n";
+        } else if (choice == "4") {
+            std::cout << "Goodbye!\n";
+            // Exit the loop to end the program
+        } else {
+            std::cout << "Invalid choice. Please try again.\n";
+        }
+
+    }
+    }

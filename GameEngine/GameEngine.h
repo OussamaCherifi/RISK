@@ -111,4 +111,6 @@ private:
 
 void testGameStates();
 
+void startupPhase();
+
 #endif //GAME_ENGINE_H

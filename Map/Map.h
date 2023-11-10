@@ -68,6 +68,9 @@ public:
 class MapLoader {
 public:
     bool createMapFromFile(string& fileName, Map* map2make);
+
 };
+
+std::string generateAbsolutePath(std::string mapName);
 
 
