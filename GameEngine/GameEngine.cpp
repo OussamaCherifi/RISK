@@ -10,9 +10,9 @@ GameEngine::GameEngine() : mCurrentState(GameEngine::setup()) {}
 
 GameEngine::GameEngine(const GameEngine &other) {
     string currentStateName = mCurrentState->getStateName();
-    for (State *s: other.mStates) {
+    for (State *s: *other.mStates) {
         auto *newState = new State(*s);
-        this->mStates.push_back(newState);
+        this->addState(newState);
         if (newState->getStateName() == currentStateName) {
             this->mCurrentState = newState;
         }
@@ -20,6 +20,7 @@ GameEngine::GameEngine(const GameEngine &other) {
 }
 
 State *GameEngine::setup() {
+    mStates = new list<State *>;
     auto *start = new State("start", "startup");
     auto *mapLoaded = new State("map-loaded", "startup");
     auto *mapValidated = new State("map-validated", "startup");
@@ -64,7 +65,7 @@ State *GameEngine::setup() {
 }
 
 void GameEngine::addState(State *state) {
-    mStates.emplace_back(state);
+    mStates->push_back(state);
 }
 
 void GameEngine::handle(const string &command) {

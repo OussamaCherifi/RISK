@@ -80,7 +80,7 @@ public:
 
     ~GameEngine() override {
         // delete all states
-        for (State *s: mStates) {
+        for (State *s: *mStates) {
             delete s;
         }
     }
@@ -107,7 +107,7 @@ public:
 
 private:
     State *mCurrentState;
-    vector<State *> mStates;
+    list<State *> *mStates;
     vector<Player*> players; // players in the game
     Map *map; // pointer to the map
 };
