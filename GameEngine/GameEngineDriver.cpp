@@ -1,9 +1,12 @@
 #include <iostream>
 #include <GameEngine.h>
+#include <Map.h>
+
 
 using namespace std;
 
 void testGameStates() {
+
     cout << ">>> Testing GameEngine <<<" << endl;
     auto *engine = new GameEngine();
     do {
@@ -15,4 +18,8 @@ void testGameStates() {
         engine->handle(input);
     } while (engine->getCurrentState()->getStateName() != "end");
     cout << "The game has ended." << endl;
+
+
 }
+
+

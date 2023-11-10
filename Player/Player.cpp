@@ -20,7 +20,15 @@ Player::Player(const Player &p){
 }
 
 //destructor
-Player::~Player() {}
+Player::~Player() {
+    for (Territory *t : territoryList){
+                delete t;
+    }
+    territoryList.clear();
+
+    delete hand;
+    delete ordersList;
+}
 
 //assignment operator
  Player& Player::operator=(const Player& p){

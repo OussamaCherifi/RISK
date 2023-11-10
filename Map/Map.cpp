@@ -180,9 +180,6 @@ bool Map::validate() {
 }
 
 
-
-
-
 bool MapLoader::createMapFromFile(string& fileName, Map* mapToCreate) {
     std::ifstream inputFile;
     inputFile.open(fileName);

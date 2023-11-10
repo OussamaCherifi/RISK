@@ -10,12 +10,15 @@ using namespace std;
 int main() {
     cout << ">>> Warzone - Assignment 1 <<<" << endl;
 
-    testLoadMaps();
-    testPlayers();
-    testOrdersLists();
-    testCards();
-    testLoggingObserver();
-    testGameStates();
+//    testLoadMaps();
+//    testPlayers();
+//    testOrdersLists();
+//    testCards();
+//    testLoggingObserver();
+//    testGameStates();
+startupPhase();
+
+
 }
 
 /*
