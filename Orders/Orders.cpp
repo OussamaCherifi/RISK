@@ -168,7 +168,6 @@ void Blockade::execute()
 {
     if (validate())
     {
-        cout << "validate Blockade";
         Notify(this);
     }
 }

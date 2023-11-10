@@ -53,7 +53,6 @@ void testLoggingObserver() {
     auto listOfOrders = ordersList->getListOfOrders();
     auto i = listOfOrders.begin();
     for (; i != listOfOrders.end(); ++i) {
-        cout << "executing " << **i << " order" << endl;
         (*i)->execute();
     }
 
