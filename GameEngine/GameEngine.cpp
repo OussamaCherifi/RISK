@@ -5,7 +5,7 @@
 using namespace std;
 
 // GameEngine
-GameEngine::GameEngine() : mStates(new list<State *>), mCurrentState(GameEngine::setup()) {}
+GameEngine::GameEngine() : mCurrentState(GameEngine::setup()) {}
 
 GameEngine::GameEngine(const GameEngine &other) {
     string currentStateName = mCurrentState->getStateName();
@@ -19,6 +19,7 @@ GameEngine::GameEngine(const GameEngine &other) {
 }
 
 State *GameEngine::setup() {
+    mStates =  new list<State *>;
     auto *start = new State("start", "startup");
     auto *mapLoaded = new State("map-loaded", "startup");
     auto *mapValidated = new State("map-validated", "startup");
