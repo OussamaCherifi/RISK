@@ -1,5 +1,8 @@
 #include "LoggingObserver.h"
 #include <fstream>
+#include <iostream>
+
+using namespace std;
 
 Subject::Subject() : _observers(new list<Observer *>) {};
 
@@ -22,14 +25,11 @@ void Subject::Notify(ILoggable *loggable) {
 }
 
 void LogObserver::Update(ILoggable *i) {
-    string logString = i->stringToLog();
-
-    ofstream file;
-
+    // open game log file
+    ofstream file("../gamelog.txt", std::ios::app);
     // Write logString to game log text file
-    file.open("../gamelog.txt", std::ios::out);
     if (file.is_open()) {
-        file << logString << endl;
+        file << i->stringToLog() << endl;
         file.close();
     }
 
