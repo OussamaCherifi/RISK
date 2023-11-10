@@ -1,31 +1,43 @@
 #include "Orders.h"
 #include <Vector>
 #include <iostream>
+#include <sstream>
 using namespace std;
-Orders::Orders(){}
-
-
-OrdersList::OrdersList(){}
+// Assignment 2, Part 5 - Zack
+// Create log string
+string Orders::stringToLog() {
+    ostringstream oss;
+    oss << "[Order]\t\tExecuted " << *this << " order";
+    return oss.str();
+}
 
 
 ostream &operator<<(ostream &myOrder, Orders &something){
     return something.displayOrder(myOrder);
 }
 
+string OrdersList::stringToLog() {
+    ostringstream oss;
+    oss << "[OrdersList]\tAdded " << *listOfOrders.back() << " order";
+    return oss.str();
+}
+
 int OrdersList::getSize()
 {
-    cout<<"inside getsize";
     return listOfOrders.size();
 }
 void OrdersList::addList(Orders *O)
 {
-    cout<<"inside addlist";
     listOfOrders.push_back(O);
+    Notify(this);
+}
+
+vector<Orders *> OrdersList::getListOfOrders() {
+    return listOfOrders;
 }
 
 void OrdersList::remove(int i)
 {
-    cout<<"inside remove";
     int sizeList = this->getSize();
 
     if (sizeList == 0)
@@ -51,7 +63,6 @@ void OrdersList::remove(int i)
 }
 void::OrdersList::move(int start, int end)
 {
-    cout<<"inside move";
     int sizeList = this->getSize() - 1;
     if (start < 0 || start >= sizeList || end < 0 || end >= sizeList)
     {
@@ -78,13 +89,11 @@ ostream &OrdersList::displayOrderList(ostream &myOrderList)
         myOrderList << "/" << *orderObject << '\n';
     }
     return myOrderList;
-    cout << "inside display orderslist";
 }
 
 ostream &operator<<(ostream &myOrderList, OrdersList &aList)
 {
     return aList.displayOrderList(myOrderList);
-    cout << "inside operator";
 }
 OrdersList &OrdersList::operator=(const OrdersList &somethingCopy)
 {
@@ -93,14 +102,12 @@ OrdersList &OrdersList::operator=(const OrdersList &somethingCopy)
 
 
 // Deploy constructors, destructor and methods
-Deploy::Deploy() { cout<<"inside deploy constructor";}
-Deploy::~Deploy() {}
 Deploy *Deploy::copy() const { return new Deploy(*this); }
 void Deploy::execute()
 {
-    if (validate() == true)
+    if (validate())
     {
-        cout << "validate Deploy";
+        Notify(this);
     }
 }
 bool Deploy::validate() {return true;}
@@ -111,19 +118,17 @@ Deploy &Deploy::operator=(const Deploy &something) {
 
 ostream &Deploy::displayOrder(ostream &myOrder) const
 {
-    myOrder << "running deploy";
+    myOrder << "Deploy";
     return myOrder;
 }
 
 // Advance
-Advance::Advance() {cout<<"inside advance constructor";}
-Advance::~Advance() {}
 Advance *Advance::copy() const { return new Advance(*this); }
 void Advance::execute()
 {
-    if (validate() == true)
+    if (validate())
     {
-        cout << "validate Advance";
+        Notify(this);
     }
 }
 bool Advance::validate() {return true;}
@@ -133,19 +138,17 @@ Advance &Advance::operator=(const Advance &something) {
 }
 ostream &Advance::displayOrder(ostream &myOrder) const
 {
-    myOrder << "running advance";
+    myOrder << "Advance";
     return myOrder;
 }
 
 // Bomb
-Bomb::Bomb() {cout<<"inside bomb constructor";}
-Bomb::~Bomb() {}
 Bomb *Bomb::copy() const { return new Bomb(*this); }
 void Bomb::execute()
 {
-    if (validate() == true)
+    if (validate())
     {
-        cout << "validate Bomb";
+        Notify(this);
     }
 }
 bool Bomb::validate() {return true;}
@@ -155,19 +158,18 @@ Bomb &Bomb::operator=(const Bomb &something) {
 }
 ostream &Bomb::displayOrder(ostream &myOrder) const
 {
-    myOrder << "running Bomb";
+    myOrder << "Bomb";
     return myOrder;
 }
 
 // Blockade
-Blockade::Blockade() {cout<<"inside blockade constructor";}
-Blockade::~Blockade() {}
 Blockade *Blockade::copy() const { return new Blockade(*this); }
 void Blockade::execute()
 {
-    if (validate() == true)
+    if (validate())
     {
         cout << "validate Blockade";
+        Notify(this);
     }
 }
 bool Blockade::validate() {return true;}
@@ -177,19 +179,17 @@ Blockade &Blockade::operator=(const Blockade &something) {
 }
 ostream &Blockade::displayOrder(ostream &myOrder) const
 {
-    myOrder << "running Blockade";
+    myOrder << "Blockade";
     return myOrder;
 }
 
 // Airlift
-Airlift::Airlift() {cout<<"inside airlift constructor";}
-Airlift::~Airlift() {}
 Airlift *Airlift::copy() const { return new Airlift(*this); }
 void Airlift::execute()
 {
-    if (validate() == true)
+    if (validate())
     {
-        cout << "validate Airlift";
+        Notify(this);
     }
 }
 bool Airlift::validate() {return true;}
@@ -199,19 +199,17 @@ Airlift &Airlift::operator=(const Airlift &something) {
 }
 ostream &Airlift::displayOrder(ostream &myOrder) const
 {
-    myOrder << "running Airlift";
+    myOrder << "Airlift";
     return myOrder;
 }
 
 // Negotiate
-Negotiate::Negotiate() {cout<<"inside negotiate constructor";}
-Negotiate::~Negotiate() {}
 Negotiate *Negotiate::copy() const { return new Negotiate(*this); }
 void Negotiate::execute()
 {
-    if (validate() == true)
+    if (validate())
     {
-        cout << "validate Negotiate";
+        Notify(this);
     }
 }
 bool Negotiate::validate() {return true;}
@@ -221,6 +219,6 @@ Negotiate &Negotiate::operator=(const Negotiate &something) {
 }
 ostream &Negotiate::displayOrder(ostream &myOrder) const
 {
-    myOrder << "running Negotiate";
+    myOrder << "Negotiate";
     return myOrder;
 }
