@@ -9,9 +9,9 @@ GameEngine::GameEngine() : mCurrentState(GameEngine::setup()) {}
 
 GameEngine::GameEngine(const GameEngine &other) {
     string currentStateName = mCurrentState->getStateName();
-    for (State *s: other.mStates) {
+    for (State *s: *other.mStates) {
         auto *newState = new State(*s);
-        this->mStates.push_back(newState);
+        this->addState(newState);
         if (newState->getStateName() == currentStateName) {
             this->mCurrentState = newState;
         }
@@ -19,6 +19,7 @@ GameEngine::GameEngine(const GameEngine &other) {
 }
 
 State *GameEngine::setup() {
+    mStates =  new list<State *>;
     auto *start = new State("start", "startup");
     auto *mapLoaded = new State("map-loaded", "startup");
     auto *mapValidated = new State("map-validated", "startup");
@@ -63,7 +64,7 @@ State *GameEngine::setup() {
 }
 
 void GameEngine::addState(State *state) {
-    mStates.emplace_back(state);
+    mStates->push_back(state);
 }
 
 void GameEngine::handle(const string &command) {
@@ -73,6 +74,7 @@ void GameEngine::handle(const string &command) {
         return;
     }
     mCurrentState = newState;
+    Notify(this);
 }
 
 State *GameEngine::getCurrentState() { return mCurrentState; }
@@ -105,6 +107,13 @@ string State::getStateName() { return mName; }
 
 string State::getPhaseName() { return mPhaseName; }
 
+// For Assignment 2, Part 5 - Zack
+string GameEngine::stringToLog() {
+    State *currentState = this->getCurrentState();
+    return "[GameEngine]\tTransition to state: " + currentState->getStateName() +
+           "\tPhase: " + currentState->getPhaseName();
+}
+
 //For Assignment 2, Part 3 - Tiffany
 void GameEngine::mainGameLoop(){
     int numTerr = 0;
@@ -128,7 +137,7 @@ void GameEngine::mainGameLoop(){
         }
 
     }
-    
+
 }
 
 void GameEngine::reinforcementPhase(){
