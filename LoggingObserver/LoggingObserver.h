@@ -33,16 +33,17 @@ public:
 
     ~Subject();
 
-    virtual void Attach(Observer *o);
+    virtual void Attach(Observer *o);  // attach an observer to subject
 
-    virtual void Detach(Observer *o);
+    virtual void Detach(Observer *o);  // detach an observer from subject
 
-    virtual void Notify(ILoggable *i);
+    virtual void Notify(ILoggable *i);  // notify all observers, pass Loggable object
 
 private:
     list<Observer *> *_observers;
 };
 
+// LogObserver class
 class LogObserver : public Observer {
 public:
     LogObserver() = default;
@@ -52,6 +53,7 @@ public:
     void Update(ILoggable *i) override;
 };
 
+// free function to test Observer pattern implementation
 void testLoggingObserver();
 
 #endif

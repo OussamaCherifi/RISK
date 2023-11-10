@@ -110,7 +110,7 @@ string State::getPhaseName() { return mPhaseName; }
 // For Assignment 2, Part 5 - Zack
 string GameEngine::stringToLog() {
     State *currentState = this->getCurrentState();
-    return "[GameEngine]\tTransition to state:" + currentState->getStateName() +
+    return "[GameEngine]\tTransition to state: " + currentState->getStateName() +
            "\tPhase: " + currentState->getPhaseName();
 }
 
