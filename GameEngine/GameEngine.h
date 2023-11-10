@@ -1,10 +1,10 @@
 #ifndef GAME_ENGINE_H
 #define GAME_ENGINE_H
 
-
 #include <vector>
 #include "Map.h"
 #include "Player.h"
+#include "LoggingObserver.h"
 
 
 using namespace std;
@@ -72,13 +72,13 @@ private:
     vector<Transition *> mTransitions;
 };
 
-class GameEngine {
+class GameEngine : public Subject, public ILoggable {
 public:
     GameEngine();
 
     GameEngine(const GameEngine &other);
 
-    ~GameEngine() {
+    ~GameEngine() override {
         // delete all states
         for (State *s: mStates) {
             delete s;
@@ -95,6 +95,9 @@ public:
     State *getCurrentState();
 
     friend ostream &operator<<(ostream &os, GameEngine *gameEngine);
+
+    // A2, Part 5 - Zack
+    string stringToLog() override;
 
     //for Assignment 2, Part 3 - Tiffany
     void mainGameLoop();

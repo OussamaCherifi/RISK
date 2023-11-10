@@ -1,6 +1,7 @@
 #include <iostream>
 #include <utility>
 #include <GameEngine.h>
+#include <sstream>
 
 using namespace std;
 
@@ -105,6 +106,15 @@ string State::getStateName() { return mName; }
 
 string State::getPhaseName() { return mPhaseName; }
 
+// For Assignment 2, Part 5 - Zack
+string GameEngine::stringToLog() {
+    std::ostringstream oss;
+    State * currentState = this->getCurrentState();
+    oss << currentState->getStateName() << " [" << currentState->getPhaseName() << "]" << endl;
+
+    return oss.str();
+}
+
 //For Assignment 2, Part 3 - Tiffany
 void GameEngine::mainGameLoop(){
     int numTerr = 0;
@@ -128,7 +138,7 @@ void GameEngine::mainGameLoop(){
         }
 
     }
-    
+
 }
 
 void GameEngine::reinforcementPhase(){
