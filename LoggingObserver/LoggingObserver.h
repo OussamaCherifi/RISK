@@ -6,31 +6,54 @@
 
 using namespace std;
 
-class LogObserver;
-
-class Subject;
-
-class ILoggable;
-
-class Subject {
-public:
-    virtual void Attach(LogObserver* o);
-    virtual void Detach(LogObserver* o);
-    virtual void Notify();
-    Subject();
-    ~Subject();
-private:
-    list<LogObserver*> *_observers;
-};
-
+// ILoggable interface class (only pure virtual functions)
 class ILoggable {
 public:
-    ~ILoggable() = default;
-    virtual void stringToLog(string s) = 0;
-protected:
-    ILoggable() = default;
+    virtual ~ILoggable() = default;
+
+    virtual string stringToLog() = 0;
 };
 
+
+// Observer abstract class
+class Observer {
+public:
+    ~Observer() = default;
+
+    virtual void Update(ILoggable *) = 0;
+
+protected:
+    Observer() = default;
+};
+
+// Subject abstract class
+class Subject {
+public:
+    Subject();
+
+    ~Subject();
+
+    virtual void Attach(Observer *o);  // attach an observer to subject
+
+    virtual void Detach(Observer *o);  // detach an observer from subject
+
+    virtual void Notify(ILoggable *i);  // notify all observers, pass Loggable object
+
+private:
+    list<Observer *> *_observers;
+};
+
+// LogObserver class
+class LogObserver : public Observer {
+public:
+    LogObserver() = default;
+
+    ~LogObserver() = default;
+
+    void Update(ILoggable *i) override;
+};
+
+// free function to test Observer pattern implementation
 void testLoggingObserver();
 
 #endif
