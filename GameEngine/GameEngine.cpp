@@ -1,5 +1,7 @@
 #include <iostream>
 #include <utility>
+#include <algorithm>
+#include <vector>
 #include <GameEngine.h>
 
 using namespace std;
@@ -113,12 +115,14 @@ void GameEngine::mainGameLoop(){
     bool playerHasAllTerritories = false;
 
     while(!playerHasAllTerritories){
-        for (Player* p : players){
-            if (p->getTerritoryList().size() == numTerr){
+        for (int i = 0; i < players.size(); i++){
+            if (players[i]->getTerritoryList().size() == numTerr){
                 //player wins
             }
-            else if (p->getTerritoryList().size() == 0){
-                //remove player
+            else if (players[i]->getTerritoryList().empty()){
+                cout << "player has no more territories! Removing player from the game." << endl;
+                delete players[i];
+                players.erase(players.begin() + i);
             }
             else{
                 reinforcementPhase();
