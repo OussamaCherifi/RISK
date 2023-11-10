@@ -1,12 +1,11 @@
 #include <iostream>
 #include <utility>
 #include <GameEngine.h>
-#include <sstream>
 
 using namespace std;
 
 // GameEngine
-GameEngine::GameEngine() : mCurrentState(GameEngine::setup()) {}
+GameEngine::GameEngine() : mStates(new list<State *>), mCurrentState(GameEngine::setup()) {}
 
 GameEngine::GameEngine(const GameEngine &other) {
     string currentStateName = mCurrentState->getStateName();
@@ -20,7 +19,6 @@ GameEngine::GameEngine(const GameEngine &other) {
 }
 
 State *GameEngine::setup() {
-    mStates = new list<State *>;
     auto *start = new State("start", "startup");
     auto *mapLoaded = new State("map-loaded", "startup");
     auto *mapValidated = new State("map-validated", "startup");
@@ -75,6 +73,7 @@ void GameEngine::handle(const string &command) {
         return;
     }
     mCurrentState = newState;
+    Notify(this);
 }
 
 State *GameEngine::getCurrentState() { return mCurrentState; }
@@ -109,11 +108,9 @@ string State::getPhaseName() { return mPhaseName; }
 
 // For Assignment 2, Part 5 - Zack
 string GameEngine::stringToLog() {
-    std::ostringstream oss;
-    State * currentState = this->getCurrentState();
-    oss << currentState->getStateName() << " [" << currentState->getPhaseName() << "]" << endl;
-
-    return oss.str();
+    State *currentState = this->getCurrentState();
+    return "[GameEngine]\tTransition to state:" + currentState->getStateName() +
+           "\tPhase: " + currentState->getPhaseName();
 }
 
 //For Assignment 2, Part 3 - Tiffany
