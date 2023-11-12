@@ -54,6 +54,9 @@ ostream &operator<<(ostream &out, const Player &p){
     return out;
 }
     
+void Player::addDiplomaticRelation(Player *player) {
+    diplomaticRelations.push_back(player);
+}
 
 //getters
 vector<Territory*> Player::getTerritoryList(){
