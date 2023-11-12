@@ -5,11 +5,11 @@
 #include "Map.h"
 #include "Player.h"
 #include "Cards.h"
+#include "LoggingObserver.h"
 
 using namespace std;
 
-class Orders
-{
+class Orders : public Subject, public ILoggable{
 public:
     Orders();
     virtual Orders *copy() const = 0;
@@ -17,20 +17,19 @@ public:
     virtual bool validate() = 0;
     virtual ostream &displayOrder(ostream &currentOrder) const = 0;
     virtual ~Orders() = default;
-    string stringToLog();
+    string stringToLog() override;
 
 private:
     friend ostream &operator<<(ostream &currentOrder, Orders &test);
 };
-class OrdersList
-{
+class OrdersList : public Subject, public ILoggable{
 public:
     OrdersList();
     int getSize();
     void addList(Orders *something);
     void remove(int i);
     void move(int start, int end);
-    string stringToLog();
+    string stringToLog() override;
     ostream &displayOrderList(ostream &myOrderList);
     OrdersList &operator=(const OrdersList &something);
     vector<Orders *> getListofOrders();
