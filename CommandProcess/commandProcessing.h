@@ -1,72 +1,73 @@
-#pragma once
-#include "LoggingObserver.h"
-#include "GameEngine.h"
-#include <string>
-#include <stdio.h>
-#include <iostream>
+#ifndef RISK_COMMANDPROCESSING_H
+#define RISK_COMMANDPROCESSING_H
 #include <string>
 #include <vector>
-#include <sstream>
+// #include "../GameEngine/GameEngine.h"
 using namespace std;
+class GameEngine;
 
-class Command : public ILoggable, public Subject{
+class Command{
+
     public:
-    //Default constructor
-    Command();
-    //Constructor
-    Command(string *command, string *effect);
-    Command(Command &command);
-    ~Command();
-    Command* save(string *effect);
-    string stringToLog() override; 
-    void Notify(); 
-    friend ostream &operator << (ostream &output, Command &obj);
-    enum class commandType { loadmap, validatemap, addplayer, gamestart, replay, quit, gameend,tournament};
+    Command();//Constructors
+    Command(std::string* command, std::string* effect);
+    Command(const Command& something);
+    ~Command(); //Destructor
+
+    Command* saveEffect(std::string* effect);
+    friend std::ostream& operator<<(std::ostream& os, const Command& command);
+
+    //Getters & Setters
+    std::string* getEffect();
+    std::string* getCommand();
+
     private:
-    string* command; 
-    string* effect;
-    static LogObserver* obs;
+    std::string* effect;
+    std::string* command; 
 };
 
-class CommandProcessor : public ILoggable, public Subject {
+class CommandProcessor{
     public:
-        friend ostream &operator << (ostream &output, CommandProcessor &obj);
-        CommandProcessor& operator=(const CommandProcessor &commandProcessor); //dom changed
     CommandProcessor();
-    ~CommandProcessor();
-    CommandProcessor(CommandProcessor &commandProcessor);
-    Command* getCommand();
-    bool validate(string command);
-    void Notify();
-    
+    CommandProcessor(const CommandProcessor& something);
+    ~CommandProcessor(); 
+    Command * getCommand(GameEngine& ge);
+    friend std::ostream& operator<<(std::ostream& os, const CommandProcessor& processor);
+    static bool validate(const std::string& command, GameEngine& ge);
+    Command * getCommand(GameEngine& ge);
 
     private:
-    vector <Command*> commandList;
-    static LogObserver* observ;
+    std::vector<Command*>* commands; 
 
     protected:
-    virtual string readCommand();
-    Command* saveCommand(string* command, string* effect);
-
+    virtual std::string readCommand();
+    Command* saveCommand(std::string* command, std::string* effect);
 };
 
-class FileCommandProcessorAdapter : public CommandProcessor{
-    public: 
-        friend ostream &operator << (ostream &output, FileCommandProcessorAdapter &obj);
-        FileCommandProcessorAdapter &operator=(const FileCommandProcessorAdapter &t);
-        FileCommandProcessorAdapter();
-        ~FileCommandProcessorAdapter();
-        string readCommand();
-        Command* passCommand();
-    private:
-    FileLineReader* reader; 
-};
-
-class FileLineReader{
-public: 
-    friend ostream &operator << (ostream &output, FileLineReader &obj);
-    FileLineReader &operator=(const FileLineReader &t); //dom changed
+class FileLineReader {
+    public:
     FileLineReader();
-    FileLineReader(FileLineReader &lineReader);
+    FileLineReader(const FileLineReader& something);
     ~FileLineReader();
+    void readLineFromFile(std::string& fileName);
+    friend std::ostream& operator<<(std::ostream& os, const FileLineReader& reader);
+    std::vector<std::string*>* getLines();
+
+    private:
+    std::vector <std::string*>* lines; 
 };
+class FileCommandProcessorAdapter : public CommandProcessor {
+    public : 
+    FileCommandProcessorAdapter();
+    FileCommandProcessorAdapter(const FileCommandProcessorAdapter& something);
+    ~FileCommandProcessorAdapter();
+     std::string readCommand() override;
+    friend std::ostream& operator<<(std::ostream& os, const FileCommandProcessorAdapter& adapter);
+    FileLineReader* getFileLineReader();
+
+    private:
+    static int current; 
+    FileLineReader* flr;
+};
+
+#endif 

@@ -1,51 +1,74 @@
-#include "commandProcessing.h"
 #include <iostream>
-#include <vector>
-#include <string>
-#include <fstream>
-#include <unordered_map>
-using namespace std;
-
-CommandProcessor::CommandProcessor() {};
-Command::Command(){};
+#include "commandProcessing.h"
+using namespace std; 
 
 
-//Implementing copy constructor
-CommandProcessor::CommandProcessor(CommandProcessor &commandProcessor) {
-    this->commandList = commandProcessor.commandList;
+Command::Command() {
+    this->command = new string("empty command");
+    this->effect = new string("empty effect");
 }
 
-//Stream operators
-ostream &operator << (ostream &output, Command &obj) {
-    output << "command processed right now" <<endl;
-    return output;
-}
-ostream &operator << (ostream &output, CommandProcessor &obj) {
-    output << "command processer right now" <<endl;
-    return output;
-}
-ostream &operator << (ostream &output, FileCommandProcessorAdapter &obj) {
-    output << "file command processor adapter right now" <<endl;
-    return output;
-}
-ostream &operator << (ostream &output, FileLineReader &obj){
-    output << "reading file right now" <<endl;
-    return output;
+Command::Command(string* command, string* effect) {
+    this->command = command;
+    this->effect = effect;
 }
 
-//Desturctor
+Command::Command(const Command& other) {
+    this->command = other.command;
+    this->effect = other.effect;
+}
+
+Command::~Command() {
+    delete command;
+    delete effect;
+}
+
+Command* Command::saveEffect(string* effect) {
+    this->effect = effect;
+    return this;
+}
+
+string* Command::getEffect() {
+    return effect;
+}
+string* Command::getCommand() {
+    return command;
+}
+CommandProcessor::CommandProcessor(){
+    this->commands = new vector<Command*>();
+}
+CommandProcessor::CommandProcessor(const CommandProcessor& something) {
+    this->commands = something.commands;
+}
 CommandProcessor::~CommandProcessor() {
-    for (Command* command : commandList) {
-        delete command;
-    }
-    commandList.clear(); // Optionally clear the vector
+    delete commands;
+}
+string CommandProcessor::readCommand(){
+    cout<< "enter command"<< endl; 
+    string command;
+    getline(cin,command);
+    return command; 
+}
+Command* CommandProcessor::saveCommand(string* command, string* effect) {
+    auto* updatedCommand = new Command(command, effect);
+    commands->push_back(updatedCommand);
+    return updatedCommand;
 }
 
-string CommandProcessor::readCommand(){
-    string command;
-    cout<< "enter command";
-    getline(cin,command);
-};
+// Command* CommandProcessor::getCommand(GameEngine& ge) {
+//     while(true) {
+//         string commandString = this->readCommand();
+//         string effect;
+//         Command* newCommand = saveCommand(new string(commandString), new string(effect));
+//         std::vector<std::string> commandTokens = splitString(commandString);
+//         if(validate(commandTokens.at(0), ge)) return newCommand;
+//         else {
+//             cout << "Invalid command. \"" << commandString << "\" Please try again." << endl;
+//             newCommand->saveEffect(new string("Invalid CommandProcessing \"" + commandString  +"\""));
+//         }
+//     }
+// }
 
-
-
+// bool CommandProcessor::validate(const string& commandString, GameEngine& ge) {
+//     return ge.validateInput(commandString);
+// }
