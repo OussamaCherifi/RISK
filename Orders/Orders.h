@@ -4,6 +4,7 @@
 #include <iostream>
 #include "Map.h"
 #include "Player.h"
+#include "Cards.h"
 
 using namespace std;
 
@@ -16,6 +17,7 @@ public:
     virtual bool validate() = 0;
     virtual ostream &displayOrder(ostream &currentOrder) const = 0;
     virtual ~Orders() = default;
+    string stringToLog();
 
 private:
     friend ostream &operator<<(ostream &currentOrder, Orders &test);
@@ -28,8 +30,10 @@ public:
     void addList(Orders *something);
     void remove(int i);
     void move(int start, int end);
+    string stringToLog();
     ostream &displayOrderList(ostream &myOrderList);
     OrdersList &operator=(const OrdersList &something);
+    vector<Orders *> getListofOrders();
     ~OrdersList();
     // OrdersList::OrdersList(){};
 
@@ -44,7 +48,7 @@ class Deploy : public Orders
 private:
     Territory* targetTerritory;
     int* numOfArmies;
-    Player* player;
+    Player* playerDep;
 public:
     int data;
     Deploy(Player* player, Territory* target, int armies);
@@ -59,13 +63,13 @@ public:
 class Advance : public Orders
 {
 private:
-    Player* player;
+    Player* playerAdv;
     Territory* sourceTerritory;
     Territory* targetTerritory;
     int* numOfArmies;
 public:
     int data;
-    Advance();
+    Advance(Player* player, Territory* source, Territory* target, int armies);
     ~Advance() override;
     Advance *copy() const override;
     void execute() override;
@@ -76,7 +80,7 @@ public:
 class Bomb : public Orders
 {
 private:
-    Player* player;
+    Player* playerBom;
     Territory* targetTerritory;
 public:
     int data;
@@ -92,6 +96,7 @@ public:
 class Blockade : public Orders
 {
 private:
+    Player* playerBlo;
     Territory* targetTerritory;
 public:
     int data;
@@ -107,8 +112,9 @@ public:
 class Airlift : public Orders
 {
 private:
-    Territory* source;
-    Territory* target;
+    Player* playerAir;
+    Territory* sourceT;
+    Territory* targetT;
     int* numOfArmies;
 public:
     int data;
@@ -123,8 +129,8 @@ public:
 
 class Negotiate : public Orders
 {
+    Player* playerNeg;
     Player* targetP;
-    Player* sourceP;
 public:
     int data;
     Negotiate(Player* player, Player* target);

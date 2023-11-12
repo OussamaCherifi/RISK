@@ -53,6 +53,24 @@ Territory::~Territory() {
     void Territory::addAdjacent(Territory* adjacent) {
         adjacentTerritories->push_back(adjacent);
     }
+    //checks if two territories are adjacent
+    bool Territory::isAdjacentTo(Territory* otherTerritory) {
+        for (Territory* adjacent : *adjacentTerritories) {
+            if (adjacent == otherTerritory) {
+                return true;
+            }
+        }
+        return false;
+    }
+    //checks if the adjacent territory is owned by the same player
+    bool Territory::isAdjacentToOwnedTerritory(Player* player) {
+        for(Territory* adjacentTerritory : *adjacentTerritories){
+            if (adjacentTerritory->getPlayer() == *player){
+                return true;
+            }
+        }
+        return false;
+    }
 
     // Define a stream insertion operator as a friend function
     void Territory::insertInStream() {
@@ -86,8 +104,7 @@ Territory::~Territory() {
         delete yCoordinate;
         yCoordinate = newY;
     }
-    void Territory::setPlayer(string* newName) {
-        delete player;
+    void Territory::setPlayer(Player* newPlayer) {
         player = new Player;
     }
     //making the army change methods
@@ -95,7 +112,7 @@ Territory::~Territory() {
         *numberOfArmies+=num;
     }
     void Territory::doubleArmies() {
-        *numberOfArmies*=2;
+        *numberOfArmies *= 2;
     }
     void Territory::removeHalfArmies() {
         *numberOfArmies /=2;
@@ -105,6 +122,12 @@ Territory::~Territory() {
         if (*numberOfArmies<0){
             *numberOfArmies =0;
         }
+    }
+    void Territory::setArmies(int* newArmies) {
+        *numberOfArmies = *newArmies;
+    }
+    int Territory::getArmies() const {
+        return *numberOfArmies;
     }
 
 //map constructors

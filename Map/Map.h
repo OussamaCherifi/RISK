@@ -37,7 +37,7 @@ public:
     //declare setters
     void setXCoordinate(int *newX);
     void setYCoordinate(int *newY);
-    void setPlayer(string *newName);
+    void setPlayer(Player* newPlayer);
 
     //army methods
 
@@ -45,9 +45,12 @@ public:
     void removeArmies(int num);
     void removeHalfArmies();
     void doubleArmies();
+    void setArmies(int* newArmies);
+    int getArmies() const;
 
     vector<Territory *> *adjacentTerritories;
-
+    bool isAdjacentTo(Territory* otherTerritory);
+    bool isAdjacentToOwnedTerritory(Player* player);
     void insertInStream();
 
     //declare destructor

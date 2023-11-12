@@ -5,14 +5,6 @@
 
 using namespace std;
 
-//default constructor
-Player::Player() {
-    //territorylist remains empty by default
-    this->hand = new Hand(); //empty hand
-    this->ordersList = new OrdersList(); //empty orderslist
-    this->reinforcementPool = new int(0);
-}
-
 //copy constructor
 Player::Player(const Player &p){
     this->territoryList = p.territoryList;
@@ -54,8 +46,17 @@ ostream &operator<<(ostream &out, const Player &p){
     return out;
 }
     
-void Player::addDiplomaticRelation(Player *player) {
-    diplomaticRelations.push_back(player);
+void Player::addDiplomaticRelation(Player *player1) {
+    diplomaticRelations.insert(player1);
+}
+bool Player::isDiplomaticRelation(Player* attacker) const {
+    return diplomaticRelations.find(attacker) != diplomaticRelations.end();
+}
+bool Player::operator==(const Player &other) const {
+    return this->id == other.id;
+}
+bool Player::operator!=(const Player &other) const {
+    return !(*this == other);
 }
 
 //getters
@@ -70,6 +71,9 @@ OrdersList *Player::getOrdersList(){
 }
 int *Player::getReinforcementPool(){
     return reinforcementPool;
+}
+Deck& Player::getDeck(){
+    return deck;
 }
 
 //setters
