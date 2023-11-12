@@ -1,6 +1,37 @@
 #include <iostream>
+#include <fstream>
 #include "commandProcessing.h"
 using namespace std; 
+
+int FileCommandProcessorAdapter::current = 0;
+
+ostream& operator<<(ostream& os, const Command& command) {
+    os << "{Command: " << *(command.command);
+    os << ", Effect: " << *(command.effect) << "}";
+    return os;
+}
+
+ostream& operator<<(ostream& os, const CommandProcessor& processor) {
+    os << "Commands: " << endl;
+    for(Command* command : *processor.commands) {
+        os << "_" << *command << endl;
+    }
+    return os;
+}
+
+ostream& operator<<(ostream& os, const FileLineReader& reader) {
+    os << "FileLineReader's Lines: " << endl;
+    for(string* line : *reader.lines) {
+        os << *line << endl;
+    }
+    return os;
+}
+
+// ostream& operator<<(ostream& os, const FileCommandProcessorAdapter& adapter) {
+//     os << "FileCommandProcessorAdapter: " << endl;
+//     os << *adapter.fileLineReader;
+//     return os;
+// }
 
 
 Command::Command() {
@@ -71,4 +102,44 @@ Command* CommandProcessor::saveCommand(string* command, string* effect) {
 
 // bool CommandProcessor::validate(const string& commandString, GameEngine& ge) {
 //     return ge.validateInput(commandString);
+// }
+FileLineReader::FileLineReader() {
+    this->lines = new vector<string*>();
+}
+
+FileLineReader::FileLineReader(const FileLineReader& something) {
+    this->lines = something.lines;
+}
+
+FileLineReader::~FileLineReader() {
+    delete lines;
+}
+
+void FileLineReader::readLineFromFile(string& fileName) {
+    string line;
+    ifstream file("../Saves/" + fileName);
+      while (getline(file, line)) {
+        lines->push_back(new string(line));
+        cout << line << endl;
+        }
+    if (!file.is_open()) {
+        cout << "Error opening file: " << fileName << ". Please try again." << endl << endl << endl;
+        return;
+    }
+    file.close();
+}
+
+vector<string*>* FileLineReader::getLines() {
+    return lines;
+}
+// FileCommandProcessorAdapter::FileCommandProcessorAdapter() {
+//     this->fileLineReader = new FileLineReader();
+// }
+
+// FileCommandProcessorAdapter::FileCommandProcessorAdapter(const FileCommandProcessorAdapter& other) {
+//     this->fileLineReader = other.fileLineReader;
+// }
+
+// FileCommandProcessorAdapter::~FileCommandProcessorAdapter() {
+//     delete fileLineReader;
 // }
