@@ -23,7 +23,7 @@ using namespace std; // Adding this to use the 'std' namespace
         continent = new std::string(copy->getContinent());
         xCoordinate = new int(copy->getxCoordinate());
         yCoordinate = new int(copy->getYCoordinate());
-        player = new std::string(copy->getPlayer());
+        player = new Player(copy->getPlayer());
         visited = new bool(false);
         numberOfArmies = new int(0);
         adjacentTerritories = copy->adjacentTerritories;
@@ -78,7 +78,7 @@ Territory::~Territory() {
         delete xCoordinate;
         xCoordinate = newX;
     }
-    string Territory::getPlayer() const {
+    Player Territory::getPlayer() const {
         return *player;
     }
 
@@ -88,7 +88,23 @@ Territory::~Territory() {
     }
     void Territory::setPlayer(string* newName) {
         delete player;
-        player = newName;
+        player = new Player;
+    }
+    //making the army change methods
+    void Territory::addArmies(int num){
+        *numberOfArmies+=num;
+    }
+    void Territory::doubleArmies() {
+        *numberOfArmies*=2;
+    }
+    void Territory::removeHalfArmies() {
+        *numberOfArmies /=2;
+    }
+    void Territory::removeArmies(int num) {
+        *numberOfArmies -= num;
+        if (*numberOfArmies<0){
+            *numberOfArmies =0;
+        }
     }
 
 //map constructors
@@ -143,6 +159,8 @@ bool Map::isMapConnected() {
 
     return true;
 }
+
+
 
 bool Map::validate() {
     //Ensure that all territories are connected.

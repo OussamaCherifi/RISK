@@ -6,6 +6,7 @@
 #include <iterator>
 #include <stack>
 #pragma once
+#include "Player.h"
 
 using namespace std;
 
@@ -14,7 +15,7 @@ class Territory {
 private:
     int *xCoordinate;
     int *yCoordinate;
-    string *player;
+    Player *player;
     string *territoryName;
     string *continent;
 
@@ -29,7 +30,7 @@ public:
     //delcare getters
     int getxCoordinate() const;
     int getYCoordinate() const;
-    string getPlayer() const;
+    Player getPlayer() const;
     string getContinent() const;
     string getName() const;
 
@@ -37,6 +38,13 @@ public:
     void setXCoordinate(int *newX);
     void setYCoordinate(int *newY);
     void setPlayer(string *newName);
+
+    //army methods
+
+    void addArmies(int num);
+    void removeArmies(int num);
+    void removeHalfArmies();
+    void doubleArmies();
 
     vector<Territory *> *adjacentTerritories;
 

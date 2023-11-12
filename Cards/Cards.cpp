@@ -14,7 +14,27 @@ CardType Cards::getType() const{
     return type;
 }
 //plays the card, the orders made by different cards will be implemented in future assignment
-void Cards::play() const{
+void Cards::play(Player& player, Deck& deck) const{
+    Orders* order = nullptr;
+    switch(type) {
+        case BOMB:
+            order= new Bomb();
+            break;
+        case BLOCKADE:
+            order = new Blockade();
+            break;
+        case AIRLIFT:
+            order= new Airlift();
+            break;
+        case DIPLOMACY:
+            order = new Negotiate();
+            break;
+        default:
+            cout<<"Unknown card type played"<<endl;
+            return;
+    }
+    player.getOrdersList()->addList(order);
+    deck.addCard(*this);
     cout<<"A "<< getTypeAsString()<<" card was played."<<endl;
 }
 string Cards::getTypeAsString() const{
@@ -58,7 +78,7 @@ Cards Deck::draw(){
 int Deck::getCardNum() {
     return cards.size();
 }
-//add a card to your hand
+//add a card to the deck
 void Deck::addCard(const Cards& card1){
     cards.push_back(card1);
 }
@@ -81,5 +101,8 @@ int Hand::getCardNum(){
 //get a card from the hand
 const Cards& Hand::getCard(int index){
     return hands[index];
+}
+Hand::Hand(){
+
 }
 

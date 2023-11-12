@@ -15,7 +15,7 @@ class Player
         Hand *hand;
         OrdersList* ordersList;
         int *reinforcementPool;
-
+        vector<Player*> diplomaticRelations;
     public:
         //constructors
         Player();
@@ -45,6 +45,10 @@ class Player
         vector<Territory*> toDefend();
         vector<Territory*> toAttack();
         void issueOrder();
+        // create diplomatic relation
+
+        void addDiplomaticRelation(Player* player);
+        bool canAttack(Player* target) const;
 };
 
 void testPlayers();

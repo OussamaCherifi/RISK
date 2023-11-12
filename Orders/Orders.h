@@ -2,42 +2,36 @@
 #define ORDERS_H
 #include <Vector>
 #include <iostream>
-#include "LoggingObserver.h"
+#include "Map.h"
+#include "Player.h"
+
 using namespace std;
 
-class Orders : public Subject, public ILoggable
+class Orders
 {
 public:
-    Orders() = default;
-    ~Orders() override = default;
+    Orders();
     virtual Orders *copy() const = 0;
     virtual void execute() = 0;
     virtual bool validate() = 0;
     virtual ostream &displayOrder(ostream &currentOrder) const = 0;
-
-    // Assignment 2, Part 5 - Zack
-    string stringToLog() override;
-
+    virtual ~Orders() = default;
 
 private:
     friend ostream &operator<<(ostream &currentOrder, Orders &test);
 };
-
-class OrdersList : public Subject, public ILoggable
+class OrdersList
 {
 public:
-    OrdersList() = default;
-    ~OrdersList() override = default;
+    OrdersList();
     int getSize();
     void addList(Orders *something);
     void remove(int i);
     void move(int start, int end);
     ostream &displayOrderList(ostream &myOrderList);
     OrdersList &operator=(const OrdersList &something);
-    vector<Orders *> getListOfOrders();
-
-    // Assignment 2, Part 5 - Zack
-    string stringToLog() override;
+    ~OrdersList();
+    // OrdersList::OrdersList(){};
 
 private:
     std::vector<Orders *> listOfOrders;
@@ -47,10 +41,14 @@ private:
 //Deploy,Advance, Bomb,Blockade,Airlift and Negotiate are all subclasses of Orders
 class Deploy : public Orders
 {
+private:
+    Territory* targetTerritory;
+    int* numOfArmies;
+    Player* player;
 public:
     int data;
-    Deploy() = default;
-    ~Deploy() override = default;
+    Deploy(Player* player, Territory* target, int armies);
+    ~Deploy() override;
     Deploy *copy() const override;
     void execute() override;
     bool validate() override;
@@ -60,10 +58,15 @@ public:
 
 class Advance : public Orders
 {
+private:
+    Player* player;
+    Territory* sourceTerritory;
+    Territory* targetTerritory;
+    int* numOfArmies;
 public:
     int data;
-    Advance() = default;
-    ~Advance() override = default;
+    Advance();
+    ~Advance() override;
     Advance *copy() const override;
     void execute() override;
     bool validate() override;
@@ -72,10 +75,13 @@ public:
 };
 class Bomb : public Orders
 {
+private:
+    Player* player;
+    Territory* targetTerritory;
 public:
     int data;
-    Bomb() = default;
-    ~Bomb() override = default;
+    Bomb(Player* player, Territory* target);
+    ~Bomb() override;
     Bomb *copy() const override;
     void execute() override;
     bool validate() override;
@@ -85,10 +91,12 @@ public:
 
 class Blockade : public Orders
 {
+private:
+    Territory* targetTerritory;
 public:
     int data;
-    Blockade() = default;
-    ~Blockade() override = default;
+    Blockade(Player* player, Territory* target);
+    ~Blockade() override;
     Blockade *copy() const override;
     void execute() override;
     bool validate() override;
@@ -98,10 +106,14 @@ public:
 
 class Airlift : public Orders
 {
+private:
+    Territory* source;
+    Territory* target;
+    int* numOfArmies;
 public:
     int data;
-    Airlift() = default;
-    ~Airlift() override = default;
+    Airlift(Player* player, Territory* source, Territory* target, int armies);
+    ~Airlift() override;
     Airlift *copy() const override;
     void execute() override;
     bool validate() override;
@@ -111,17 +123,17 @@ public:
 
 class Negotiate : public Orders
 {
+    Player* targetP;
+    Player* sourceP;
 public:
     int data;
-    Negotiate() = default;
-    ~Negotiate() override = default;
+    Negotiate(Player* player, Player* target);
+    ~Negotiate() override;
     Negotiate *copy() const override;
     void execute() override;
     bool validate() override;
     ostream &displayOrder(ostream &currentOrder) const override;
     Negotiate &operator=(const Negotiate &something);
 };
-
-void testOrdersLists();
 
 #endif 

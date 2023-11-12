@@ -1,4 +1,5 @@
 #include "Orders.h"
+#include "LoggingObserver.h"
 #include <Vector>
 #include <iostream>
 #include <sstream>
@@ -102,15 +103,24 @@ OrdersList &OrdersList::operator=(const OrdersList &somethingCopy)
 
 
 // Deploy constructors, destructor and methods
+Deploy::Deploy(Player* player, Territory *target, int armies) : targetTerritory(target), numOfArmies(new int(armies)){}
 Deploy *Deploy::copy() const { return new Deploy(*this); }
 void Deploy::execute()
 {
     if (validate())
     {
+        targetTerritory->addArmies(*numOfArmies);
         Notify(this);
     }
 }
-bool Deploy::validate() {return true;}
+bool Deploy::validate() {
+    if (targetTerritory->getPlayer() == *player){
+    return true;
+    }
+    else{
+        return false;
+    }
+}
 Deploy &Deploy::operator=(const Deploy &something) {
     if (this != &something) {this->data = something.data;}
     return *this;
@@ -211,7 +221,9 @@ void Negotiate::execute()
         Notify(this);
     }
 }
-bool Negotiate::validate() {return true;}
+bool Negotiate::validate() {
+    if()
+}
 Negotiate &Negotiate::operator=(const Negotiate &something) {
     if (this != &something) {this->data = something.data;}
     return *this;
