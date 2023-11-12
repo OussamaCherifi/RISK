@@ -21,17 +21,24 @@ class Command : public ILoggable, public Subject{
     string stringToLog() override; 
     void Notify(); 
     friend ostream &operator << (ostream &output, Command &obj);
-
+    enum class commandType { loadmap, validatemap, addplayer, gamestart, replay, quit, gameend,tournament};
     private:
     string* command; 
     string* effect;
-    static LogObserver* obs; 
-
-   
+    static LogObserver* obs;
 };
 
 class CommandProcessor : public ILoggable, public Subject {
-
+    public:
+        friend ostream &operator << (ostream &output, CommandProcessor &obj);
+        CommandProcessor& operator=(const CommandProcessor &commandProcessor); //dom changed
+    CommandProcessor();
+    ~CommandProcessor();
+    CommandProcessor(CommandProcessor &commandProcessor);
+    Command* getCommand();
+    bool validate(string command);
+    void Notify();
+    
 
     private:
     vector <Command*> commandList;
