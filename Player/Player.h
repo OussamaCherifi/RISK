@@ -14,6 +14,7 @@ class Player
         vector<Territory*> territoryList;
         Hand *hand;
         OrdersList* ordersList;
+        int *reinforcementPool;
 
     public:
         //constructors
@@ -33,6 +34,10 @@ class Player
         vector<Territory*> getTerritoryList();
         Hand *getHand();
         OrdersList *getOrdersList();
+        int *getReinforcementPool();
+
+        //setters
+        void setReinforcementPool(int *num);
 
         //add territories to the collection
         void addTerritory(Territory* t);

@@ -2,6 +2,7 @@
 #include <utility>
 #include <algorithm>
 #include <vector>
+#include <math.h>
 #include <GameEngine.h>
 
 using namespace std;
@@ -126,33 +127,47 @@ void GameEngine::mainGameLoop(){
     while(!playerHasAllTerritories){
         for (int i = 0; i < players.size(); i++){
             if (players[i]->getTerritoryList().size() == numTerr){
-                //player wins
+                cout << "player has won!" << endl;
+                // set state to win?
             }
             else if (players[i]->getTerritoryList().empty()){
                 cout << "player has no more territories! Removing player from the game." << endl;
                 delete players[i];
                 players.erase(players.begin() + i);
             }
-            else{
-                reinforcementPhase();
-                issueOrdersPhase();
-                executeOrdersPhase();
-            }
         }
-
+            reinforcementPhase();
+            issueOrdersPhase();
+            executeOrdersPhase();
     }
 
 }
 
 void GameEngine::reinforcementPhase(){
+    for (Player *p : players){
+        int numReinforcement = floor(p->getTerritoryList().size() / 3);
+        // if (p.ownsContinent()) numReinforcement += 5;
 
+        //make sure the minimum number is 3
+        if (numReinforcement < 3) numReinforcement = 3;
+
+        cout << "player is receiving " << numReinforcement << " reinforcements." << endl;
+
+        int *numPtr = &numReinforcement;
+        p->setReinforcementPool(numPtr);
+    }
 }
 
 void GameEngine::issueOrdersPhase(){
-
+    for (Player *p : players){
+        cout << "Let's start by deploying army units from your reinforcement pool. " << endl;
+        
+        p->issueOrder();
+    }
 }
 
 void GameEngine::executeOrdersPhase(){
+
 
 }
 

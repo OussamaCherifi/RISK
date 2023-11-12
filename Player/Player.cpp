@@ -10,6 +10,7 @@ Player::Player() {
     //territorylist remains empty by default
     this->hand = new Hand(); //empty hand
     this->ordersList = new OrdersList(); //empty orderslist
+    this->reinforcementPool = new int(0);
 }
 
 //copy constructor
@@ -17,6 +18,7 @@ Player::Player(const Player &p){
     this->territoryList = p.territoryList;
     this->hand = p.hand;
     this->ordersList = p.ordersList;
+    this->reinforcementPool = p.reinforcementPool;
 }
 
 //destructor
@@ -25,6 +27,8 @@ Player::~Player() {
                 delete t;
     }
     territoryList.clear();
+
+    delete reinforcementPool;
 
     delete hand;
     delete ordersList;
@@ -35,6 +39,7 @@ Player::~Player() {
     this->territoryList = p.territoryList;
     this->hand = p.hand;
     this->ordersList = p.ordersList;
+    this->reinforcementPool = p.reinforcementPool;
     return *this;
  }
 
@@ -60,6 +65,14 @@ Hand *Player::getHand(){
 OrdersList *Player::getOrdersList(){
     return ordersList;
 }
+int *Player::getReinforcementPool(){
+    return reinforcementPool;
+}
+
+//setters
+void Player::setReinforcementPool(int *num){
+    this->reinforcementPool = num;
+}
 
 //adds territories owned by the player to their collection
 void Player::addTerritory(Territory* t){
@@ -67,25 +80,17 @@ void Player::addTerritory(Territory* t){
 }
 
 vector<Territory*> Player::toDefend(){
-    vector<Territory*> defendList;
-
-    //arbitrary list of territories
-    defendList.push_back(territoryList[0]);
-    return defendList;
+    return territoryList;
 }
 
 vector<Territory*> Player::toAttack(){
     vector<Territory*> attackList;
-
-    //arbitrary list of territories
-    attackList.push_back(territoryList[1]);
-
+    // get adjacent territories
     return attackList;
 }
 
 void Player::issueOrder(){
-    //arbitrary order for now
-    Deploy* o1 = new Deploy();
-    ordersList->addList(o1);
+    cout << "Issuing Orders" << endl;
+    
 }
 // tiffany
