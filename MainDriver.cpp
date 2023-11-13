@@ -14,7 +14,7 @@ int main() {
 //    testPlayers();
 //    testOrdersLists();
 //    testCards();
-    testLoggingObserver();
+//    testLoggingObserver();
 //    testGameStates();
 //startupPhase();
 //
