@@ -67,6 +67,9 @@ public:
 
 class MapLoader {
 public:
+
+    MapLoader();
+    ~MapLoader();
     bool createMapFromFile(string& fileName, Map* map2make);
 
 };

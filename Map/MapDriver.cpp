@@ -37,7 +37,7 @@ std::string generateAbsolutePath(string mapName){
 //testLoadMap
 void testLoadMaps(){
 
-    MapLoader driver = MapLoader();
+    auto* driver = new MapLoader();
 
     string fileName = generateAbsolutePath("mapFileTest.txt");
 
@@ -47,8 +47,14 @@ void testLoadMaps(){
       // Create and test a map
         Map* mapTest = new Map();
 
-        bool testResult = driver.createMapFromFile(fileName, mapTest);
 
+
+//    if (driver != nullptr && mapTest != nullptr) {
+//        std::string filepath = generateAbsolutePath(fileName);
+//        driver->createMapFromFile(filepath, mapTest);
+//    }
+
+    bool testResult = driver->createMapFromFile(fileName, mapTest);
 
         if (testResult) {
             cout << "Successful creation of a map from " << mapTest << endl;
@@ -63,6 +69,7 @@ void testLoadMaps(){
 
     mapTest->territories->clear();
     delete mapTest;
+
 }
 
 

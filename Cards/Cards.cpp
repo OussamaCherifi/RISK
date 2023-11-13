@@ -10,6 +10,7 @@ Cards::Cards(const Cards& c1):type(c1.type){}
 Cards::Cards(CardType t) {
     this->type=t;
 }
+
 CardType Cards::getType() const{
     return type;
 }

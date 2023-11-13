@@ -5,6 +5,7 @@
 #include "Map.h"
 #include "Player.h"
 #include "LoggingObserver.h"
+#include "Cards.h"
 
 
 using namespace std;

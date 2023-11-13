@@ -7,6 +7,8 @@ Orders::Orders(){}
 
 OrdersList::OrdersList(){}
 
+OrdersList::~OrdersList(){}
+
 
 ostream &operator<<(ostream &myOrder, Orders &something){
     return something.displayOrder(myOrder);
