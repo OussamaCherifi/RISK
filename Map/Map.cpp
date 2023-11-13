@@ -96,6 +96,10 @@ using namespace std; // Adding this to use the 'std' namespace
         player = newName;
     }
 
+    vector<Territory *> *Territory::getAdjacentTerritory(){
+        return adjacentTerritories;
+    }
+
 //map constructors
     Map::Map() {
         territories = new vector<Territory*>;

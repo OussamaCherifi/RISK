@@ -122,7 +122,13 @@ vector<Territory*> Player::toDefend(){
 
 vector<Territory*> Player::toAttack(){
     vector<Territory*> attackList;
-    // get adjacent territories
+
+    for(Territory *t : territoryList){
+        for(int i = 0; i < t->getAdjacentTerritory()->size(); i++){
+
+        }
+    }
+
     return attackList;
 }
 

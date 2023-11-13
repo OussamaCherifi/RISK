@@ -33,6 +33,7 @@ public:
     string getPlayer() const;
     string getContinent() const;
     string getName() const;
+    vector<Territory *> *getAdjacentTerritory();
 
     //declare setters
     void setXCoordinate(int *newX);
