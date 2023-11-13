@@ -142,7 +142,8 @@ ostream &Deploy::displayOrder(ostream &myOrder) const
 }
 
 // Advance
-
+Advance::Advance(Player* player, Territory* source, Territory* target, int armies)
+    : sourceTerritory(source), targetTerritory(target), numOfArmies(new int(armies)) {}
 Advance *Advance::copy() const { return new Advance(*this); }
 void Advance::execute()
 {

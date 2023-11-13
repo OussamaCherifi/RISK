@@ -166,7 +166,7 @@ void Player::issueOrder(){
                 cout << "Invalid number. Please enter another number." << endl; 
             }
 
-            cout << "A Deploy Order of " <<  numUnits << " units to " << territoryName << endl;
+            cout << "A Deploy Order of " <<  numUnits << " units to " << territoryName << " will be issued." << endl;
             Deploy *deployOrder = new Deploy(this, territoryList[territoryIndex], numUnits);
             ordersList->addList(deployOrder);
 
@@ -174,7 +174,7 @@ void Player::issueOrder(){
 
     cout << "Now let's issue Advance orders!" << endl;
     string playerInput, dSourceTerritory, dTargetTerritory;
-    int playerChoice, dSourceIndex, dTargetIndex;
+    int playerChoice, dSourceIndex, dTargetIndex, numArmies;
     bool playerDone = false, defenseDone = false, attackDone = false, validNumChoice = false;
 
     while(!playerDone){
@@ -221,6 +221,13 @@ void Player::issueOrder(){
                         }
                     }
                 }
+
+                cout << "How many army units do you want to move?" << endl;
+                cin >> numArmies;
+
+                cout << "An Advance Order of " << numArmies << " army units from " << dSourceTerritory << " to " << dTargetTerritory <<  " will be issued." << endl;
+                Advance *advanceOrder = new Advance(this, territoryList[dSourceIndex], territoryList[dTargetIndex], numArmies);
+                ordersList->addList(advanceOrder);
             }
 
             else if (playerChoice == 2) {
