@@ -5,6 +5,14 @@
 
 using namespace std;
 
+//default constructor
+Player::Player() {
+    //territorylist remains empty by default
+    this->hand = new Hand(); //empty hand
+    this->ordersList = new OrdersList(); //empty orderslist
+    this->reinforcementPool = new int(0);
+}
+
 //copy constructor
 Player::Player(const Player &p){
     this->territoryList = p.territoryList;
