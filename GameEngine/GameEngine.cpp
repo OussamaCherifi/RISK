@@ -153,15 +153,54 @@ void GameEngine::reinforcementPhase(){
 
         cout << "player is receiving " << numReinforcement << " reinforcements." << endl;
 
-        int *numPtr = &numReinforcement;
-        p->setReinforcementPool(numPtr);
+        p->setReinforcementPool(numReinforcement);
     }
 }
 
 void GameEngine::issueOrdersPhase(){
     for (Player *p : players){
+        string territoryName;
+        int numUnits, territoryIndex;
+        bool territoryFound = false;
+        bool correctNum = false;
+
         cout << "Let's start by deploying army units from your reinforcement pool. " << endl;
-        
+
+        while (p->getReinforcementPool() > 0){
+            cout << "You have " << p->getReinforcementPool() << " army units in your reinforcement pool." << endl;
+
+            while(!territoryFound){
+                cout << "Enter the name of territory you wish to deploy army units: ";
+                cin >> territoryName;
+
+                for(int i = 0; i < p->getTerritoryList().size(); i++){
+
+                    if (territoryName == p->getTerritoryList()[i]->getName()){
+                        territoryFound = true;
+                        territoryIndex = i;
+                        break;
+                    }
+                }
+
+                cout << "Territory not found. Please re-enter the territory name." << endl;
+            }
+
+            while(!correctNum){
+                cout << "How many army units do you wish to deploy?";
+                cin >> numUnits;
+
+                if (numUnits > 0 && numUnits <= p->getReinforcementPool())
+                    correctNum = true;
+
+                cout << "Invalid number. Please enter another number." << endl; 
+            }
+
+            // p.getTerritoryList()[territoryIndex].deploy(numUnits);
+
+        }
+
+        cout << "Great! All your reinforcement army units are deployed!" << endl;
+
         p->issueOrder();
     }
 }
