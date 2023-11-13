@@ -17,16 +17,12 @@ void Cards::play(Player& player, Deck& deck) const{
     Orders* order = nullptr;
     switch(*type) {
         case BOMB:
-            order= new Bomb();
             break;
-        case BLOCKADE:
-            order = new Blockade();
+        case BLOCKADE:;
             break;
         case AIRLIFT:
-            order= new Airlift();
             break;
         case DIPLOMACY:
-            order = new Negotiate();
             break;
         default:
             cout<<"Unknown card type played"<<endl;

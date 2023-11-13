@@ -128,7 +128,9 @@ void testOrderExecution(){
     negotiateOrder.execute();
 
     //Proof they cannot attack
-
+    Advance advanceOrder4(&player1, &T, &V, 1);
+    advanceOrder.validate();
+    advanceOrder.execute();
 }
 
 

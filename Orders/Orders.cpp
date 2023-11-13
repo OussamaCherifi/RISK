@@ -260,7 +260,7 @@ void Blockade::execute()
     if (validate())
     {
         targetTerritory->doubleArmies();
-        //targetTerritory->setPlayer(Neutral); //give the ownership of territory to the neutral player
+        //give the ownership of territory to the neutral player
         Notify(this);
         cout<<"Blockade Active"<<endl;
     }
