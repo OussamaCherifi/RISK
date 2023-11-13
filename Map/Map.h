@@ -17,7 +17,8 @@ private:
     string *player;
     string *territoryName;
     string *continent;
-
+    bool *visited;
+    vector<Territory *> adjacentTerritories;
     int* numberOfArmies;
 
 public:
