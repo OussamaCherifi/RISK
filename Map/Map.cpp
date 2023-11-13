@@ -28,7 +28,7 @@ using namespace std; // Adding this to use the 'std' namespace
         continent = new std::string(copy->getContinent());
         xCoordinate = new int(copy->getxCoordinate());
         yCoordinate = new int(copy->getYCoordinate());
-        player = new Player(copy->getPlayer());
+        player = new std::string(copy->getPlayer());
         visited = new bool(false);
         numberOfArmies = new int(0);
         adjacentTerritories = copy->adjacentTerritories;
@@ -58,24 +58,6 @@ using namespace std; // Adding this to use the 'std' namespace
     void Territory::addAdjacent(Territory* adjacent) {
         adjacentTerritories->push_back(adjacent);
     }
-    //checks if two territories are adjacent
-    bool Territory::isAdjacentTo(Territory* otherTerritory) {
-        for (Territory* adjacent : *adjacentTerritories) {
-            if (adjacent == otherTerritory) {
-                return true;
-            }
-        }
-        return false;
-    }
-    //checks if the adjacent territory is owned by the same player
-    bool Territory::isAdjacentToOwnedTerritory(Player* player) {
-        for(Territory* adjacentTerritory : *adjacentTerritories){
-            if (adjacentTerritory->getPlayer() == *player){
-                return true;
-            }
-        }
-        return false;
-    }
 
     // Define a stream insertion operator as a friend function
     void Territory::insertInStream() {
@@ -101,7 +83,7 @@ using namespace std; // Adding this to use the 'std' namespace
         delete xCoordinate;
         xCoordinate = newX;
     }
-    Player Territory::getPlayer() const {
+    string Territory::getPlayer() const {
         return *player;
     }
 
@@ -109,30 +91,9 @@ using namespace std; // Adding this to use the 'std' namespace
         delete yCoordinate;
         yCoordinate = newY;
     }
-    void Territory::setPlayer(Player* newPlayer) {
-        player = new Player;
-    }
-    //making the army change methods
-    void Territory::addArmies(int num){
-        *numberOfArmies+=num;
-    }
-    void Territory::doubleArmies() {
-        *numberOfArmies *= 2;
-    }
-    void Territory::removeHalfArmies() {
-        *numberOfArmies /=2;
-    }
-    void Territory::removeArmies(int num) {
-        *numberOfArmies -= num;
-        if (*numberOfArmies<0){
-            *numberOfArmies =0;
-        }
-    }
-    void Territory::setArmies(int* newArmies) {
-        *numberOfArmies = *newArmies;
-    }
-    int Territory::getArmies() const {
-        return *numberOfArmies;
+    void Territory::setPlayer(string* newName) {
+        delete player;
+        player = newName;
     }
 
 //map constructors
@@ -187,8 +148,6 @@ bool Map::isMapConnected() {
 
     return true;
 }
-
-
 
 bool Map::validate() {
     //Ensure that all territories are connected.

@@ -27,7 +27,7 @@ add_executable(A1_COMP345
         Player/Player.h
         Player/PlayerDriver.cpp
         MainDriver.cpp
-        LoggingObserver/LoggingObserver.h
         LoggingObserver/LoggingObserver.cpp
+        LoggingObserver/LoggingObserver.h
         LoggingObserver/LoggingObserverDriver.cpp
 )

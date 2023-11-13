@@ -1,16 +1,11 @@
 #include "Orders.h"
-#include "LoggingObserver.h"
 #include <Vector>
 #include <iostream>
-#include <sstream>
 using namespace std;
-// Assignment 2, Part 5 - Zack
-// Create log string
-string Orders::stringToLog() {
-    ostringstream oss;
-    oss << "[Order]\t\tExecuted " << *this << " order";
-    return oss.str();
-}
+Orders::Orders(){}
+
+
+OrdersList::OrdersList(){}
 
 OrdersList::~OrdersList(){}
 
@@ -19,28 +14,20 @@ ostream &operator<<(ostream &myOrder, Orders &something){
     return something.displayOrder(myOrder);
 }
 
-string OrdersList::stringToLog() {
-    ostringstream oss;
-    oss << "[OrdersList]\tAdded " << *listOfOrders.back() << " order";
-    return oss.str();
-}
-
 int OrdersList::getSize()
 {
+    cout<<"inside getsize";
     return listOfOrders.size();
 }
 void OrdersList::addList(Orders *O)
 {
+    cout<<"inside addlist";
     listOfOrders.push_back(O);
-    Notify(this);
-}
-
-vector<Orders *> OrdersList::getListofOrders() {
-    return listOfOrders;
 }
 
 void OrdersList::remove(int i)
 {
+    cout<<"inside remove";
     int sizeList = this->getSize();
 
     if (sizeList == 0)
@@ -66,6 +53,7 @@ void OrdersList::remove(int i)
 }
 void::OrdersList::move(int start, int end)
 {
+    cout<<"inside move";
     int sizeList = this->getSize() - 1;
     if (start < 0 || start >= sizeList || end < 0 || end >= sizeList)
     {
@@ -92,11 +80,13 @@ ostream &OrdersList::displayOrderList(ostream &myOrderList)
         myOrderList << "/" << *orderObject << '\n';
     }
     return myOrderList;
+    cout << "inside display orderslist";
 }
 
 ostream &operator<<(ostream &myOrderList, OrdersList &aList)
 {
     return aList.displayOrderList(myOrderList);
+    cout << "inside operator";
 }
 OrdersList &OrdersList::operator=(const OrdersList &somethingCopy)
 {
@@ -105,29 +95,17 @@ OrdersList &OrdersList::operator=(const OrdersList &somethingCopy)
 
 
 // Deploy constructors, destructor and methods
-Deploy::Deploy(Player* player, Territory *target, int armies) : targetTerritory(target), numOfArmies(new int(armies)){}
+Deploy::Deploy() { cout<<"inside deploy constructor";}
+Deploy::~Deploy() {}
 Deploy *Deploy::copy() const { return new Deploy(*this); }
 void Deploy::execute()
 {
-    if (validate())
+    if (validate() == true)
     {
-        targetTerritory->addArmies(*numOfArmies);
-        playerDep->setReinforcementPool((playerDep->getReinforcementPool())-*numOfArmies);
-        Notify(this);
+        cout << "validate Deploy";
     }
 }
-bool Deploy::validate() {
-    if (targetTerritory->getPlayer() == *playerDep){
-        if(*numOfArmies <= *playerDep->getReinforcementPool()){
-            return true;
-        }
-        else
-            return false;
-    }
-    else{
-        return false;
-    }
-}
+bool Deploy::validate() {return true;}
 Deploy &Deploy::operator=(const Deploy &something) {
     if (this != &something) {this->data = something.data;}
     return *this;
@@ -135,192 +113,116 @@ Deploy &Deploy::operator=(const Deploy &something) {
 
 ostream &Deploy::displayOrder(ostream &myOrder) const
 {
-    myOrder << "Deploy";
+    myOrder << "running deploy";
     return myOrder;
 }
 
 // Advance
-
+Advance::Advance() {cout<<"inside advance constructor";}
+Advance::~Advance() {}
 Advance *Advance::copy() const { return new Advance(*this); }
 void Advance::execute()
 {
-    if (validate())
+    if (validate() == true)
     {
-        if(targetTerritory->getPlayer()==*playerAdv){
-            sourceTerritory->removeArmies(*numOfArmies);
-            targetTerritory->addArmies(*numOfArmies);
-        }
-        else{
-            int* attackingArmies = numOfArmies;
-            int defendingArmies = targetTerritory->getArmies();
-
-            while (*attackingArmies > 0 && defendingArmies > 0) {
-                // Battle simulation
-                for (int i = 0; i < *attackingArmies; ++i) {
-                    if (rand() % 100 < 60) {
-                        // Attacker kills one defending army
-                        --defendingArmies;
-                    }
-                }
-
-                for (int i = 0; i < defendingArmies; ++i) {
-                    if (rand() % 100 < 70) {
-                        // Defender kills one attacking army
-                        --attackingArmies;
-                    }
-                }
-            }
-
-            // Check if the attacker conquered the territory
-            if (defendingArmies <= 0) {
-                // Attacker captures the territory
-                targetTerritory->setPlayer(playerAdv);
-                targetTerritory->setArmies(attackingArmies);
-
-                // Player receives a card for conquering a territory
-                playerAdv->getHand()->addCard((playerAdv->getDeck()).draw());
-            } else {
-                // Attacker did not conquer the territory
-                targetTerritory->setArmies(&defendingArmies);
-            }
-        }
-        Notify(this);
+        cout << "validate Advance";
     }
 }
-bool Advance::validate() {
-    if (sourceTerritory->getPlayer() == *playerAdv){
-        if (sourceTerritory->isAdjacentTo(targetTerritory)){
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-    else
-        return false;
-}
+bool Advance::validate() {return true;}
 Advance &Advance::operator=(const Advance &something) {
     if (this != &something) {this->data = something.data;}
     return *this;
 }
 ostream &Advance::displayOrder(ostream &myOrder) const
 {
-    myOrder << "Advance";
+    myOrder << "running advance";
     return myOrder;
 }
 
 // Bomb
+Bomb::Bomb() {cout<<"inside bomb constructor";}
+Bomb::~Bomb() {}
 Bomb *Bomb::copy() const { return new Bomb(*this); }
 void Bomb::execute()
 {
-    if (validate())
+    if (validate() == true)
     {
-        targetTerritory->removeHalfArmies();
-        Notify(this);
+        cout << "validate Bomb";
     }
 }
-bool Bomb::validate() {
-    if(targetTerritory->getPlayer() != *playerBom && targetTerritory->isAdjacentToOwnedTerritory(playerBom)){
-        return true;
-    }
-    else
-        return false;
-}
+bool Bomb::validate() {return true;}
 Bomb &Bomb::operator=(const Bomb &something) {
     if (this != &something) {this->data = something.data;}
     return *this;
 }
 ostream &Bomb::displayOrder(ostream &myOrder) const
 {
-    myOrder << "Bomb";
+    myOrder << "running Bomb";
     return myOrder;
 }
 
 // Blockade
+Blockade::Blockade() {cout<<"inside blockade constructor";}
+Blockade::~Blockade() {}
 Blockade *Blockade::copy() const { return new Blockade(*this); }
 void Blockade::execute()
 {
-    if (validate())
+    if (validate() == true)
     {
-        targetTerritory->doubleArmies();
-        targetTerritory->setPlayer(Neutral); //give the ownership of territory to the neutral player
-        Notify(this);
+        cout << "validate Blockade";
     }
 }
-bool Blockade::validate() {
-    if(targetTerritory->getPlayer() != *playerBlo){
-        return true;
-    }
-    else{
-        return false;
-    }
-}
+bool Blockade::validate() {return true;}
 Blockade &Blockade::operator=(const Blockade &something) {
     if (this != &something) {this->data = something.data;}
     return *this;
 }
 ostream &Blockade::displayOrder(ostream &myOrder) const
 {
-    myOrder << "Blockade";
+    myOrder << "running Blockade";
     return myOrder;
 }
 
 // Airlift
-Airlift::Airlift(Player* player, Territory* source, Territory* target, int armies)
-        : sourceT(source), targetT(target), numOfArmies(new int(armies)) {}
+Airlift::Airlift() {cout<<"inside airlift constructor";}
+Airlift::~Airlift() {}
 Airlift *Airlift::copy() const { return new Airlift(*this); }
 void Airlift::execute()
 {
-    if (validate())
+    if (validate() == true)
     {
-        sourceT->removeArmies(*numOfArmies);
-        targetT->addArmies(*numOfArmies);
-        Notify(this);
+        cout << "validate Airlift";
     }
 }
-bool Airlift::validate() {
-    if (sourceT->getPlayer() == *playerAir && targetT->getPlayer() == *playerAir) {
-        return true;
-    }
-    else
-        return false;
-}
+bool Airlift::validate() {return true;}
 Airlift &Airlift::operator=(const Airlift &something) {
     if (this != &something) {this->data = something.data;}
     return *this;
 }
 ostream &Airlift::displayOrder(ostream &myOrder) const
 {
-    myOrder << "Airlift";
+    myOrder << "running Airlift";
     return myOrder;
 }
 
 // Negotiate
-Negotiate::Negotiate(Player* player, Player* target) : targetP(target) {}
+Negotiate::Negotiate() {cout<<"inside negotiate constructor";}
+Negotiate::~Negotiate() {}
 Negotiate *Negotiate::copy() const { return new Negotiate(*this); }
 void Negotiate::execute()
 {
-    if (validate())
+    if (validate() == true)
     {
-        playerNeg->addDiplomaticRelation(targetP);
-        targetP->addDiplomaticRelation(playerNeg);
-        Notify(this);
+        cout << "validate Negotiate";
     }
 }
-bool Negotiate::validate() {
-    if(*targetP == *playerNeg){
-        return false;
-    }
-    else{
-        return true;
-    }
-}
+bool Negotiate::validate() {return true;}
 Negotiate &Negotiate::operator=(const Negotiate &something) {
     if (this != &something) {this->data = something.data;}
     return *this;
 }
 ostream &Negotiate::displayOrder(ostream &myOrder) const
 {
-    myOrder << "Negotiate";
+    myOrder << "running Negotiate";
     return myOrder;
 }
