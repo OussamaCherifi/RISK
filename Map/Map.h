@@ -75,9 +75,12 @@ public:
     //declare methods
     bool validate();
     bool isMapConnected();
+    map<string, int> getContinentNameAndNum();
     void insertInStream();
 
     vector<Territory*>* territories;
+private:
+    map<string, int> continentNameAndNum;
 };
 
 class MapLoader {

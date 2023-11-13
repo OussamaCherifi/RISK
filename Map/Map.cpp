@@ -190,7 +190,6 @@ bool Map::isMapConnected() {
 }
 
 
-
 bool Map::validate() {
     //Ensure that all territories are connected.
     if (!isMapConnected()) {
@@ -225,6 +224,8 @@ bool Map::validate() {
     // If all checks pass, the map is valid.
     return true;
 }
+
+map<string, int> Map::getContinentNameAndNum() {return continentNameAndNum;}
 
 
 bool MapLoader::createMapFromFile(string& fileName, Map* mapToCreate) {
@@ -264,7 +265,7 @@ bool MapLoader::createMapFromFile(string& fileName, Map* mapToCreate) {
             inputFile.close();
             return false;
         }
-        try {
+        try{
 
             if (!nextLine.empty() && nextLine != "[Territories]") {
                 int index = nextLine.find("=");
@@ -272,6 +273,9 @@ bool MapLoader::createMapFromFile(string& fileName, Map* mapToCreate) {
                 string substring = nextLine.substr(0, index);
                 substring.erase(remove(substring.begin(), substring.end(), ' '), substring.end());
                 continentInfo.insert(make_pair(substring, stoi(nextLine.substr(index + 1))));
+
+                //made a copy of continentInfo to access it from continentNameAndNum, instance of Map
+                mapToCreate->getContinentNameAndNum().insert(make_pair(substring, stoi(nextLine.substr(index + 1))));
             }
         }
         catch (const exception& e) {

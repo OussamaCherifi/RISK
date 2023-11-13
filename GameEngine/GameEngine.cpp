@@ -128,7 +128,8 @@ void GameEngine::mainGameLoop(){
         for (int i = 0; i < players.size(); i++){
             if (players[i]->getTerritoryList().size() == numTerr){
                 cout << "player has won!" << endl;
-                // set state to win?
+                playerHasAllTerritories = true;
+                break;
             }
             else if (players[i]->getTerritoryList().empty()){
                 cout << "player has no more territories! Removing player from the game." << endl;
@@ -146,7 +147,7 @@ void GameEngine::mainGameLoop(){
 void GameEngine::reinforcementPhase(){
     for (Player *p : players){
         int numReinforcement = floor(p->getTerritoryList().size() / 3);
-        // if (p.ownsContinent()) numReinforcement += 5;
+        // if (p.ownsAContinent()) numReinforcement += 5;
 
         //make sure the minimum number is 3
         if (numReinforcement < 3) numReinforcement = 3;
