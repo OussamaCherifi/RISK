@@ -33,7 +33,7 @@ void OrdersList::addList(Orders *O)
     Notify(this);
 }
 
-vector<Orders *> OrdersList::getListofOrders() {
+vector<Orders *> OrdersList::getListOfOrders() {
     return listOfOrders;
 }
 

@@ -153,9 +153,7 @@ void GameEngine::reinforcementPhase(){
 
         cout << "player is receiving " << numReinforcement << " reinforcements." << endl;
 
-        int *ptrNumReinforcement = &numReinforcement;
-
-        p->setReinforcementPool(ptrNumReinforcement);
+        p->setReinforcementPool(&numReinforcement);
     }
 }
 

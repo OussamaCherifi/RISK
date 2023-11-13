@@ -26,13 +26,14 @@ public:
     void addList(Orders *something);
     void remove(int i);
     void move(int start, int end);
+    vector<Orders *> getListOfOrders();
     ostream &displayOrderList(ostream &myOrderList);
     OrdersList &operator=(const OrdersList &something);
     ~OrdersList();
     // OrdersList::OrdersList(){};
 
 private:
-    std::vector<Orders *> listOfOrders;
+    vector<Orders *> listOfOrders;
     friend ostream &operator<<(ostream &myOrderList, OrdersList &something);
 };
 
