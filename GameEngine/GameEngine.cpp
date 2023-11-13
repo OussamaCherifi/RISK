@@ -1,8 +1,6 @@
 #include <iostream>
 #include <utility>
-#include <sstream>
 #include <GameEngine.h>
-#include <vector>
 
 using namespace std;
 
@@ -190,16 +188,12 @@ ostream &operator<<(ostream &os, GameEngine *gameEngine) {
 void startupPhase() {
 
     std::string choice;
-    GameEngine* game = new GameEngine();
+    bool running = true;
+
     MapLoader driver = MapLoader();
     Map *mapTest = new Map();
-    Deck deck;
-    Hand hand;
 
-    // Create a vector to store Player objects that are created
-    std::vector<Player*> playerList;
-
-    while(true) {
+    while(running) {
 
         // Display the menu
         std::cout << "Command Menu:\n";
@@ -207,168 +201,34 @@ void startupPhase() {
         std::cout << "2. validateMap\n";
         std::cout << "3. addplayer\n";
         std::cout << "4. gamestart\n";
-        std::cout << "5. press 5 to exit\n";
         std::cout << "Enter your choice: ";
 
-        // Get input from the user
-        std::cout << "Enter a command: ";
-        std::string userInput;
-        std::getline(std::cin, userInput);
-
-        // Remove spaces from the input
-        userInput.erase(std::remove_if(userInput.begin(), userInput.end(), ::isspace), userInput.end());
-
-        // Check if the input has the format "loadmap<someFile>"
-        std::string expected_prefix_loadmap = "loadmap";
-        std::string expected_prefix_addplayer = "addplayer";
-        size_t open_bracket = userInput.find('<');
-        size_t close_bracket = userInput.find('>');
-
-        if (userInput.compare(0, expected_prefix_loadmap.size(), expected_prefix_loadmap) == 0 &&
-            userInput.size() > expected_prefix_loadmap.size() &&
-            userInput[userInput.size() - 1] == '>') {
-
-            if (open_bracket != std::string::npos && close_bracket != std::string::npos &&
-                open_bracket < close_bracket) {
-                std::string filename = userInput.substr(open_bracket + 1, close_bracket - open_bracket - 1);
-                std::cout << "Loading map with filename: " << filename << std::endl;
-
-                std::string filepath = generateAbsolutePath(filename);
-                bool loadResult = driver.createMapFromFile(filepath, mapTest);
-                if (loadResult) {
-                    cout << "Successful creation of a map from " << mapTest << endl;
-                }
-                else {
-                    cout << "Unsuccessful creation of a map from " << mapTest << endl;
-                }
-
-            }
-
-        }
-
-        //user chooses to validate the current loaded map
-        else if (userInput == "validateMap") {
-                std::cout << "Validating map\n";
-                    if (mapTest->validate()) {
-                        cout << "Map from " << mapTest << " is valid!" << endl;
-                    } else {
-                        cout << "Map from " << mapTest << " is invalid!" << endl;
-            }
+        // Get user's choice as a string
+        std::cin >> choice;
 
 
-        }
+        if (choice == "1") {
+            std::cout << "Enter the Name of the map you wish to load: ";
+            std::string mapChoice;
 
-        //user chooses to add a player into the game
-        else if (userInput.compare(0, expected_prefix_addplayer.size(), expected_prefix_addplayer) == 0 &&
-                       userInput.size() > expected_prefix_addplayer.size() &&
-                       userInput[userInput.size() - 1] == '>') {
-            if (open_bracket != std::string::npos && close_bracket != std::string::npos &&
-                open_bracket < close_bracket) {
+            // Get user's choice of map
+            std::cin >> mapChoice;
 
-                string playerName = userInput.substr(open_bracket + 1, close_bracket - open_bracket - 1);
+            std::string filepath = generateAbsolutePath(mapChoice);
+            driver.createMapFromFile(filepath, mapTest);
 
+        } else if (choice == "2") {
+            std::cout << "You selected Option 2\n";
+            mapTest->validate();
 
-                if (playerList.size() < 6) {
-                    cout << "Loading player with name: " << playerName << std::endl;
-                    // Dynamically allocate a new Player object
-                    auto* player1 = new Player();
-                    player1->setName(playerName);
-
-                    // Store the pointer in playerList
-                    playerList.push_back(player1);
-
-                    cout << "You have successfully added player " << playerName << " into the game" <<std::endl;
-                    cout << "Current player count: " << playerList.size() << "\n"<<std::endl;
-
-                }
-
-                 if(playerList.size() >= 6){
-
-                     cout << "You have reached the maximum capacity of players allowed in the game. "<< "\nCurrent player count: " << playerList.size() << "\n"<<std::endl;
-
-                }
-                }
-
-            }
-
-        else if (userInput == "gamestart") {
-
-                if(playerList.size() < 2){
-                    std::cout << "Add another player name. A minimum of 2 players are required :\n";
-
-                }
-
-                else if(playerList.size() >= 2 ){
-
-                    // Distribute territories to players as well as give them 50 armies in their reinforcement pool
-                    int currentPlayerIndex = 0;
-                    for (Territory* territory : *mapTest->territories) {
-
-                        Player* currentPlayer = playerList[currentPlayerIndex];
-
-                        vector<Territory*>& playerTerritories = currentPlayer->getTerritoryList();
-
-                        playerTerritories.push_back(territory);
-
-                        int armies = 50;
-
-                        //give armies
-                        currentPlayer->setReinforcementPool(&armies);
-
-                        // Move to the next player to add his territory
-                        currentPlayerIndex = (currentPlayerIndex + 1) % playerList.size();
-                    }
-
-                    // Loop over players
-                    for (Player* currentPlayer : playerList) {
-                        //players draw cards
-                        for (int i = 0; i < 2; ++i) {
-                            Cards card = deck.draw();
-                            currentPlayer->getHand()->addCard(card);
-//                            cout << "Drew a " << card.getTypeAsString() << " card." << endl;
-//                            cout << "Deck size: " << deck.getCardNum() << endl;
-                        }
-                    }
-
-                    // Display the result
-                    for (Player* player : playerList) {
-                        cout << "Player " << player->getPlayerName()<< " owns territories: ";
-                        cout << "Number of armies " << *(player->getReinforcementPool()) <<" ";
-                        cout << "cards " << player->getHand()->getCardNum() <<" ";
-                        cout << "Deck size: " << deck.getCardNum() << endl;
-
-                        for (Territory* territory : player->getTerritoryList()) {
-                            std::cout << territory->getName() << ", ";
-                        }
-                        std::cout << std::endl;
-                    }
-
-
-
-                }
-
-                //play();
-
-        }
-
-        else if (userInput == "5") {
-                    mapTest->territories->clear();
-                    delete mapTest;
-                    std::cout << "Exiting\n";
-
-
-
-        }
-
-        else {
-                std::cout << "Invalid choice. Please enter a valid option.\n";
-
-        }
-
-        continue;
+        } else if (choice == "3") {
+            std::cout << "You selected Option 3\n";
+        } else if (choice == "4") {
+            std::cout << "Goodbye!\n";
+            // Exit the loop to end the program
+        } else {
+            std::cout << "Invalid choice. Please try again.\n";
         }
 
     }
-
-
-
+    }

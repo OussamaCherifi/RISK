@@ -17,7 +17,7 @@ int main() {
 //    testLoggingObserver();
 //    testGameStates();
 startupPhase();
-//
+
 
 }
 

@@ -14,8 +14,6 @@ class Player
         vector<Territory*> territoryList;
         Hand *hand;
         OrdersList* ordersList;
-        string playerName;
-        int *reinforcementPool;
 
     public:
         //constructors
@@ -32,12 +30,9 @@ class Player
         friend ostream &operator<<(ostream &out, const Player &p);
 
         //getters
-//        vector<Territory*> getTerritoryList();
-        vector<Territory*>& getTerritoryList();
-        string getPlayerName(); // New getter for playerName
+        vector<Territory*> getTerritoryList();
         Hand *getHand();
         OrdersList *getOrdersList();
-        int *getReinforcementPool();
 
         //add territories to the collection
         void addTerritory(Territory* t);
@@ -45,13 +40,6 @@ class Player
         vector<Territory*> toDefend();
         vector<Territory*> toAttack();
         void issueOrder();
-
-
-    // setters
-    void setName(const std::string& newName);
-    void setReinforcementPool(int *num);
-
-
 };
 
 void testPlayers();
