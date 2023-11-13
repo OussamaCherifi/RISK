@@ -246,6 +246,18 @@ void Player::issueOrder(){
         }
 
     }
+
+    int cardIndex;
+    cout << "You can now play one card from your hand." << endl;
+    cout << "Here are the cards in your hand: " << endl;
+    for (int i = 0; i < hand->getCardNum(); i++){
+        cout << i << "- " << hand->getCard(i).getTypeAsString() << endl;
+    }
+
+    cout << "Enter the index of the card you want to play"<< endl;
+    cin >> cardIndex;
+
+
     
 }
 // tiffany
