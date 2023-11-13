@@ -183,11 +183,14 @@ void Player::issueOrder(){
     }
 
     cout << "Now let's issue Advance orders!" << endl;
-    string playerInput, dSourceTerritory, dTargetTerritory;
-    int playerChoice, dSourceIndex, dTargetIndex, numArmies;
-    bool playerDone = false, defenseDone = false, attackDone = false, validNumChoice = false;
+
+    bool playerDone = false;
 
     while(!playerDone){
+        string playerInput, sourceTerritory, targetTerritory;
+        int playerChoice, sourceIndex, targetIndex, numArmies;
+        bool sourceFound = false, targetFound = false;
+
         cout << "Do you wish to issue Advance orders? Enter \"YES\" or \"NO\"" << endl;
         cout << "Any other input would be considerd as \"NO\"" << endl;
         cin >> playerInput;
@@ -197,46 +200,47 @@ void Player::issueOrder(){
             cin >> playerChoice;
 
             if(playerChoice == 1){
-                bool defenseSourceFound = false, defenseTargetFound = false;
                 cout << "Here are your territories to defend: " << endl;
                 for (Territory *t : toDefend()){
                     cout << " - " << t->getName() << endl;
                 }
 
-                while(!defenseSourceFound){
+                while(!sourceFound){
                 cout << "Enter the name of the territory you want to move troops from";
-                cin >> dSourceTerritory;
+                cin >> sourceTerritory;
 
-                for(int i = 0; i < territoryList.size(); i++){
+                for(int i = 0; i < toDefend().size(); i++){
 
-                    if (dSourceTerritory == territoryList[i]->getName()){
-                        defenseSourceFound = true;
-                        dSourceIndex = i;
+                    if (sourceTerritory == toDefend()[i]->getName()){
+                        sourceFound = true;
+                        sourceIndex = i;
                         break;
                     }
                 }
-                cout << "Territory not found. Please re-enter the territory name." << endl;
+                cout << "Territory not found." << endl;
                 }
 
-                while(!defenseTargetFound){
+                while(!targetFound){
                     cout << "Enter the name of the territory you want to move troops to";
-                    cin >> dTargetTerritory;
+                    cin >> targetTerritory;
 
-                    for(int i = 0; i < territoryList.size(); i++){
+                    for(int i = 0; i < toDefend().size(); i++){
 
-                        if (dTargetTerritory == territoryList[i]->getName()){
-                            defenseTargetFound = true;
-                            dTargetIndex = i;
+                        if (targetTerritory == territoryList[i]->getName()){
+                            targetFound = true;
+                            targetIndex = i;
                             break;
                         }
                     }
+
+                    cout << "Territory not found." << endl;
                 }
 
                 cout << "How many army units do you want to move?" << endl;
                 cin >> numArmies;
 
-                cout << "An Advance Order of " << numArmies << " army units from " << dSourceTerritory << " to " << dTargetTerritory <<  " will be issued." << endl;
-                auto *advanceOrder = new Advance(this, territoryList[dSourceIndex], territoryList[dTargetIndex], numArmies);
+                cout << "An Advance Order of " << numArmies << " army units from " << sourceTerritory << " to " << targetTerritory <<  " will be issued." << endl;
+                auto *advanceOrder = new Advance(this, toDefend()[sourceIndex], toDefend()[targetIndex], numArmies);
                 ordersList->addList(advanceOrder);
             }
 
@@ -245,6 +249,49 @@ void Player::issueOrder(){
                 for (Territory *t : toAttack()){
                     cout << " - " << t->getName() << endl; 
                 }
+
+                while(!sourceFound){
+                    cout << "Here are the territories you own: " << endl;
+                    for (Territory *t : territoryList){
+                        cout << " - " << t->getName() << endl;
+                    }
+                    cout << "Enter the name of the territory you want to move troops from";
+                    cin >> sourceTerritory;
+
+                    for(int i = 0; i < territoryList.size(); i++){
+
+                        if (sourceTerritory == territoryList[i]->getName()){
+                            sourceFound = true;
+                            sourceIndex = i;
+                            break;
+                        }
+                    }
+                    cout << "Territory not found." << endl;
+                }
+
+                while(!targetFound){
+                    cout << "Enter the name of the territory you want to move troops to";
+                    cin >> targetTerritory;
+
+                    for(int i = 0; i < toAttack().size(); i++){
+
+                        if (targetTerritory == toAttack()[i]->getName()){
+                            targetFound = true;
+                            targetIndex = i;
+                            break;
+                        }
+                    }
+
+                    cout << "Territory not found." << endl;
+                }
+
+                cout << "How many army units do you want to move?" << endl;
+                cin >> numArmies;
+
+                cout << "An Advance Order of " << numArmies << " army units from " << sourceTerritory << " to " << targetTerritory <<  " will be issued." << endl;
+                auto *advanceOrder = new Advance(this, territoryList[sourceIndex], territoryList[targetIndex], numArmies);
+                ordersList->addList(advanceOrder);
+
             }
             else{
                 cout << "Invalid choice. Please enter \"1\" to defend or \"2\" to attack." << endl;
