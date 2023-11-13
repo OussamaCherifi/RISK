@@ -153,7 +153,9 @@ void GameEngine::reinforcementPhase(){
 
         cout << "player is receiving " << numReinforcement << " reinforcements." << endl;
 
-        p->setReinforcementPool(numReinforcement);
+        int *ptrNumReinforcement = &numReinforcement;
+
+        p->setReinforcementPool(ptrNumReinforcement);
     }
 }
 
@@ -189,7 +191,7 @@ void GameEngine::issueOrdersPhase(){
                 cout << "How many army units do you wish to deploy?";
                 cin >> numUnits;
 
-                if (numUnits > 0 && numUnits <= p->getReinforcementPool())
+                if (numUnits > 0 && numUnits <= *p->getReinforcementPool())
                     correctNum = true;
 
                 cout << "Invalid number. Please enter another number." << endl; 

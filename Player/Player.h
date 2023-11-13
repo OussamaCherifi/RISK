@@ -17,7 +17,7 @@ class Player
         vector<Territory*> territoryList;
         Hand *hand;
         OrdersList* ordersList;
-        int reinforcementPool;
+        int *reinforcementPool;
         set<Player* > diplomaticRelations;
         Deck deck;
     public:
@@ -38,11 +38,11 @@ class Player
         vector<Territory*> getTerritoryList();
         Hand *getHand();
         OrdersList *getOrdersList();
-        int getReinforcementPool();
+        int *getReinforcementPool();
         Deck& getDeck();
 
         //setters
-        void setReinforcementPool(int num);
+        void setReinforcementPool(int *num);
 
         //add territories to the collection
         void addTerritory(Territory* t);

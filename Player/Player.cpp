@@ -10,7 +10,7 @@ Player::Player() {
     //territorylist remains empty by default
     this->hand = new Hand(); //empty hand
     this->ordersList = new OrdersList(); //empty orderslist
-    this->reinforcementPool = 0;
+    this->reinforcementPool = new int(0);
 }
 
 //copy constructor
@@ -27,6 +27,8 @@ Player::~Player() {
                 delete t;
     }
     territoryList.clear();
+
+    delete reinforcementPool;
 
     delete hand;
     delete ordersList;
@@ -75,7 +77,7 @@ Hand *Player::getHand(){
 OrdersList *Player::getOrdersList(){
     return ordersList;
 }
-int Player::getReinforcementPool(){
+int *Player::getReinforcementPool(){
     return reinforcementPool;
 }
 Deck& Player::getDeck(){
@@ -83,7 +85,7 @@ Deck& Player::getDeck(){
 }
 
 //setters
-void Player::setReinforcementPool(int num){
+void Player::setReinforcementPool(int *num){
     this->reinforcementPool = num;
 }
 
