@@ -31,7 +31,7 @@ class Subject {
 public:
     Subject();
 
-    ~Subject();
+    virtual ~Subject();
 
     virtual void Attach(Observer *o);  // attach an observer to subject
 

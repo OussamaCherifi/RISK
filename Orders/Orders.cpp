@@ -103,7 +103,7 @@ OrdersList &OrdersList::operator=(const OrdersList &somethingCopy)
 
 
 // Deploy constructors, destructor and methods
-Deploy::Deploy(Player* player, Territory *target, int armies) : targetTerritory(target), numOfArmies(new int(armies)){}
+Deploy::Deploy(Player* player, Territory *target, int armies) : playerDep(player), targetTerritory(target), numOfArmies(new int(armies)){}
 Deploy *Deploy::copy() const { return new Deploy(*this); }
 void Deploy::execute()
 {
@@ -119,7 +119,7 @@ void Deploy::execute()
     }
 }
 bool Deploy::validate() {
-    if (targetTerritory->getPlayer() == *playerDep){
+    if (targetTerritory->getPlayer() == playerDep){
         if(*numOfArmies <= *playerDep->getReinforcementPool()){
             return true;
         }
@@ -143,13 +143,13 @@ ostream &Deploy::displayOrder(ostream &myOrder) const
 
 // Advance
 Advance::Advance(Player* player, Territory* source, Territory* target, int armies)
-    : sourceTerritory(source), targetTerritory(target), numOfArmies(new int(armies)) {}
+    : playerAdv(player), sourceTerritory(source), targetTerritory(target), numOfArmies(new int(armies)) {}
 Advance *Advance::copy() const { return new Advance(*this); }
 void Advance::execute()
 {
     if (validate())
     {
-        if(targetTerritory->getPlayer()==*playerAdv){
+        if(targetTerritory->getPlayer()==playerAdv){
             sourceTerritory->removeArmies(*numOfArmies);
             targetTerritory->addArmies(*numOfArmies);
         }
@@ -186,7 +186,7 @@ void Advance::execute()
                     cout << "Territory conquered by attacker" << endl;
 
                     // Player receives a card for conquering a territory
-                    playerAdv->getHand()->addCard((playerAdv->getDeck()).draw());
+                    playerAdv->getHand()->addCard((playerAdv->getDeck())->draw());
                     cout << "Player received a card;" << endl;
                 } else {
                     // Attacker did not conquer the territory
@@ -202,7 +202,7 @@ void Advance::execute()
     }
 }
 bool Advance::validate() {
-    if (sourceTerritory->getPlayer() == *playerAdv){
+    if (sourceTerritory->getPlayer() == playerAdv){
         if (sourceTerritory->isAdjacentTo(targetTerritory)){
             return true;
         }
@@ -224,6 +224,7 @@ ostream &Advance::displayOrder(ostream &myOrder) const
 }
 
 // Bomb
+Bomb::Bomb(Player* player, Territory* target) : playerBom(player), targetTerritory(target) {}
 Bomb *Bomb::copy() const { return new Bomb(*this); }
 void Bomb::execute()
 {
@@ -238,7 +239,7 @@ void Bomb::execute()
     }
 }
 bool Bomb::validate() {
-    if(targetTerritory->getPlayer() != *playerBom && targetTerritory->isAdjacentToOwnedTerritory(playerBom)){
+    if(targetTerritory->getPlayer() != playerBom && targetTerritory->isAdjacentToOwnedTerritory(playerBom)){
         return true;
     }
     else
@@ -255,6 +256,7 @@ ostream &Bomb::displayOrder(ostream &myOrder) const
 }
 
 // Blockade
+Blockade::Blockade(Player* player, Territory* target) : playerBlo(player), targetTerritory(target) {}
 Blockade *Blockade::copy() const { return new Blockade(*this); }
 void Blockade::execute()
 {
@@ -270,7 +272,7 @@ void Blockade::execute()
     }
 }
 bool Blockade::validate() {
-    if(targetTerritory->getPlayer() != *playerBlo){
+    if(targetTerritory->getPlayer() != playerBlo){
         return true;
     }
     else{
@@ -289,7 +291,7 @@ ostream &Blockade::displayOrder(ostream &myOrder) const
 
 // Airlift
 Airlift::Airlift(Player* player, Territory* source, Territory* target, int armies)
-        : sourceT(source), targetT(target), numOfArmies(new int(armies)) {}
+        : playerAir(player), sourceT(source), targetT(target), numOfArmies(new int(armies)) {}
 Airlift *Airlift::copy() const { return new Airlift(*this); }
 void Airlift::execute()
 {
@@ -304,7 +306,7 @@ void Airlift::execute()
     }
 }
 bool Airlift::validate() {
-    if (sourceT->getPlayer() == *playerAir && targetT->getPlayer() == *playerAir) {
+    if (sourceT->getPlayer() == playerAir && targetT->getPlayer() == playerAir) {
         return true;
     }
     else
@@ -321,7 +323,7 @@ ostream &Airlift::displayOrder(ostream &myOrder) const
 }
 
 // Negotiate
-Negotiate::Negotiate(Player* player, Player* target) : targetP(target) {}
+Negotiate::Negotiate(Player* player, Player* target) : playerNeg(player), targetP(target) {}
 Negotiate *Negotiate::copy() const { return new Negotiate(*this); }
 void Negotiate::execute()
 {

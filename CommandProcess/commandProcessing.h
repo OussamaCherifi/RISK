@@ -34,7 +34,6 @@ class CommandProcessor{
     Command * getCommand(GameEngine& ge);
     friend std::ostream& operator<<(std::ostream& os, const CommandProcessor& processor);
     static bool validate(const std::string& command, GameEngine& ge);
-    Command * getCommand(GameEngine& ge);
 
     private:
     std::vector<Command*>* commands; 

@@ -1,5 +1,5 @@
 #include "Player.h"
-
+#include "Map.h"
 #include<iostream>
 #include<vector>
 
@@ -52,7 +52,7 @@ void Player::setName(const std::string& newName) {
     playerName = newName;
 }
 void Player::setReinforcementPool(int *num){
-    this->reinforcementPool = num;
+    reinforcementPool = num;
 }
 
 //getter
@@ -78,8 +78,8 @@ ostream &operator<<(ostream &out, const Player &p){
 void Player::addDiplomaticRelation(Player *player1) {
     diplomaticRelations.insert(player1);
 }
-bool Player::isDiplomaticRelation(Player attacker) const {
-    return diplomaticRelations.find(&attacker) != diplomaticRelations.end();
+bool Player::isDiplomaticRelation(Player *attacker) const {
+    return diplomaticRelations.find(attacker) != diplomaticRelations.end();
 }
 bool Player::operator==(const Player &other) const {
     return this->id == other.id;
@@ -89,7 +89,7 @@ bool Player::operator!=(const Player &other) const {
 }
 
 //getters
-vector<Territory*> Player::getTerritoryList(){
+vector<Territory*> &Player::getTerritoryList(){
     return territoryList;
 }
 
@@ -99,17 +99,11 @@ Hand *Player::getHand(){
 OrdersList *Player::getOrdersList(){
     return ordersList;
 }
-int *Player::getReinforcementPool(){
-    return reinforcementPool;
-}
-Deck& Player::getDeck(){
+Deck *Player::getDeck(){
     return deck;
 }
 
 //setters
-void Player::setReinforcementPool(int *num){
-    this->reinforcementPool = num;
-}
 
 //adds territories owned by the player to their collection
 void Player::addTerritory(Territory* t){
@@ -124,7 +118,7 @@ vector<Territory*> Player::toAttack(){
     vector<Territory*> attackList;
 
     for(Territory *t : territoryList){
-        for(int i = 0; i < t->getAdjacentTerritory()->size(); i++){
+        for(int i = 0; i < t->getAdjacentTerritories()->size(); i++){
 
         }
     }
@@ -139,7 +133,7 @@ void Player::issueOrder(){
 
     cout << "Let's start by deploying army units from your reinforcement pool. " << endl;
 
-    while (getReinforcementPool() > 0){
+    while (*getReinforcementPool() > 0){
             cout << "You have " << reinforcementPool << " army units in your reinforcement pool." << endl;
 
             cout << "Here are your territories to defend: " << endl;
@@ -173,7 +167,7 @@ void Player::issueOrder(){
             }
 
             cout << "A Deploy Order of " <<  numUnits << " units to " << territoryName << " will be issued." << endl;
-            Deploy *deployOrder = new Deploy(this, territoryList[territoryIndex], numUnits);
+            auto *deployOrder = new Deploy(this, territoryList[territoryIndex], numUnits);
             ordersList->addList(deployOrder);
 
     }
@@ -232,7 +226,7 @@ void Player::issueOrder(){
                 cin >> numArmies;
 
                 cout << "An Advance Order of " << numArmies << " army units from " << dSourceTerritory << " to " << dTargetTerritory <<  " will be issued." << endl;
-                Advance *advanceOrder = new Advance(this, territoryList[dSourceIndex], territoryList[dTargetIndex], numArmies);
+                auto *advanceOrder = new Advance(this, territoryList[dSourceIndex], territoryList[dTargetIndex], numArmies);
                 ordersList->addList(advanceOrder);
             }
 

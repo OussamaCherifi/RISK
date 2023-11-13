@@ -1,12 +1,20 @@
 #ifndef PLAYER_H
 #define PLAYER_H
-#include "Map.h"
-#include "Cards.h"
-#include "Orders.h"
 #include<vector>
 #include <set>
+#include "Cards.h"
+#include "Map.h"
+#include "Orders.h"
 
-using namespace std; 
+using namespace std;
+
+class Territory;
+
+class Hand;
+
+class OrdersList;
+
+class Deck;
 
 //create players
 class Player 
@@ -20,7 +28,7 @@ class Player
         string playerName;
         int *reinforcementPool;
         set<Player* > diplomaticRelations;
-        Deck deck;
+        Deck *deck;
     public:
         //constructors
         Player();
@@ -42,7 +50,7 @@ class Player
         Hand *getHand();
         OrdersList *getOrdersList();
         int *getReinforcementPool();
-        Deck& getDeck();
+        Deck *getDeck();
 
         //setters
         void setReinforcementPool(int *num);

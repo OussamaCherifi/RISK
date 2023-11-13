@@ -4,11 +4,16 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include "Orders.h"
+#include "Player.h"
 using namespace std;
+
+class Player;
 
 //create Warzone card types
 
 enum CardType {BOMB, BLOCKADE, REINFORCEMENT, AIRLIFT, DIPLOMACY, UNKNOWN};
+class Deck;
 
 class Cards{
 private:
@@ -16,7 +21,7 @@ private:
 public:
     Cards(CardType t);
     Cards(const Cards& c1);
-    void play() const;
+    void play(Player *player, Deck *deck) const;
     CardType getType() const;
     string getTypeAsString() const;
 };

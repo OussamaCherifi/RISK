@@ -6,20 +6,13 @@
 
 using namespace std; // Adding this to use the 'std' namespace
 
-    MapLoader::MapLoader() {}
-
-    //destructor
-    MapLoader::~MapLoader() {}
     // Parameterized constructor
-    Territory::Territory(string name, string cont, int x, int y) {
-        territoryName = new string(name);
-        continent = new std::string(cont);
-        xCoordinate = new int(x);
-        yCoordinate = new int(y);
-        visited = new bool(false);
-        numberOfArmies = new int(0);
-        adjacentTerritories = new vector<Territory*>;
-        player = new std::string("");
+    Territory::Territory(string name, string cont, int x, int y) :
+            territoryName(new string(name)),
+            continent(new string(cont)), xCoordinate(new int(x)),
+            yCoordinate(new int(y)), visited(new bool(false)),
+            numberOfArmies(new int(0)),
+            adjacentTerritories(new vector<Territory *>()) {
     }
 
 // Copy constructor
@@ -28,35 +21,52 @@ using namespace std; // Adding this to use the 'std' namespace
         continent = new std::string(copy->getContinent());
         xCoordinate = new int(copy->getxCoordinate());
         yCoordinate = new int(copy->getYCoordinate());
-        player = new std::string(copy->getPlayer());
+        player = new Player(*copy->getPlayer());
         visited = new bool(false);
         numberOfArmies = new int(0);
         adjacentTerritories = copy->adjacentTerritories;
     }
 
-    Territory::~Territory() {
-        //deallocates all variables to not have memory leaks or dangling pointers
-        delete player;
-        player = nullptr;
-        delete territoryName;
-        territoryName = nullptr;
-        delete continent;
-        continent = nullptr;
-        delete xCoordinate;
-        xCoordinate = nullptr;
-        delete yCoordinate;
-        yCoordinate = nullptr;
-        delete numberOfArmies;
-        numberOfArmies = nullptr;
-        delete adjacentTerritories;
-        adjacentTerritories = nullptr;
-        delete visited;
-        visited = nullptr;
-    }
+Territory::~Territory() {
+    //deallocates all variables to not have memory leaks or dangling pointers
+    delete player;
+    player = nullptr;
+    delete territoryName;
+    territoryName = nullptr;
+    delete continent;
+    continent = nullptr;
+    delete xCoordinate;
+    xCoordinate = nullptr;
+    delete yCoordinate;
+    yCoordinate = nullptr;
+    delete numberOfArmies;
+    numberOfArmies = nullptr;
+    for (auto ptr : *adjacentTerritories)
+        delete ptr;  // Free the memory allocated for each Territory object
+    adjacentTerritories->clear();  // Clear the vector
+}
 
     // Add an adjacent territory to the vector
     void Territory::addAdjacent(Territory* adjacent) {
         adjacentTerritories->push_back(adjacent);
+    }
+    //checks if two territories are adjacent
+    bool Territory::isAdjacentTo(Territory* otherTerritory) {
+        for (Territory* adjacent : *adjacentTerritories) {
+            if (adjacent == otherTerritory) {
+                return true;
+            }
+        }
+        return false;
+    }
+    //checks if the adjacent territory is owned by the same player
+    bool Territory::isAdjacentToOwnedTerritory(Player* player) {
+        for(Territory* adjacentTerritory : *adjacentTerritories){
+            if (adjacentTerritory->getPlayer() == player){
+                return true;
+            }
+        }
+        return false;
     }
 
     // Define a stream insertion operator as a friend function
@@ -73,6 +83,15 @@ using namespace std; // Adding this to use the 'std' namespace
     string Territory::getContinent() const {
         return *continent;
     }
+    bool Territory::getVisited() const {
+        return visited;
+    }
+    void Territory::setVisited(bool value) {
+        visited = value;
+    }
+    vector<Territory *> *Territory::getAdjacentTerritories() const {
+        return adjacentTerritories;
+    }
     int Territory::getxCoordinate() const {
         return *xCoordinate; }
 
@@ -83,21 +102,38 @@ using namespace std; // Adding this to use the 'std' namespace
         delete xCoordinate;
         xCoordinate = newX;
     }
-    string Territory::getPlayer() const {
-        return *player;
+    Player *Territory::getPlayer() const {
+        return player;
     }
 
     void Territory::setYCoordinate(int* newY) {
         delete yCoordinate;
         yCoordinate = newY;
     }
-    void Territory::setPlayer(string* newName) {
-        delete player;
-        player = newName;
+    void Territory::setPlayer(Player* newPlayer) {
+        player = new Player;
     }
-
-    vector<Territory *> *Territory::getAdjacentTerritory(){
-        return adjacentTerritories;
+    //making the army change methods
+    void Territory::addArmies(int num){
+        *numberOfArmies+=num;
+    }
+    void Territory::doubleArmies() {
+        *numberOfArmies *= 2;
+    }
+    void Territory::removeHalfArmies() {
+        *numberOfArmies /=2;
+    }
+    void Territory::removeArmies(int num) {
+        *numberOfArmies -= num;
+        if (*numberOfArmies<0){
+            *numberOfArmies =0;
+        }
+    }
+    void Territory::setArmies(int* newArmies) {
+        *numberOfArmies = *newArmies;
+    }
+    int Territory::getArmies() const {
+        return *numberOfArmies;
     }
 
 //map constructors
@@ -125,7 +161,7 @@ bool Map::isMapConnected() {
 
     // Reset visited flag for all territories
     for (Territory* node : *territories) {
-        *node->visited = false;
+        node->setVisited(false);
     }
 
     std::stack<Territory*> stack;
@@ -135,9 +171,9 @@ bool Map::isMapConnected() {
         Territory* node = stack.top();
         stack.pop();
 
-        if (!node->visited) {
-            *node->visited = true;
-            for (Territory* neighbor : *node->adjacentTerritories) {
+        if (!node->getVisited()) {
+            node->setVisited(true);
+            for (Territory* neighbor : *node->getAdjacentTerritories()) {
                 stack.push(neighbor);
             }
         }
@@ -145,13 +181,15 @@ bool Map::isMapConnected() {
 
     // Check if all territories have been visited
     for (Territory* node : *territories) {
-        if (!node->visited) {
+        if (!node->getVisited()) {
             return false;
         }
     }
 
     return true;
 }
+
+
 
 bool Map::validate() {
     //Ensure that all territories are connected.
@@ -215,36 +253,35 @@ bool MapLoader::createMapFromFile(string& fileName, Map* mapToCreate) {
             return false;
         }
     }
-        //here the document wasn't rejected YET we can start processing the data
+    //here the document wasn't rejected YET so we can start processing the data
 
-        // Parse the continent data until we reach an empty line or the "[Territories]" section.
-        // Create associations between continent names and their corresponding territory counts
-        map<string, int> continentInfo;
-        while (nextLine != "[Territories]") {
-            if (!getline(inputFile, nextLine)) {
-                //reject the file if we find no [territory] line
-                inputFile.close();
-                return false;
-            }
-            try {
-                if (!nextLine.empty() && nextLine != "[Territories]") {
-                    size_t index = nextLine.find("=");
-                    // Remove spaces and add continent to the list
-                    string substring = nextLine.substr(0, index);
-                    substring.erase(remove(substring.begin(), substring.end(), ' '), substring.end());
-                    continentInfo.insert(make_pair(substring, stoi(nextLine.substr(index + 1))));
-                }
-            } catch (const exception &e) {
-                inputFile.close();
-                return false;
+    // Parse the continent data until we reach an empty line or the "[Territories]" section.
+    // Create associations between continent names and their corresponding territory counts
+    map<string, int> continentInfo;
+    while (nextLine != "[Territories]") {
+        if (!getline(inputFile, nextLine)) {
+            //reject the file if we find no [territory] line
+            inputFile.close();
+            return false;
+        }
+        try {
+
+            if (!nextLine.empty() && nextLine != "[Territories]") {
+                int index = nextLine.find("=");
+                // Remove spaces and add continent to the list
+                string substring = nextLine.substr(0, index);
+                substring.erase(remove(substring.begin(), substring.end(), ' '), substring.end());
+                continentInfo.insert(make_pair(substring, stoi(nextLine.substr(index + 1))));
             }
         }
-
-
-
+        catch (const exception& e) {
+            inputFile.close();
+            return false;
+        }
+    }
 
     // Reach the "[Territories]" line and begin looping until the end of the file and reject the file if there is no "[Territories]" line
-    map<string, Territory *> territoryList;
+    map<string, Territory*> territoryList;
     vector<vector<string>> adjacentListInfo;
 
     while (!inputFile.eof()) {
@@ -263,30 +300,27 @@ bool MapLoader::createMapFromFile(string& fileName, Map* mapToCreate) {
                 }
                 elements.push_back(nextLine.substr(start));
                 // Create a territory from the initial elements and add it to the map list
-                Territory *newTerritory = new Territory(elements[0], elements[3], stoi(elements[1]), stoi(elements[2]));
+                Territory* newTerritory = new Territory(elements[0], elements[3], stoi(elements[1]), stoi(elements[2]));
                 mapToCreate->territories->push_back(newTerritory);
                 territoryList.insert(make_pair(newTerritory->getName(), newTerritory));
 
-
+                // If the continent number is negative or the continent cannot be found we need to reject the file
                 continentInfo[elements[3]] -= 1;
                 if (continentInfo[elements[3]] < 0) {
                     inputFile.close();
                     return false;
                 }
 
-
                 // Add the remaining adjacent territories to the adjacent list
                 elements.erase(elements.begin(), elements.begin() + 4);
                 adjacentListInfo.push_back(elements);
             }
-            catch (const exception &e) {
+            catch (const exception& e) {
                 inputFile.close();
                 return false;
             }
         }
     }
-
-
 
     //Link territories with their adjacent territories; File rejection occurs
     // if a territory lacks neighbors which means an incomplete connection.
@@ -296,25 +330,8 @@ bool MapLoader::createMapFromFile(string& fileName, Map* mapToCreate) {
                 for (const string &neighbor: adjacentListInfo[i]) {
                     mapToCreate->territories->at(i)->addAdjacent(territoryList[neighbor]);
                 }
-            } else {
-                inputFile.close();
-                return false;
             }
         }
-
-//        // Print the territory list
-//        cout << "Territory List:" << endl;
-//        for (Territory* territory : *mapToCreate->territories) {
-//            territory->insertInStream();
-//        }
     }
-        else {
-            inputFile.close();
-            return false;
-        }
-
-        inputFile.close();
-
-
-        return true;
-    }
+    return false;
+}

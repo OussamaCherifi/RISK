@@ -1,3 +1,5 @@
+#ifndef MAP_H
+#define MAP_H
 #include <iostream>
 #include <vector>
 #include <tuple>
@@ -5,24 +7,25 @@
 #include <map>
 #include <iterator>
 #include <stack>
-#pragma once
+#include "Player.h"
 
 using namespace std;
+
+class Player;
 
 class Territory {
     //declare variables
 private:
     int *xCoordinate;
     int *yCoordinate;
-    string *player;
+    Player *player;
     string *territoryName;
     string *continent;
-    bool *visited;
-    vector<Territory *> adjacentTerritories;
+    bool visited;
+    vector<Territory *> *adjacentTerritories;
     int* numberOfArmies;
 
 public:
-    bool* visited;
     //delcare constructor with parameters and copy constructor
     Territory(string name, string cont, int x, int y);
     Territory(Territory *copy);
@@ -30,18 +33,28 @@ public:
     //delcare getters
     int getxCoordinate() const;
     int getYCoordinate() const;
-    string getPlayer() const;
+    Player *getPlayer() const;
     string getContinent() const;
+    bool getVisited() const;
+    void setVisited(bool visited);
+    vector<Territory *> *getAdjacentTerritories() const;
     string getName() const;
-    vector<Territory *> *getAdjacentTerritory();
 
     //declare setters
     void setXCoordinate(int *newX);
     void setYCoordinate(int *newY);
-    void setPlayer(string *newName);
+    void setPlayer(Player* newPlayer);
 
-    vector<Territory *> *adjacentTerritories;
+    //army methods
 
+    void addArmies(int num);
+    void removeArmies(int num);
+    void removeHalfArmies();
+    void doubleArmies();
+    void setArmies(int* newArmies);
+    int getArmies() const;
+    bool isAdjacentTo(Territory* otherTerritory);
+    bool isAdjacentToOwnedTerritory(Player* player);
     void insertInStream();
 
     //declare destructor
@@ -69,13 +82,10 @@ public:
 
 class MapLoader {
 public:
-
-    MapLoader();
-    ~MapLoader();
     bool createMapFromFile(string& fileName, Map* map2make);
 
 };
 
 std::string generateAbsolutePath(std::string mapName);
 
-
+#endif
