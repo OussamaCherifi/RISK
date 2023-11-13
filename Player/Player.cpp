@@ -49,8 +49,8 @@ ostream &operator<<(ostream &out, const Player &p){
 void Player::addDiplomaticRelation(Player *player1) {
     diplomaticRelations.insert(player1);
 }
-bool Player::isDiplomaticRelation(Player* attacker) const {
-    return diplomaticRelations.find(attacker) != diplomaticRelations.end();
+bool Player::isDiplomaticRelation(Player attacker) const {
+    return diplomaticRelations.find(&attacker) != diplomaticRelations.end();
 }
 bool Player::operator==(const Player &other) const {
     return this->id == other.id;

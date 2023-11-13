@@ -112,6 +112,10 @@ void Deploy::execute()
         targetTerritory->addArmies(*numOfArmies);
         playerDep->setReinforcementPool((playerDep->getReinforcementPool())-*numOfArmies);
         Notify(this);
+        cout<<"Armies deployed"<<endl;
+    }
+    else{
+        cout<<"Could not execute order"<<endl;
     }
 }
 bool Deploy::validate() {
@@ -149,40 +153,51 @@ void Advance::execute()
             targetTerritory->addArmies(*numOfArmies);
         }
         else{
-            int* attackingArmies = numOfArmies;
-            int defendingArmies = targetTerritory->getArmies();
-
-            while (*attackingArmies > 0 && defendingArmies > 0) {
-                // Battle simulation
-                for (int i = 0; i < *attackingArmies; ++i) {
-                    if (rand() % 100 < 60) {
-                        // Attacker kills one defending army
-                        --defendingArmies;
-                    }
-                }
-
-                for (int i = 0; i < defendingArmies; ++i) {
-                    if (rand() % 100 < 70) {
-                        // Defender kills one attacking army
-                        --attackingArmies;
-                    }
-                }
+            if (playerAdv->isDiplomaticRelation(targetTerritory->getPlayer())){
+                cout<<"Cannot attack this turn, diplomatic relations"<<endl;
             }
+            else {
+                int *attackingArmies = numOfArmies;
+                int defendingArmies = targetTerritory->getArmies();
 
-            // Check if the attacker conquered the territory
-            if (defendingArmies <= 0) {
-                // Attacker captures the territory
-                targetTerritory->setPlayer(playerAdv);
-                targetTerritory->setArmies(attackingArmies);
+                while (*attackingArmies > 0 && defendingArmies > 0) {
+                    // Battle simulation
+                    for (int i = 0; i < *attackingArmies; ++i) {
+                        if (rand() % 100 < 60) {
+                            // Attacker kills one defending army
+                            --defendingArmies;
+                        }
+                    }
 
-                // Player receives a card for conquering a territory
-                playerAdv->getHand()->addCard((playerAdv->getDeck()).draw());
-            } else {
-                // Attacker did not conquer the territory
-                targetTerritory->setArmies(&defendingArmies);
+                    for (int i = 0; i < defendingArmies; ++i) {
+                        if (rand() % 100 < 70) {
+                            // Defender kills one attacking army
+                            --attackingArmies;
+                        }
+                    }
+                }
+
+                // Check if the attacker conquered the territory
+                if (defendingArmies <= 0) {
+                    // Attacker captures the territory
+                    targetTerritory->setPlayer(playerAdv);
+                    targetTerritory->setArmies(attackingArmies);
+                    cout << "Territory conquered by attacker" << endl;
+
+                    // Player receives a card for conquering a territory
+                    playerAdv->getHand()->addCard((playerAdv->getDeck()).draw());
+                    cout << "Player received a card;" << endl;
+                } else {
+                    // Attacker did not conquer the territory
+                    targetTerritory->setArmies(&defendingArmies);
+                    cout << "Attacker did not conquer territory" << endl;
+                }
             }
         }
         Notify(this);
+    }
+    else{
+        cout<<"Could not execute order"<<endl;
     }
 }
 bool Advance::validate() {
@@ -214,7 +229,11 @@ void Bomb::execute()
     if (validate())
     {
         targetTerritory->removeHalfArmies();
+        cout<<"Territory bombed"<<endl;
         Notify(this);
+    }
+    else{
+        cout<<"Could not execute order"<<endl;
     }
 }
 bool Bomb::validate() {
@@ -241,8 +260,12 @@ void Blockade::execute()
     if (validate())
     {
         targetTerritory->doubleArmies();
-        targetTerritory->setPlayer(Neutral); //give the ownership of territory to the neutral player
+        //targetTerritory->setPlayer(Neutral); //give the ownership of territory to the neutral player
         Notify(this);
+        cout<<"Blockade Active"<<endl;
+    }
+    else{
+        cout<<"Could not execute order"<<endl;
     }
 }
 bool Blockade::validate() {
@@ -275,6 +298,9 @@ void Airlift::execute()
         targetT->addArmies(*numOfArmies);
         Notify(this);
     }
+    else{
+        cout<<"Could not execute order"<<endl;
+    }
 }
 bool Airlift::validate() {
     if (sourceT->getPlayer() == *playerAir && targetT->getPlayer() == *playerAir) {
@@ -303,6 +329,9 @@ void Negotiate::execute()
         playerNeg->addDiplomaticRelation(targetP);
         targetP->addDiplomaticRelation(playerNeg);
         Notify(this);
+    }
+    else{
+        cout<<"Could not execute order"<<endl;
     }
 }
 bool Negotiate::validate() {

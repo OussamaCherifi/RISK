@@ -53,7 +53,7 @@ class Player
 
         // create diplomatic relation
         void addDiplomaticRelation(Player* player1);
-        bool isDiplomaticRelation(Player* attacker) const;
+        bool isDiplomaticRelation(Player attacker) const;
 
         //comparators to make sure players are the same
         bool operator==(const Player& other) const;
