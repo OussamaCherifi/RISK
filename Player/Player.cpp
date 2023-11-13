@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "Map.h"
+#include <algorithm>
 #include<iostream>
 #include<vector>
 
@@ -115,14 +116,22 @@ vector<Territory*> Player::toDefend(){
 }
 
 vector<Territory*> Player::toAttack(){
-    vector<Territory*> attackList;
+    vector<Territory *> attackList;
 
-    for(Territory *t : territoryList){
-        for(int i = 0; i < t->getAdjacentTerritories()->size(); i++){
-
+    for(Territory t : territoryList){
+        for(int i = 0; i < t.getAdjacentTerritories()->size(); i++){
+            Territory *adjacent = t.getAdjacentTerritories()->at(i);
+            //check if player owns the territory, if yes break
+            if(false){}
+                //check if the territory is already in the attacklist, if yes break
+            else if(*find(attackList.begin(), attackList.end(), adjacent) != *attackList.end()) {
+                break;
+            }
+            else {
+                attackList.push_back(adjacent);
+            }
         }
     }
-
     return attackList;
 }
 

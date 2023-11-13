@@ -29,11 +29,17 @@ void testLoggingObserver() {
     auto *dummyTarget = new Territory("dummy", "dummy", 0, 0);
 
     auto *deploy = new Deploy(dummyPlayer, dummyTarget, 0);
+    deploy->Notify(deploy);
     auto *advance = new Advance(dummyPlayer, dummyTarget, dummyTarget, 0);
+    advance->Notify(advance);
     auto *bomb = new Bomb(dummyPlayer, dummyTarget);
+    bomb->Notify(bomb);
     auto *blockade = new Blockade(dummyPlayer, dummyTarget);
+    blockade->Notify(blockade);
     auto *airlift = new Airlift(dummyPlayer, dummyTarget, dummyTarget, 0);
+    airlift->Notify(airlift);
     auto *negotiate = new Negotiate(dummyPlayer, dummyPlayer);
+    negotiate->Notify(negotiate);
     deploy->Attach(observer);
     advance->Attach(observer);
     bomb->Attach(observer);
