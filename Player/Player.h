@@ -4,6 +4,7 @@
 #include "Cards.h"
 #include "Orders.h"
 #include<vector>
+#include <set>
 
 using namespace std; 
 
@@ -11,12 +12,15 @@ using namespace std;
 class Player 
 { 
     private:
+        static int* nextID;
+        int id;
         vector<Territory*> territoryList;
         Hand *hand;
         OrdersList* ordersList;
         string playerName;
         int *reinforcementPool;
-
+        set<Player* > diplomaticRelations;
+        Deck deck;
     public:
         //constructors
         Player();
@@ -38,6 +42,10 @@ class Player
         Hand *getHand();
         OrdersList *getOrdersList();
         int *getReinforcementPool();
+        Deck& getDeck();
+
+        //setters
+        void setReinforcementPool(int *num);
 
         //add territories to the collection
         void addTerritory(Territory* t);
@@ -46,12 +54,16 @@ class Player
         vector<Territory*> toAttack();
         void issueOrder();
 
+        // create diplomatic relation
+        void addDiplomaticRelation(Player* player1);
+        bool isDiplomaticRelation(Player* attacker) const;
 
-    // setters
-    void setName(const std::string& newName);
-    void setReinforcementPool(int *num);
+        //comparators to make sure players are the same
+        bool operator==(const Player& other) const;
+        bool operator!=(const Player& other) const;
 
-
+        // setters
+        void setName(const std::string& newName);
 };
 
 void testPlayers();

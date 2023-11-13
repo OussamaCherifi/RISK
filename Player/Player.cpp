@@ -26,9 +26,11 @@ Player::Player(const Player &p){
 //destructor
 Player::~Player() {
     for (Territory *t : territoryList){
-        delete t;
+                delete t;
     }
     territoryList.clear();
+
+    delete reinforcementPool;
 
     delete hand;
     delete ordersList;
@@ -36,14 +38,14 @@ Player::~Player() {
 }
 
 //assignment operator
-Player& Player::operator=(const Player& p){
+ Player& Player::operator=(const Player& p){
     this->territoryList = p.territoryList;
     this->hand = p.hand;
     this->ordersList = p.ordersList;
     this->playerName = p.playerName;
     this->reinforcementPool = p.reinforcementPool;
     return *this;
-}
+ }
 
 //setter
 void Player::setName(const std::string& newName) {
@@ -66,20 +68,28 @@ int *Player::getReinforcementPool(){
 ostream &operator<<(ostream &out, const Player &p){
     out << "Territories owned by player";
     for(Territory* territory : p.territoryList){
-        out << "territory" << ", ";
+        out << "territory" << ", "; 
     }
     out << "Player's hand has " << p.hand->getCardNum() << " cards";
     out << "\n Player's Orderslist has " << p.ordersList->getSize() << " orders";
     return out;
 }
-
+    
+void Player::addDiplomaticRelation(Player *player1) {
+    diplomaticRelations.insert(player1);
+}
+bool Player::isDiplomaticRelation(Player attacker) const {
+    return diplomaticRelations.find(&attacker) != diplomaticRelations.end();
+}
+bool Player::operator==(const Player &other) const {
+    return this->id == other.id;
+}
+bool Player::operator!=(const Player &other) const {
+    return !(*this == other);
+}
 
 //getters
-//vector<Territory*> Player::getTerritoryList(){
-//    return territoryList;
-//}
-
-vector<Territory*>& Player::getTerritoryList() {
+vector<Territory*> Player::getTerritoryList(){
     return territoryList;
 }
 
@@ -89,6 +99,17 @@ Hand *Player::getHand(){
 OrdersList *Player::getOrdersList(){
     return ordersList;
 }
+int *Player::getReinforcementPool(){
+    return reinforcementPool;
+}
+Deck& Player::getDeck(){
+    return deck;
+}
+
+//setters
+void Player::setReinforcementPool(int *num){
+    this->reinforcementPool = num;
+}
 
 //adds territories owned by the player to their collection
 void Player::addTerritory(Territory* t){
@@ -96,25 +117,17 @@ void Player::addTerritory(Territory* t){
 }
 
 vector<Territory*> Player::toDefend(){
-    vector<Territory*> defendList;
-
-    //arbitrary list of territories
-    defendList.push_back(territoryList[0]);
-    return defendList;
+    return territoryList;
 }
 
 vector<Territory*> Player::toAttack(){
     vector<Territory*> attackList;
-
-    //arbitrary list of territories
-    attackList.push_back(territoryList[1]);
-
+    // get adjacent territories
     return attackList;
 }
 
 void Player::issueOrder(){
-    //arbitrary order for now
-    Deploy* o1 = new Deploy();
-    ordersList->addList(o1);
+    cout << "Issuing Orders" << endl;
+    
 }
 // tiffany
