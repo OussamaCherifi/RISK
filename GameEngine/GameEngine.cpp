@@ -196,8 +196,9 @@ void GameEngine::issueOrdersPhase(){
 
                 cout << "Invalid number. Please enter another number." << endl; 
             }
-
-            // p.getTerritoryList()[territoryIndex].deploy(numUnits);
+            
+            int numArmies = p->getTerritoryList()[territoryIndex]->getArmies() + numUnits;
+            p->getTerritoryList()[territoryIndex]->setArmies(&numArmies);
 
         }
 
