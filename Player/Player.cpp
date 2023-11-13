@@ -122,7 +122,8 @@ vector<Territory*> Player::toAttack(){
         for(int i = 0; i < t.getAdjacentTerritories()->size(); i++){
             Territory *adjacent = t.getAdjacentTerritories()->at(i);
             //check if player owns the territory, if yes break
-            if(false){}
+            if(adjacent->getPlayer() == this)
+                break;
                 //check if the territory is already in the attacklist, if yes break
             else if(*find(attackList.begin(), attackList.end(), adjacent) != *attackList.end()) {
                 break;
