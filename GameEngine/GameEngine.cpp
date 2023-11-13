@@ -167,7 +167,11 @@ void GameEngine::issueOrdersPhase(){
 }
 
 void GameEngine::executeOrdersPhase(){
-
+    for(Player *p : players){
+        for(Orders *o : p->getOrdersList()->getListOfOrders()){
+            o->execute();
+        }
+    }
 
 }
 

@@ -257,7 +257,7 @@ void Player::issueOrder(){
     cout << "Enter the index of the card you want to play"<< endl;
     cin >> cardIndex;
 
-
+    hand->getCard(cardIndex).play(this, deck);
     
 }
 // tiffany
