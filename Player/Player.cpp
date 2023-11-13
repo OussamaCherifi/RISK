@@ -127,7 +127,49 @@ vector<Territory*> Player::toAttack(){
 }
 
 void Player::issueOrder(){
-    cout << "Issuing Orders" << endl;
+    string territoryName;
+    int territoryIndex, numUnits;
+    bool territoryFound = false, correctNum = false;
+
+    cout << "Let's start by deploying army units from your reinforcement pool. " << endl;
+
+    while (getReinforcementPool() > 0){
+            cout << "You have " << getReinforcementPool() << " army units in your reinforcement pool." << endl;
+
+            cout << "Here are your territories to defend: " << endl;
+            for (Territory *t : toDefend()){
+                cout << " - " << t->getName() << endl;
+            }
+
+            while(!territoryFound){
+                cout << "Enter the name of territory you wish to deploy army units: ";
+                cin >> territoryName;
+
+                for(int i = 0; i < getTerritoryList().size(); i++){
+
+                    if (territoryName == getTerritoryList()[i]->getName()){
+                        territoryFound = true;
+                        territoryIndex = i;
+                        break;
+                    }
+                }
+                cout << "Territory not found. Please re-enter the territory name." << endl;
+            }
+
+            while(!correctNum){
+                cout << "How many army units do you wish to deploy?";
+                cin >> numUnits;
+
+                if (numUnits > 0 && numUnits <= *p->getReinforcementPool())
+                    correctNum = true;
+
+                cout << "Invalid number. Please enter another number." << endl; 
+            }
+
+            cout << "A Deploy Order of " <<  numUnits << " units to " << territoryName << endl;
+            Deploy *deployOrder = new Deploy(this, getTerritoryList()[territoryIndex], numUnits);
+
+    }
     
 }
 // tiffany
