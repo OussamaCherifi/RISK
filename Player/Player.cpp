@@ -3,6 +3,7 @@
 #include <algorithm>
 #include<iostream>
 #include<vector>
+#include <map>
 
 using namespace std;
 
@@ -115,6 +116,42 @@ vector<Territory*> Player::toDefend(){
     return territoryList;
 }
 
+int Player::calculateContinentBonus(Map *mapCreated){
+    int bonus = 0;
+
+    //storing the number of territories per continent
+    vector<int> tPerContinents;
+    auto it = mapCreated->getContinentNameAndNum().begin();
+
+    while(it != mapCreated->getContinentNameAndNum().end()){
+        tPerContinents.push_back(it->second);
+        ++it;
+    }
+
+    //storing the number of the player's territories per continent
+    vector<int> playerTPerContinents(tPerContinents.size(), 0);
+
+    for(int i = 0; i < territoryList.size(); i++){
+        bool found = false;
+
+        it = mapCreated->getContinentNameAndNum().begin();
+        while(it != mapCreated->getContinentNameAndNum().end()){
+            if(territoryList[i]->getContinent() == it->first)
+                found = true;
+        }
+
+        if (found) playerTPerContinents[i]++;
+    }
+
+    //comparing both vector and array, if there is an equal value, then the player owns a continent and gets a bonus
+    for (int i = 0; i < tPerContinents.size(); i++){
+        if (tPerContinents[i] == playerTPerContinents[i])
+            bonus ++;
+    }
+
+    return bonus*5;
+}
+
 vector<Territory*> Player::toAttack(){
     vector<Territory *> attackList;
 
@@ -124,7 +161,7 @@ vector<Territory*> Player::toAttack(){
             //check if player owns the territory, if yes break
             if(adjacent->getPlayer() == this)
                 break;
-                //check if the territory is already in the attacklist, if yes break
+            //check if the territory is already in the attacklist, if yes break
             else if(*find(attackList.begin(), attackList.end(), adjacent) != *attackList.end()) {
                 break;
             }

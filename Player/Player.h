@@ -10,6 +10,8 @@ using namespace std;
 
 class Territory;
 
+class Map;
+
 class Hand;
 
 class OrdersList;
@@ -61,6 +63,9 @@ class Player
         vector<Territory*> toDefend();
         vector<Territory*> toAttack();
         void issueOrder();
+
+        //calculate if the player should get bonus reinforcement for owning continents
+        int calculateContinentBonus(Map *mapCreated);
 
         // create diplomatic relation
         void addDiplomaticRelation(Player* player1);

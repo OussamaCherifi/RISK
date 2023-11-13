@@ -147,8 +147,8 @@ void GameEngine::mainGameLoop(){
 void GameEngine::reinforcementPhase(){
     for (Player *p : players){
         int numReinforcement = floor(p->getTerritoryList().size() / 3);
-//        int bonus = p.calculateContinentBonus(map);
-        // if (bonus > 0) numReinforcement += bonus*5;
+        int bonus = p->calculateContinentBonus(map);
+        numReinforcement += bonus;
 
         //make sure the minimum number is 3
         if (numReinforcement < 3) numReinforcement = 3;
