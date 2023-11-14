@@ -109,18 +109,20 @@ void Deploy::execute()
 {
     if (validate())
     {
+        int* numofReinforcements= (playerDep->getReinforcementPool());
         targetTerritory->addArmies(*numOfArmies);
-        playerDep->setReinforcementPool((playerDep->getReinforcementPool())-*numOfArmies);
+        playerDep->setReinforcementPool(numofReinforcements);
         Notify(this);
-        cout<<"Armies deployed"<<endl;
+        cout<<"Armies left :"<<*numofReinforcements<<endl;
+        delete numofReinforcements;
     }
     else{
-        cout<<"Could not execute order"<<endl;
+        cout<<"Could not execute order Deploy"<<endl;
     }
 }
 bool Deploy::validate() {
-    if (targetTerritory->getPlayer() == playerDep){
-        if(*numOfArmies <= *playerDep->getReinforcementPool()){
+    if (targetTerritory->getPlayer()->getID() == playerDep->getID()){
+        if(*numOfArmies <= *(playerDep->getReinforcementPool())){
             return true;
         }
         else
@@ -143,15 +145,16 @@ ostream &Deploy::displayOrder(ostream &myOrder) const
 
 // Advance
 Advance::Advance(Player* player, Territory* source, Territory* target, int armies)
-    : playerAdv(player), sourceTerritory(source), targetTerritory(target), numOfArmies(new int(armies)) {}
+        : playerAdv(player), sourceTerritory(source), targetTerritory(target), numOfArmies(new int(armies)) {}
 Advance *Advance::copy() const { return new Advance(*this); }
 void Advance::execute()
 {
     if (validate())
     {
-        if(targetTerritory->getPlayer()==playerAdv){
+        if(targetTerritory->getPlayer()->getID()==playerAdv->getID()){
             sourceTerritory->removeArmies(*numOfArmies);
             targetTerritory->addArmies(*numOfArmies);
+            cout<<"Advance successful"<<endl;
         }
         else{
             if (playerAdv->isDiplomaticRelation(targetTerritory->getPlayer())){
@@ -186,8 +189,13 @@ void Advance::execute()
                     cout << "Territory conquered by attacker" << endl;
 
                     // Player receives a card for conquering a territory
-                    playerAdv->getHand()->addCard((playerAdv->getDeck())->draw());
-                    cout << "Player received a card;" << endl;
+                    if (playerAdv && playerAdv->getHand() && playerAdv->getDeck()) {
+                        playerAdv->getHand()->addCard((playerAdv->getDeck())->draw());
+                        cout << "Player received a card;" << endl;
+                    }
+                    else{
+                        cout<<"Error with pointer"<<endl;
+                    }
                 } else {
                     // Attacker did not conquer the territory
                     targetTerritory->setArmies(&defendingArmies);
@@ -198,11 +206,11 @@ void Advance::execute()
         Notify(this);
     }
     else{
-        cout<<"Could not execute order"<<endl;
+        cout<<"Could not execute order Advance"<<endl;
     }
 }
 bool Advance::validate() {
-    if (sourceTerritory->getPlayer() == playerAdv){
+    if (sourceTerritory->getPlayer()->getID() == playerAdv->getID()){
         if (sourceTerritory->isAdjacentTo(targetTerritory)){
             return true;
         }
@@ -235,11 +243,11 @@ void Bomb::execute()
         Notify(this);
     }
     else{
-        cout<<"Could not execute order"<<endl;
+        cout<<"Could not execute order Bomb"<<endl;
     }
 }
 bool Bomb::validate() {
-    if(targetTerritory->getPlayer() != playerBom && targetTerritory->isAdjacentToOwnedTerritory(playerBom)){
+    if(targetTerritory->getPlayer()->getID() != playerBom->getID() && targetTerritory->isAdjacentToOwnedTerritory(playerBom)){
         return true;
     }
     else
@@ -268,11 +276,11 @@ void Blockade::execute()
         cout<<"Blockade Active"<<endl;
     }
     else{
-        cout<<"Could not execute order"<<endl;
+        cout<<"Could not execute order Blockade"<<endl;
     }
 }
 bool Blockade::validate() {
-    if(targetTerritory->getPlayer() != playerBlo){
+    if(targetTerritory->getPlayer()->getID() == playerBlo->getID()){
         return true;
     }
     else{
@@ -299,14 +307,15 @@ void Airlift::execute()
     {
         sourceT->removeArmies(*numOfArmies);
         targetT->addArmies(*numOfArmies);
+        cout<<"Airlift Successful"<<endl;
         Notify(this);
     }
     else{
-        cout<<"Could not execute order"<<endl;
+        cout<<"Could not execute order Airlift"<<endl;
     }
 }
 bool Airlift::validate() {
-    if (sourceT->getPlayer() == playerAir && targetT->getPlayer() == playerAir) {
+    if (sourceT->getPlayer()->getID() == playerAir->getID() && targetT->getPlayer()->getID() == playerAir->getID()) {
         return true;
     }
     else
@@ -331,6 +340,7 @@ void Negotiate::execute()
     {
         playerNeg->addDiplomaticRelation(targetP);
         targetP->addDiplomaticRelation(playerNeg);
+        cout<<"Negotiation successful"<<endl;
         Notify(this);
     }
     else{

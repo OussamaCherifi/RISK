@@ -58,7 +58,7 @@ class Player
         //setters
         void setReinforcementPool(int *num);
         void setID(int num);
-
+        void setDeck(Deck deck);
         //add territories to the collection
         void addTerritory(Territory* t);
 

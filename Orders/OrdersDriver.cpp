@@ -38,86 +38,103 @@ void testOrderExecution(){
     // Create players and territories for testing
     Player player1;
     Player player2;
-    testLoadMaps();
+    Deck deck1;
 
+    player1.setName("John");
+    player2.setName("Mark");
+    player1.setDeck(deck1);
+    player2.setDeck(deck1);
     player1.setReinforcementPool(new int(10));
     player2.setReinforcementPool(new int(15));
 
     // Add territories to the map
-    Territory T("France", "Europe", 1, 1);
-    Territory S("Germany", "Europe", 1,2);
-    Territory V("Spain", "Europe", 1,3);
-    Territory R("Greece", "Europe", 2,3);
-    T.addAdjacent(&S);
-    S.addAdjacent(&T);
-    T.addAdjacent(&V);
-    V.addAdjacent(&T);
+    Territory France("France", "Europe", 1, 1);
+    Territory Germany("Germany", "Europe", 1, 2);
+    Territory Spain("Spain", "Europe", 1, 3);
+    Territory Greece("Greece", "Europe", 2, 3);
+    Territory Turkey("Turkey", "Europe", 2,4);
 
-    V.setPlayer(&player2);
-    T.setPlayer(&player1);
-    S.setPlayer(&player2);
-    R.setPlayer(&player2);
+    //give troops to each territory for testing purposes
+    France.addArmies(100);
+    //Germany.addArmies(100);
+    Spain.addArmies(100);
+    Greece.addArmies(100);
+    Turkey.addArmies(100);
+
+    //Add adjacent territories to map
+    France.addAdjacent(&Germany);
+    Germany.addAdjacent(&France);
+    France.addAdjacent(&Spain);
+    Spain.addAdjacent(&France);
+    Turkey.addAdjacent(&Greece);
+    Greece.addAdjacent(&Turkey);
+
+    //set Player territories
+    Spain.setPlayer(&player2);
+    France.setPlayer(&player1);
+    Germany.setPlayer(&player2);
+    Greece.setPlayer(&player2);
+    Turkey.setPlayer(&player2);
 
     // Deploy order that should work
-    Deploy deployOrder(&player1, &T, 5);
+    Deploy deployOrder(&player1, &France, 5);
     deployOrder.validate();
     deployOrder.execute();
 
     //Deploy order that should not work
-    Deploy deployOrder2(&player1, &T, 15);
-    deployOrder.validate();
-    deployOrder.execute();
-
-    // Advance order that should not work
-    Advance advanceOrder(&player2, &S, &R, 3);
-    advanceOrder.validate();
-    advanceOrder.execute();
-
-    //Advance order that should work
-    Advance advanceOrder2(&player2, &S, &R, 3);
-    advanceOrder.validate();
-    advanceOrder.execute();
-
-    cout<<"Territory S is now owned by: "<<S.getPlayer()<<endl;
-
-    //Advance order that transfers territory
-    Advance advanceOrder3(&player1, &T, &S, 8);
-    advanceOrder.validate();
-    advanceOrder.execute();
-
-    cout<<"Territory S is now owned by: "<<S.getPlayer()<<endl;
+    Deploy deployOrder2(&player1, &France, 100);
+    deployOrder2.validate();
+    deployOrder2.execute();
 
     // Airlift order that should work (assuming player1 has an airlift card)
     Cards airliftCard(AIRLIFT);
     player1.getHand()->addCard(airliftCard);
 
-    Airlift airliftOrder(&player2, &S, &R, 2);
-    airliftOrder.validate();
-    airliftOrder.execute();
+    Airlift airlift(&player2, &Turkey, &Greece, 2);
+    airlift.validate();
+    airlift.execute();
 
     // Airlift order that should not work
-    Cards airliftCard2(AIRLIFT);
     player1.getHand()->addCard(airliftCard);
 
-    Airlift airliftOrder2(&player2, &S, &T, 2);
-    airliftOrder.validate();
-    airliftOrder.execute();
+    Airlift airliftOrder2(&player1, &Germany, &France, 2);
+    airliftOrder2.validate();
+    airliftOrder2.execute();
 
-    // Bomb order (assuming player1 has a bomb card)
+    // Advance order that should not work
+    Advance advanceOrder(&player2, &Germany, &Greece, 3);
+    advanceOrder.validate();
+    advanceOrder.execute();
+
+    //Advance order that should work
+    Advance advanceOrder2(&player2, &Greece, &Turkey, 3);
+    advanceOrder2.validate();
+    advanceOrder2.execute();
+
+    // Bomb order that should work
     Cards bombCard(BOMB);
     player1.getHand()->addCard(bombCard);
 
-    Bomb bombOrder(&player1, &R);
+    Bomb bombOrder(&player1, &Spain);
     bombOrder.validate();
     bombOrder.execute();
 
-    // Blockade order (assuming player1 has a blockade card)
+    // Blockade order that should work
     Cards blockadeCard(BLOCKADE);
     player1.getHand()->addCard(blockadeCard);
 
-    Blockade blockadeOrder(&player1, &T);
+    Blockade blockadeOrder(&player1, &France);
     blockadeOrder.validate();
     blockadeOrder.execute();
+
+    cout << "Territory Germany is now owned by: " << Germany.getPlayer()->getPlayerName() << endl;
+
+    //Advance order that transfers territory
+    Advance advanceOrder3(&player1, &France, &Germany, 8);
+    advanceOrder3.validate();
+    advanceOrder3.execute();
+
+    cout << "Territory Germany is now owned by: " << Germany.getPlayer()->getPlayerName() << endl;
 
     // Negotiate order (assuming player1 has a diplomacy card)
     Cards diplomacyCard(DIPLOMACY);
@@ -128,9 +145,9 @@ void testOrderExecution(){
     negotiateOrder.execute();
 
     //Proof they cannot attack
-    Advance advanceOrder4(&player1, &T, &V, 1);
-    advanceOrder.validate();
-    advanceOrder.execute();
+    Advance advanceOrder4(&player1, &France, &Spain, 1);
+    advanceOrder4.validate();
+    advanceOrder4.execute();
 }
 
 

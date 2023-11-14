@@ -59,8 +59,10 @@ Deck::Deck(const Deck& d1):cards(d1.cards){}
 Deck::Deck(){
     cards = vector<Cards>();
     //create and shuffle deck
-    for (int i=0; i<5; ++i){
-        cards.emplace_back(static_cast<CardType>(i));
+    for (int j=0; j<5; j++) {
+        for (int i = 0; i < 5; ++i) {
+            cards.emplace_back(static_cast<CardType>(i));
+        }
     }
     unsigned seed = chrono::system_clock::now().time_since_epoch().count();
     shuffle(cards.begin(), cards.end(), default_random_engine(seed));

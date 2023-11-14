@@ -57,6 +57,9 @@ void Player::setReinforcementPool(int *num){
 void Player::setID(int num) {
     this->id = num;
 }
+void Player::setDeck(Deck deck) {
+    this->deck = &deck;
+}
 
 //getter
 string Player::getPlayerName() {

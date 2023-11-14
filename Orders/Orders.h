@@ -64,7 +64,9 @@ public:
     Deploy(Player *player, Territory *target, int armies);
 
     Deploy() = default;
-
+    void setTargetTerritory(Territory *targetTerritory);
+    void setNumOfArmies(int* numofarmies);
+    void setPlayerDep(Player* playerdep);
     ~Deploy() override = default;
     Deploy *copy() const override;
     void execute() override;
@@ -163,7 +165,6 @@ private:
     Player *targetP;
 public:
     int data;
-
     Negotiate(Player *player, Player *target);
 
     Negotiate() = default;
@@ -176,4 +177,5 @@ public:
     Negotiate &operator=(const Negotiate &something);
 };
 
+void testOrderExecution();
 #endif 
