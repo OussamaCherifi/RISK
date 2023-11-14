@@ -99,7 +99,7 @@ void testMainGameLoop(){
     p1->addTerritory(t4);
     p1->addTerritory(t5);
     p1->addTerritory(t6);
-    p1->addTerritory(t7);
+    p3->addTerritory(t7);
     p3->addTerritory(t8);
 
     //create a vector of players and add the players

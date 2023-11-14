@@ -118,11 +118,9 @@ int Player::calculateContinentBonus(Map *mapCreated){
 
     //storing the number of territories per continent
     vector<int> tPerContinents;
-    auto it = mapCreated->getContinentNameAndNum().begin();
 
-    while(it != mapCreated->getContinentNameAndNum().end()){
-        tPerContinents.push_back(it->second);
-        ++it;
+    for(auto it : mapCreated->getContinentNameAndNum()){
+        tPerContinents.push_back(it.second);
     }
 
     //storing the number of the player's territories per continent
@@ -130,20 +128,26 @@ int Player::calculateContinentBonus(Map *mapCreated){
 
     for(int i = 0; i < territoryList.size(); i++){
         bool found = false;
+        int continentIndex = 0;
 
-        it = mapCreated->getContinentNameAndNum().begin();
-        while(it != mapCreated->getContinentNameAndNum().end()){
-            if(territoryList[i]->getContinent() == it->first)
+        for(auto it : mapCreated->getContinentNameAndNum()){
+            if(territoryList[i]->getContinent() == it.first) {
                 found = true;
+                break;
+            }
+            continentIndex++;
         }
 
-        if (found) playerTPerContinents[i]++;
+        if (found) {
+            playerTPerContinents[continentIndex]++;
+        }
     }
 
     //comparing both vector and array, if there is an equal value, then the player owns a continent and gets a bonus
     for (int i = 0; i < tPerContinents.size(); i++){
-        if (tPerContinents[i] == playerTPerContinents[i])
-            bonus ++;
+        if (tPerContinents[i] == playerTPerContinents[i]) {
+            bonus++;
+        }
     }
 
     return bonus*5;
