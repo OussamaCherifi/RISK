@@ -137,7 +137,7 @@ void GameEngine::mainGameLoop(){
         for(Player *p: players){
             cout << p->getPlayerName() << " owns " << p->getTerritoryList().size() << " territories." << endl;
         }
-        cout << "-------------------" << endl;
+        cout << "-------------------\n" << endl;
         for (int i = 0; i < players.size(); i++){
             if (players[i]->getTerritoryList().size() == numTerr){
                 cout << players[i]->getPlayerName() << " has won!" << endl;
@@ -150,7 +150,6 @@ void GameEngine::mainGameLoop(){
                 players.erase(players.begin() + i);
             }
         }
-            cout << "Checking done, entering reinforcementPhase." << endl; //TESTING
             reinforcementPhase();
             issueOrdersPhase();
             executeOrdersPhase();
@@ -159,22 +158,24 @@ void GameEngine::mainGameLoop(){
 }
 
 void GameEngine::reinforcementPhase(){
+    cout << " \n-- REINFORCEMENT PHASE -- " << endl;
     for (Player *p : players){
         int numReinforcement = floor(p->getTerritoryList().size() / 3);
         int bonus = p->calculateContinentBonus(map);
-        if (bonus > 0 ) cout << p->getPlayerName() << " got extra reinforcements for owning a continent!" << endl;
-        numReinforcement += bonus;
 
         //make sure the minimum number is 3
         if (numReinforcement < 3) numReinforcement = 3;
 
-        cout << p->getPlayerName() << " is receiving " << numReinforcement << " reinforcements." << endl;
-
+        cout << p->getPlayerName() << " is receiving " << numReinforcement << " reinforcements for owning " << p->getTerritoryList().size() << " territories " << endl;
+        if (bonus ==  1 ) cout << " and a bonus of " << bonus << " reinforcements for owning a continent!" << endl;
+        else if (bonus > 1) cout << " and a bonus of " << bonus << " reinforcements for owning a continent!" << endl;
+        numReinforcement += bonus;
         p->setReinforcementPool(&numReinforcement);
     }
 }
 
 void GameEngine::issueOrdersPhase(){
+    cout << "\n -- ISSUE ORDERS PHASE -- " << endl;
     for (Player *p : players){
         p->issueOrder();
     }
@@ -182,6 +183,7 @@ void GameEngine::issueOrdersPhase(){
 }
 
 void GameEngine::executeOrdersPhase(){
+    cout << "\n -- EXECUTE ORDERS PHASE -- " << endl;
     for(Player *p : players){
         for(Orders *o : p->getOrdersList()->getListOfOrders()){
             o->execute();

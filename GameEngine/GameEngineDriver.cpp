@@ -113,13 +113,6 @@ void testMainGameLoop(){
     GameEngine *gameEngine = new GameEngine(players, map);
 
     gameEngine->mainGameLoop();
-
-
-
-
-
-
-
 }
 
 
