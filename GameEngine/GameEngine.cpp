@@ -75,14 +75,15 @@ void GameEngine::addState(State *state) {
     mStates->push_back(state);
 }
 
-void GameEngine::handle(const string &command) {
+bool GameEngine::handle(const string &command) {
     State *newState = mCurrentState->handle(command);
     if (newState->getStateName() == "fail") {
         cout << "Invalid command: " << command << endl;
-        return;
+        return false;
     }
     mCurrentState = newState;
     Notify(this);
+    return true;
 }
 
 State *GameEngine::getCurrentState() { return mCurrentState; }

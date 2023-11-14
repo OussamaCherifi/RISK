@@ -92,7 +92,7 @@ public:
 
     void addState(State *state);
 
-    void handle(const string &command);
+    bool handle(const string &command);
 
     State *getCurrentState();
 

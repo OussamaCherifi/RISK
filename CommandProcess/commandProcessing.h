@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 #include "../GameEngine/GameEngine.h"
-#include "../Map/Map.h"
+#include "Map.h"
 #include "../LoggingObserver/LoggingObserver.h"
 using namespace std;
 class GameEngine;
@@ -37,7 +37,7 @@ class CommandProcessor : public Subject, public ILoggable{
     string stringToLog();
     Command * getCommand(GameEngine& ge);
     friend std::ostream& operator<<(std::ostream& os, const CommandProcessor& processor);
-
+    static bool validate(const std::string& command, GameEngine& gameEngine);
     private:
     std::vector<Command*>* commands; 
 
