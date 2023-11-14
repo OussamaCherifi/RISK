@@ -127,13 +127,14 @@ void GameEngine::mainGameLoop(){
     int numTerr = 0;
     if (map != nullptr) numTerr = map->territories->size();
 
-    //Game info
-    cout << "There are " << map->territories->size() << " territories in this game. \n" << endl; //TESTING
+    cout << "\n -- MAP INFO -- " << endl;
+    cout << "There are " << map->territories->size() << " territories in this game." << endl;
+    cout << "------------------" << endl;
 
     bool playerHasAllTerritories = false;
 
     while(!playerHasAllTerritories){
-        cout << " -- PLAYER INFO -- " << endl;
+        cout << "\n -- PLAYER INFO -- " << endl;
         for(Player *p: players){
             cout << p->getPlayerName() << " owns " << p->getTerritoryList().size() << " territories." << endl;
         }
@@ -163,13 +164,18 @@ void GameEngine::reinforcementPhase(){
         int numReinforcement = floor(p->getTerritoryList().size() / 3);
         int bonus = p->calculateContinentBonus(map);
 
-        //make sure the minimum number is 3
-        if (numReinforcement < 3) numReinforcement = 3;
-
         cout << p->getPlayerName() << " is receiving " << numReinforcement << " reinforcements for owning " << p->getTerritoryList().size() << " territories " << endl;
         if (bonus ==  1 ) cout << " and a bonus of " << bonus << " reinforcements for owning a continent!" << endl;
-        else if (bonus > 1) cout << " and a bonus of " << bonus << " reinforcements for owning a continent!" << endl;
+        else if (bonus > 1) cout << " and a bonus of " << bonus << " reinforcements for owning continents!" << endl;
+
         numReinforcement += bonus;
+
+        //make sure the minimum number is 3
+        if (numReinforcement < 3) {
+            numReinforcement = 3;
+            cout << "Since " << p->getPlayerName() << " has less than 3 reinforcements, " << p->getPlayerName() << " will get 3 reinforcements in total." << endl;
+        }
+
         int *numPtr = new int(numReinforcement);
         p->setReinforcementPool(numPtr);
     }

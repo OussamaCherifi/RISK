@@ -201,6 +201,7 @@ void Player::issueOrder(){
     int deployIndex, territoryIndex, numUnits;
     bool territoryFound = false, correctNum = false;
 
+    cout << "\nIt is " << this->getPlayerName() << "'s turn to issue Orders!" << endl;
     cout << "Let's start by deploying army units from your reinforcement pool. " << endl;
 
     while (*getReinforcementPool() > 0){
@@ -373,7 +374,7 @@ void Player::issueOrder(){
 
     int cardIndex;
     cout << "\nYou can now play one card from your hand." << endl;
-    if(hand->getCardNum() == 0) cout << "You do not own any cards";
+    if(hand->getCardNum() == 0) cout << "You do not own any cards" << endl;
     else {
 
         //For testing purposes
@@ -397,7 +398,7 @@ void Player::issueOrder(){
             cout << i << "- " << territoryList[i]->getName() << endl;
         }
         bool sourceFound = false, targetFound = false, validNum = false;
-        int sourceIndex, targetIndex, numUnits;
+        int sourceIndex, targetIndex, numCardUnits;
         while (!sourceFound) {
             cout << "Enter the index of the territory you want to move troops from";
             cin >> sourceIndex;
@@ -422,18 +423,18 @@ void Player::issueOrder(){
 
         while (!validNum) {
             cout << "How many army units do you wish to move?";
-            cin >> numUnits;
+            cin >> numCardUnits;
 
-            if (numUnits > 0 && numUnits <= toDefend()[sourceIndex]->getArmies())
+            if (numCardUnits > 0 && numCardUnits <= toDefend()[sourceIndex]->getArmies())
                 validNum = true;
             else {
                 cout << "Invalid number. Please enter another number." << endl;
             }
         }
 
-        cout << "An Airlift Order of " << numUnits << " army units from " << territoryList[sourceIndex]->getName()
+        cout << "An Airlift Order of " << numCardUnits << " army units from " << territoryList[sourceIndex]->getName()
              << " to " << toDefend()[targetIndex]->getName() << " will be issued." << endl;
-        Airlift *airlift = new Airlift(this, territoryList[sourceIndex], territoryList[targetIndex], numUnits);
+        Airlift *airlift = new Airlift(this, territoryList[sourceIndex], territoryList[targetIndex], numCardUnits);
         ordersList->addList(airlift);
 
 //        hand->getCard(cardIndex).play(this, deck);
