@@ -269,7 +269,7 @@ bool MapLoader::createMapFromFile(string& fileName, Map* mapToCreate) {
             return false;
         }
     }
-    //here the document wasn't rejected YET so we can start processing the data
+    //here the document wasn't rejected YET we can start processing the data
 
     // Parse the continent data until we reach an empty line or the "[Territories]" section.
     // Create associations between continent names and their corresponding territory counts
@@ -280,27 +280,25 @@ bool MapLoader::createMapFromFile(string& fileName, Map* mapToCreate) {
             inputFile.close();
             return false;
         }
-        try{
-
+        try {
             if (!nextLine.empty() && nextLine != "[Territories]") {
-                int index = nextLine.find("=");
+                size_t index = nextLine.find("=");
                 // Remove spaces and add continent to the list
                 string substring = nextLine.substr(0, index);
                 substring.erase(remove(substring.begin(), substring.end(), ' '), substring.end());
                 continentInfo.insert(make_pair(substring, stoi(nextLine.substr(index + 1))));
-
-                //made a copy of continentInfo to access it from continentNameAndNum, instance of Map
-                mapToCreate->getContinentNameAndNum().insert(make_pair(substring, stoi(nextLine.substr(index + 1))));
             }
-        }
-        catch (const exception& e) {
+        } catch (const exception &e) {
             inputFile.close();
             return false;
         }
     }
 
+
+
+
     // Reach the "[Territories]" line and begin looping until the end of the file and reject the file if there is no "[Territories]" line
-    map<string, Territory*> territoryList;
+    map<string, Territory *> territoryList;
     vector<vector<string>> adjacentListInfo;
 
     while (!inputFile.eof()) {
@@ -319,27 +317,30 @@ bool MapLoader::createMapFromFile(string& fileName, Map* mapToCreate) {
                 }
                 elements.push_back(nextLine.substr(start));
                 // Create a territory from the initial elements and add it to the map list
-                Territory* newTerritory = new Territory(elements[0], elements[3], stoi(elements[1]), stoi(elements[2]));
+                Territory *newTerritory = new Territory(elements[0], elements[3], stoi(elements[1]), stoi(elements[2]));
                 mapToCreate->territories->push_back(newTerritory);
                 territoryList.insert(make_pair(newTerritory->getName(), newTerritory));
 
-                // If the continent number is negative or the continent cannot be found we need to reject the file
+
                 continentInfo[elements[3]] -= 1;
                 if (continentInfo[elements[3]] < 0) {
                     inputFile.close();
                     return false;
                 }
 
+
                 // Add the remaining adjacent territories to the adjacent list
                 elements.erase(elements.begin(), elements.begin() + 4);
                 adjacentListInfo.push_back(elements);
             }
-            catch (const exception& e) {
+            catch (const exception &e) {
                 inputFile.close();
                 return false;
             }
         }
     }
+
+
 
     //Link territories with their adjacent territories; File rejection occurs
     // if a territory lacks neighbors which means an incomplete connection.
@@ -349,8 +350,25 @@ bool MapLoader::createMapFromFile(string& fileName, Map* mapToCreate) {
                 for (const string &neighbor: adjacentListInfo[i]) {
                     mapToCreate->territories->at(i)->addAdjacent(territoryList[neighbor]);
                 }
+            } else {
+                inputFile.close();
+                return false;
             }
         }
+
+//        // Print the territory list
+//        cout << "Territory List:" << endl;
+//        for (Territory* territory : *mapToCreate->territories) {
+//            territory->insertInStream();
+//        }
     }
-    return false;
+    else {
+        inputFile.close();
+        return false;
+    }
+
+    inputFile.close();
+
+
+    return true;
 }

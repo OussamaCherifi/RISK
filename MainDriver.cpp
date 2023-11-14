@@ -10,7 +10,7 @@ using namespace std;
 int main() {
 //    cout << ">>> Warzone - Assignment 1 <<<" << endl;
 
-//    testLoadMaps();
+    testLoadMaps();
 //    testPlayers();
 //    testOrdersLists();
 //    testCards();
@@ -18,8 +18,8 @@ int main() {
 //    testGameStates();
 //startupPhase();
 //
-    cout << ">>> Warzone - Assignment 2 <<<" << endl;
-    testMainGameLoop();
+//    cout << ">>> Warzone - Assignment 2 <<<" << endl;
+//    testMainGameLoop();
 //    testLoggingObserver();
 
 }
