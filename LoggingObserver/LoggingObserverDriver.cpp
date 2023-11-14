@@ -24,29 +24,19 @@ void testLoggingObserver() {
     engine->Detach(observer);
     delete engine;
     cout << "Tested GameEngine logging" << endl;
+    auto *deploy = new Deploy();
+    auto *advance = new Advance();
+    auto *bomb = new Bomb();
+    auto *blockade = new Blockade();
+    auto *airlift = new Airlift();
+    auto *negotiate = new Negotiate();
 
-    auto *dummyPlayer = new Player();
-    auto *dummyTarget = new Territory("dummy", "dummy", 0, 0);
-
-    auto *deploy = new Deploy(dummyPlayer, dummyTarget, 0);
-    deploy->Notify(deploy);
-    auto *advance = new Advance(dummyPlayer, dummyTarget, dummyTarget, 0);
-    advance->Notify(advance);
-    auto *bomb = new Bomb(dummyPlayer, dummyTarget);
-    bomb->Notify(bomb);
-    auto *blockade = new Blockade(dummyPlayer, dummyTarget);
-    blockade->Notify(blockade);
-    auto *airlift = new Airlift(dummyPlayer, dummyTarget, dummyTarget, 0);
-    airlift->Notify(airlift);
-    auto *negotiate = new Negotiate(dummyPlayer, dummyPlayer);
-    negotiate->Notify(negotiate);
     deploy->Attach(observer);
     advance->Attach(observer);
     bomb->Attach(observer);
     blockade->Attach(observer);
     airlift->Attach(observer);
     negotiate->Attach(observer);
-
 
     auto *ordersList = new OrdersList;
     ordersList->Attach(observer);
@@ -58,13 +48,12 @@ void testLoggingObserver() {
     ordersList->addList(airlift);
     ordersList->addList(negotiate);
 
-
-    auto listOfOrders = ordersList->getListOfOrders();
-    auto i = listOfOrders.begin();
-    for (; i != listOfOrders.end(); ++i) {
-        cout << "executing " << **i << " order" << endl;
-        (*i)->execute();
-    }
+    deploy->Notify(deploy);
+    advance->Notify(advance);
+    bomb->Notify(bomb);
+    blockade->Notify(blockade);
+    airlift->Notify(airlift);
+    negotiate->Notify(negotiate);
 
     deploy->Detach(observer);
     delete deploy;
