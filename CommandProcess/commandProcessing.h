@@ -8,7 +8,7 @@
 using namespace std;
 class GameEngine;
 
-class Command : public Subject, ILoggable {
+class Command : public Subject, public ILoggable {
 
     public:
     Command();//Constructors
@@ -26,10 +26,10 @@ class Command : public Subject, ILoggable {
 
     private:
     std::string* effect;
-    std::string* command; 
+    std::string* command;
 };
 
-class CommandProcessor : public Subject, ILoggable{
+class CommandProcessor : public Subject, public ILoggable{
     public:
      CommandProcessor();
     CommandProcessor(const CommandProcessor& something);
@@ -37,7 +37,6 @@ class CommandProcessor : public Subject, ILoggable{
     string stringToLog();
     Command * getCommand(GameEngine& ge);
     friend std::ostream& operator<<(std::ostream& os, const CommandProcessor& processor);
-    static bool validate(const std::string& command, GameEngine& ge);
 
     private:
     std::vector<Command*>* commands; 

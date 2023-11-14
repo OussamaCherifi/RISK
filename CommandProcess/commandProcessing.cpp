@@ -2,7 +2,7 @@
 #include <fstream>
 #include "commandProcessing.h"
 #include "../GameUtils/gameutil.h"
-using namespace std; 
+using namespace std;
 
 
 int FileCommandProcessorAdapter::current = 0;
@@ -63,7 +63,7 @@ Command* Command::saveEffect(string* effect) {
 }
 string Command::stringToLog()
 {
-    return string("Effect is: " + *effect);
+    return string("[Command]\tEffect is: " + *effect);
 }
 string* Command::getEffect() {
     return effect;
@@ -83,10 +83,10 @@ CommandProcessor::~CommandProcessor() {
     delete commands;
 }
 string CommandProcessor::readCommand(){
-    cout<< "enter command"<< endl; 
+    cout<< "enter command"<< endl;
     string command;
     getline(cin,command);
-    return command; 
+    return command;
 }
 Command* CommandProcessor::saveCommand(string* command, string* effect) {
     auto* updatedCommand = new Command(command, effect);
@@ -101,17 +101,18 @@ Command* CommandProcessor::getCommand(GameEngine& ge) {
         string effect;
         Command* newCommand = saveCommand(new string(commandString), new string(effect));
         std::vector<std::string> commandTokens = splitString(commandString);
-        if(validate(commandTokens.at(0), ge)) return newCommand;
-        else {
-            cout << "Invalid command. \"" << commandString << "\" Please try again." << endl;
-            newCommand->saveEffect(new string("Invalid CommandProcessing \"" + commandString  +"\""));
-        }
+        return newCommand;
+        //        if(validate(commandTokens.at(0), ge)) return newCommand;
+        //        else {
+        //            cout << "Invalid command. \"" << commandString << "\" Please try again." << endl;
+        //            newCommand->saveEffect(new string("Invalid CommandProcessing \"" + commandString  +"\""));
+        //        }
     }
 }
 
 string CommandProcessor::stringToLog()
 {
-    return string("Added new command: " + *commands->back()->getCommand());
+    return string("[CommandProcessor]\tAdded new command: " + *commands->back()->getCommand());
 }
 
 
