@@ -96,22 +96,38 @@ void testMainGameLoop(){
     p3->setName("Player 3");
     p3->setID(3);
 
+    //assign players and armies to territories
     p1->addTerritory(t1);
     t1->setPlayer(p1);
+    t1->setArmies(new int(3));
+
     p1->addTerritory(t2);
     t2->setPlayer(p1);
+    t2->setArmies(new int(3));
+
     p1->addTerritory(t3);
     t3->setPlayer(p1);
+    t3->setArmies(new int(3));
+
     p1->addTerritory(t4);
     t4->setPlayer(p1);
+    t4->setArmies(new int(3));
+
     p1->addTerritory(t5);
     t5->setPlayer(p1);
+    t5->setArmies(new int(3));
+
     p1->addTerritory(t6);
     t6->setPlayer(p1);
+    t6->setArmies(new int(3));
+
     p3->addTerritory(t7);
     t7->setPlayer(p3);
+    t7->setArmies(new int(1));
+
     p3->addTerritory(t8);
     t8->setPlayer(p3);
+    t8->setArmies(new int(1));
 
     //create a vector of players and add the players
     vector<Player *> players;

@@ -302,21 +302,20 @@ void Player::issueOrder(){
 
                 targetFound = false;
                 sourceFound = false;
-                cout << "An Advance Order of " << numArmies << " army units from " << toDefend()[sourceIndex] << " to "
-                     << toDefend()[targetIndex] << " will be issued." << endl;
+                cout << "An Advance Order of " << numUnits << " army units from " << toDefend()[sourceIndex]->getName() << " to "
+                     << toDefend()[targetIndex]->getName() << " will be issued." << endl;
                 auto *advanceOrder = new Advance(this, toDefend()[sourceIndex], toDefend()[targetIndex], numArmies);
                 ordersList->addList(advanceOrder);
             } else if (playerChoice == 2) {
-                cout << "Here are the territories to attack: " << endl;
-                for (int i = 0; i < toAttack().size(); i++) {
-                    cout << i << "- " << toAttack()[i]->getName() << endl;
-                }
-
                 cout << "Here are your territories you own: " << endl;
                 for (int i = 0; i < toDefend().size(); i++) {
                     cout << i << "- " << territoryList[i]->getName() << endl;
                 }
 
+                cout << "Here are the territories to attack: " << endl;
+                for (int i = 0; i < toAttack().size(); i++) {
+                    cout << i << "- " << toAttack()[i]->getName() << endl;
+                }
 
                 while (!sourceFound) {
                     cout << "Enter the index of the territory you want to move troops from";
@@ -354,8 +353,8 @@ void Player::issueOrder(){
 
                 targetFound = false;
                 sourceFound = false;
-                cout << "An Advance Order of " << numArmies << " army units from " << territoryList[sourceIndex]
-                     << " to " << toAttack()[targetIndex] << " will be issued." << endl;
+                cout << "An Advance Order of " << numUnits << " army units from " << territoryList[sourceIndex]->getName()
+                     << " to " << toAttack()[targetIndex]->getName() << " will be issued." << endl;
                 auto *advanceOrder = new Advance(this, toDefend()[sourceIndex], toDefend()[targetIndex], numArmies);
                 ordersList->addList(advanceOrder);
             }
