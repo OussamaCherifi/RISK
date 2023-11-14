@@ -143,7 +143,7 @@ void GameEngine::mainGameLoop(){
             if (players[i]->getTerritoryList().size() == numTerr){
                 cout << players[i]->getPlayerName() << " has won!" << endl;
                 playerHasAllTerritories = true;
-                break;
+                return;
             }
             else if (players[i]->getTerritoryList().empty()){
                 cout << players[i]->getPlayerName() << " has no more territories! Removing them from the game." << endl;
@@ -196,6 +196,11 @@ void GameEngine::executeOrdersPhase(){
             o->execute();
         }
     }
+
+    cout << "For testing purposes, giving all Player 3 territories to Player 1 to show what happens when a player owns all territories" << endl;
+    players[0]->getTerritoryList().push_back(players[1]->getTerritoryList()[0]);
+    players[0]->getTerritoryList().push_back(players[1]->getTerritoryList()[1]);
+    players[1]->getTerritoryList().clear();
 
 }
 
