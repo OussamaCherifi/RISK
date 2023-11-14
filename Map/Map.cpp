@@ -121,7 +121,7 @@ Territory::~Territory() {
         yCoordinate = newY;
     }
     void Territory::setPlayer(Player* newPlayer) {
-        player = new Player;
+        player = newPlayer;
     }
     //making the army change methods
     void Territory::addArmies(int num){

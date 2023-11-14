@@ -88,10 +88,13 @@ void testMainGameLoop(){
     //create players and manually assign territories
     Player *p1 = new Player();
     p1->setName("Player 1");
+    p1->setID(1);
     Player *p2 = new Player();
     p2->setName("Player 2");
+    p2->setID(2);
     Player *p3 = new Player();
     p3->setName("Player 3");
+    p3->setID(3);
 
     p1->addTerritory(t1);
     t1->setPlayer(p1);

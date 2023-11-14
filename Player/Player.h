@@ -53,9 +53,11 @@ class Player
         OrdersList *getOrdersList();
         int *getReinforcementPool();
         Deck *getDeck();
+        int getID();
 
         //setters
         void setReinforcementPool(int *num);
+        void setID(int num);
 
         //add territories to the collection
         void addTerritory(Territory* t);
