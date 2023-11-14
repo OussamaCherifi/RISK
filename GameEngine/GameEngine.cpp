@@ -170,7 +170,8 @@ void GameEngine::reinforcementPhase(){
         if (bonus ==  1 ) cout << " and a bonus of " << bonus << " reinforcements for owning a continent!" << endl;
         else if (bonus > 1) cout << " and a bonus of " << bonus << " reinforcements for owning a continent!" << endl;
         numReinforcement += bonus;
-        p->setReinforcementPool(&numReinforcement);
+        int *numPtr = new int(numReinforcement);
+        p->setReinforcementPool(numPtr);
     }
 }
 

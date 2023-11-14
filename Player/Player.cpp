@@ -175,51 +175,52 @@ vector<Territory*> Player::toAttack(){
 }
 
 void Player::issueOrder(){
-    string territoryName;
-    int territoryIndex, numUnits;
+    int deployIndex, territoryIndex, numUnits;
     bool territoryFound = false, correctNum = false;
 
     cout << "Let's start by deploying army units from your reinforcement pool. " << endl;
 
     while (*getReinforcementPool() > 0){
-            cout << "You have " << reinforcementPool << " army units in your reinforcement pool." << endl;
+        cout << "You have " << *reinforcementPool << " army units in your reinforcement pool." << endl;
 
-            cout << "Here are your territories to defend: " << endl;
-            for (Territory *t : toDefend()){
-                cout << " - " << t->getName() << endl;
+        cout << "Here are your territories to defend: " << endl;
+        for (int i = 0; i < toDefend().size(); i++){
+            cout << i << "- " << toDefend()[i]->getName() << endl;
+        }
+
+        while(!territoryFound){
+            cout << "Enter the index of territory you wish to deploy army units:";
+            cin >> deployIndex;
+
+            if(deployIndex >= 0 && deployIndex < toDefend().size()){
+                territoryFound = true;
+                territoryIndex = deployIndex;
             }
-
-            while(!territoryFound){
-                cout << "Enter the name of territory you wish to deploy army units: ";
-                cin >> territoryName;
-
-                for(int i = 0; i < territoryList.size(); i++){
-
-                    if (territoryName == territoryList[i]->getName()){
-                        territoryFound = true;
-                        territoryIndex = i;
-                        break;
-                    }
-                }
-                cout << "Territory not found. Please re-enter the territory name." << endl;
+            else {
+                cout << "Territory not found. Please re-enter the valid territory index." << endl;
             }
+        }
 
-            while(!correctNum){
-                cout << "How many army units do you wish to deploy?";
-                cin >> numUnits;
+        while(!correctNum){
+            cout << "How many army units do you wish to deploy?";
+            cin >> numUnits;
 
-                if (numUnits > 0 && numUnits <= *reinforcementPool)
-                    correctNum = true;
-
-                cout << "Invalid number. Please enter another number." << endl; 
+            if (numUnits > 0 && numUnits <= *reinforcementPool)
+                correctNum = true;
+            else {
+                cout << "Invalid number. Please enter another number." << endl;
             }
+        }
 
-            cout << "A Deploy Order of " <<  numUnits << " units to " << territoryName << " will be issued." << endl;
-            auto *deployOrder = new Deploy(this, territoryList[territoryIndex], numUnits);
-            ordersList->addList(deployOrder);
-
+        territoryFound = false; correctNum = false;
+        int *ptrNum = new int(*reinforcementPool - numUnits);
+        setReinforcementPool(ptrNum);
+        cout << "A Deploy Order of " <<  numUnits << " unit(s) to " << toDefend()[territoryIndex]->getName() << " will be issued." << endl;
+        auto *deployOrder = new Deploy(this, toDefend()[territoryIndex], numUnits);
+        ordersList->addList(deployOrder);
     }
 
+    cout << "\nGreat, all your reinforcement troops have been deployed." << endl;
     cout << "Now let's issue Advance orders!" << endl;
 
     bool playerDone = false;
