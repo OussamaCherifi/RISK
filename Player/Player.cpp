@@ -13,7 +13,7 @@ Player::Player() {
     this->hand = new Hand(); //empty hand
     this->ordersList = new OrdersList(); //empty orderslist
     this->playerName = "";
-    this->reinforcementPool;
+    this->reinforcementPool = new int (0);
 }
 
 //copy constructor
@@ -31,12 +31,9 @@ Player::~Player() {
                 delete t;
     }
     territoryList.clear();
-
     delete reinforcementPool;
-
     delete hand;
     delete ordersList;
-    delete reinforcementPool;
 }
 
 //assignment operator

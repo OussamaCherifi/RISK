@@ -127,6 +127,12 @@ void GameEngine::mainGameLoop(){
     int numTerr = 0;
     if (map != nullptr) numTerr = map->territories->size();
 
+    //initial info
+    cout << "There are " << map->territories->size() << " territories in this game." << endl; //TESTING
+    for(Player *p: players){
+        cout << p->getPlayerName() << " owns " << p->getTerritoryList().size() << " territories." << endl;
+    }
+
     bool playerHasAllTerritories = false;
 
     while(!playerHasAllTerritories){
@@ -142,6 +148,7 @@ void GameEngine::mainGameLoop(){
                 players.erase(players.begin() + i);
             }
         }
+            cout << "Checking done, entering reinforcementPhase." << endl; //TESTING
             reinforcementPhase();
             issueOrdersPhase();
             executeOrdersPhase();
