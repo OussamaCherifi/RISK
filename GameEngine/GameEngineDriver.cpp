@@ -136,6 +136,11 @@ void testMainGameLoop(){
     players.push_back(p2);
     players.push_back(p3);
 
+    //create a deck and manually give a card to a player
+    Deck deck;
+    Cards card = deck.draw();
+    p1->getHand()->addCard(card);
+
     //create the GameEngine
     GameEngine *gameEngine = new GameEngine(players, map);
 

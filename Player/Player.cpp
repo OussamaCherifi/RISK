@@ -372,16 +372,72 @@ void Player::issueOrder(){
     }
 
     int cardIndex;
-    cout << "You can now play one card from your hand." << endl;
-    cout << "Here are the cards in your hand: " << endl;
-    for (int i = 0; i < hand->getCardNum(); i++){
-        cout << i << "- " << hand->getCard(i).getTypeAsString() << endl;
+    cout << "\nYou can now play one card from your hand." << endl;
+    if(hand->getCardNum() == 0) cout << "You do not own any cards";
+    else {
+
+        //For testing purposes
+        Cards *testCard = new Cards(static_cast<CardType>(3));
+        hand->addCard(*testCard);
+
+        //Print cards
+        cout << "Here are the cards in your hand: " << endl;
+        for (int i = 0; i < hand->getCardNum(); i++) {
+            cout << i << "- " << hand->getCard(i).getTypeAsString() << endl;
+        }
+
+        cout << "Enter the index of the card you want to play" << endl;
+        cin >> cardIndex;
+
+        //For Testing Purposes
+        cardIndex = 1;
+        cout << "An Airlift order will be played!" << endl;
+        cout << "Here are your territories you own: " << endl;
+        for (int i = 0; i < toDefend().size(); i++) {
+            cout << i << "- " << territoryList[i]->getName() << endl;
+        }
+        bool sourceFound = false, targetFound = false, validNum = false;
+        int sourceIndex, targetIndex, numUnits;
+        while (!sourceFound) {
+            cout << "Enter the index of the territory you want to move troops from";
+            cin >> sourceIndex;
+
+            if (sourceIndex >= 0 && sourceIndex < toDefend().size()) {
+                sourceFound = true;
+            } else {
+                cout << "Territory not found." << endl;
+            }
+        }
+
+        while (!targetFound) {
+            cout << "Enter the index of the territory you want to move troops to";
+            cin >> targetIndex;
+
+            if (targetIndex >= 0 && targetIndex < toDefend().size()) {
+                targetFound = true;
+            } else {
+                cout << "Territory not found." << endl;
+            }
+        }
+
+        while (!validNum) {
+            cout << "How many army units do you wish to move?";
+            cin >> numUnits;
+
+            if (numUnits > 0 && numUnits <= toDefend()[sourceIndex]->getArmies())
+                validNum = true;
+            else {
+                cout << "Invalid number. Please enter another number." << endl;
+            }
+        }
+
+        cout << "An Airlift Order of " << numUnits << " army units from " << territoryList[sourceIndex]->getName()
+             << " to " << toDefend()[targetIndex]->getName() << " will be issued." << endl;
+        Airlift *airlift = new Airlift(this, territoryList[sourceIndex], territoryList[targetIndex], numUnits);
+        ordersList->addList(airlift);
+
+//        hand->getCard(cardIndex).play(this, deck);
     }
-
-    cout << "Enter the index of the card you want to play"<< endl;
-    cin >> cardIndex;
-
-    hand->getCard(cardIndex).play(this, deck);
     
 }
 // tiffany
