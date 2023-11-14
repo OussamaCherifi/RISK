@@ -10,6 +10,11 @@ using namespace std;
 // GameEngine
 GameEngine::GameEngine() : mCurrentState(GameEngine::setup()) {}
 
+GameEngine::GameEngine(vector<Player *> players, Map *map){
+    this->players = players;
+    this->map = map;
+}
+
 GameEngine::GameEngine(const GameEngine &other) {
     string currentStateName = mCurrentState->getStateName();
     for (State *s: *other.mStates) {
@@ -148,6 +153,7 @@ void GameEngine::reinforcementPhase(){
     for (Player *p : players){
         int numReinforcement = floor(p->getTerritoryList().size() / 3);
         int bonus = p->calculateContinentBonus(map);
+        if (bonus > 0 ) cout << "You got extra reinforcements for owning a continent!" << endl;
         numReinforcement += bonus;
 
         //make sure the minimum number is 3

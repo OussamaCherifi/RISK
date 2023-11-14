@@ -27,6 +27,7 @@ private:
 
 public:
     //delcare constructor with parameters and copy constructor
+    Territory(string name, string cont);
     Territory(string name, string cont, int x, int y);
     Territory(Territory *copy);
 
@@ -71,6 +72,7 @@ class Map{
     //delcare constructors
 public:
     Map();
+    Map(map<string, int> continentNameAndNum); // for testing purposes
     Map(const Map& copy);
     //declare methods
     bool validate();

@@ -76,6 +76,7 @@ private:
 class GameEngine : public Subject, public ILoggable {
 public:
     GameEngine();
+    GameEngine(vector<Player *> players, Map *map); //for testing purposes
 
     GameEngine(const GameEngine &other);
 
@@ -116,5 +117,7 @@ private:
 void testGameStates();
 
 void startupPhase();
+
+void testMainGameLoop();
 
 #endif //GAME_ENGINE_H

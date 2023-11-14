@@ -7,6 +7,16 @@
 using namespace std; // Adding this to use the 'std' namespace
 
     // Parameterized constructor
+    Territory::Territory(string name, string cont) {
+        territoryName = new string(name);
+        continent = new string(cont);
+        yCoordinate = new int(0);
+        xCoordinate = new int(0);
+        visited = false;
+        numberOfArmies = new int(0);
+        adjacentTerritories = new vector<Territory *>;
+    }
+
     Territory::Territory(string name, string cont, int x, int y) :
             territoryName(new string(name)),
             continent(new string(cont)), xCoordinate(new int(x)),
@@ -140,6 +150,11 @@ Territory::~Territory() {
     Map::Map() {
         territories = new vector<Territory*>;
     }
+
+    Map::Map(map<string, int> continentNameAndNum){
+        territories = new vector<Territory *>;
+        this->continentNameAndNum = continentNameAndNum;
+    };
 
     Map::Map(const Map& copy) {
     // Perform a deep copy of the territories vector
