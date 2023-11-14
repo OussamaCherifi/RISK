@@ -2,11 +2,13 @@
 #define RISK_COMMANDPROCESSING_H
 #include <string>
 #include <vector>
-// #include "../GameEngine/GameEngine.h"
+#include "../GameEngine/GameEngine.h"
+#include "../Map/Map.h"
+#include "../LoggingObserver/LoggingObserver.h"
 using namespace std;
 class GameEngine;
 
-class Command{
+class Command : public Subject, ILoggable {
 
     public:
     Command();//Constructors
@@ -16,6 +18,7 @@ class Command{
 
     Command* saveEffect(std::string* effect);
     friend std::ostream& operator<<(std::ostream& os, const Command& command);
+    string stringToLog();
 
     //Getters & Setters
     std::string* getEffect();
@@ -26,11 +29,12 @@ class Command{
     std::string* command; 
 };
 
-class CommandProcessor{
+class CommandProcessor : public Subject, ILoggable{
     public:
-    CommandProcessor();
+     CommandProcessor();
     CommandProcessor(const CommandProcessor& something);
-    ~CommandProcessor(); 
+    ~CommandProcessor();
+    string stringToLog();
     Command * getCommand(GameEngine& ge);
     friend std::ostream& operator<<(std::ostream& os, const CommandProcessor& processor);
     static bool validate(const std::string& command, GameEngine& ge);
@@ -43,7 +47,7 @@ class CommandProcessor{
     Command* saveCommand(std::string* command, std::string* effect);
 };
 
-class FileLineReader {
+class FileLineReader  {
     public:
     FileLineReader();
     FileLineReader(const FileLineReader& something);
@@ -68,5 +72,6 @@ class FileCommandProcessorAdapter : public CommandProcessor {
     static int current; 
     FileLineReader* flr;
 };
+
 
 #endif 
