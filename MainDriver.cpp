@@ -8,16 +8,19 @@
 using namespace std;
 
 int main() {
-    cout << ">>> Warzone - Assignment 1 <<<" << endl;
+//    cout << ">>> Warzone - Assignment 1 <<<" << endl;
 
 //    testLoadMaps();
 //    testPlayers();
 //    testOrdersLists();
 //    testCards();
-//    testLoggingObserver();
+
 //    testGameStates();
 //startupPhase();
 //
+    cout << ">>> Warzone - Assignment 2 <<<" << endl;
+    testMainGameLoop();
+//    testLoggingObserver();
 
 }
 

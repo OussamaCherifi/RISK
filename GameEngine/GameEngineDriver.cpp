@@ -1,5 +1,6 @@
 #include <iostream>
 #include <map>
+#include <vector>
 #include <GameEngine.h>
 #include <Map.h>
 
@@ -83,6 +84,36 @@ void testMainGameLoop(){
     map->territories->push_back(t6);
     map->territories->push_back(t7);
     map->territories->push_back(t8);
+
+    //create players and manually assign territories
+    Player *p1 = new Player();
+    p1->setName("Player 1");
+    Player *p2 = new Player();
+    p2->setName("Player 2");
+    Player *p3 = new Player();
+    p3->setName("Player 3");
+
+    p1->addTerritory(t1);
+    p1->addTerritory(t2);
+    p1->addTerritory(t3);
+    p1->addTerritory(t4);
+    p1->addTerritory(t5);
+    p1->addTerritory(t6);
+    p1->addTerritory(t7);
+    p3->addTerritory(t8);
+
+    //create a vector of players and add the players
+    vector<Player *> players;
+
+    players.push_back(p1);
+    players.push_back(p2);
+    players.push_back(p3);
+
+    //create the GameEngine
+    GameEngine *gameEngine = new GameEngine(players, map);
+
+    gameEngine->mainGameLoop();
+
 
 
 
