@@ -1,5 +1,6 @@
 #include "LoggingObserver.h"
 #include "GameEngine.h"
+#include "commandProcessing.h"
 #include <iostream>
 
 using namespace std;
@@ -71,6 +72,24 @@ void testLoggingObserver() {
     ordersList->Detach(observer);
     delete ordersList;
     cout << "Tested Orders & OrdersList logging" << endl;
+
+    auto *dummyEngine = new GameEngine();
+
+    auto *commandProcessor = new CommandProcessor();
+    commandProcessor->getCommand(*dummyEngine);
+    commandProcessor->Attach(observer);
+    commandProcessor->Notify(commandProcessor);
+
+    auto *command = new Command();
+    command->Attach(observer);
+    command->saveEffect(new string("Test explosion"));
+
+
+    delete dummyEngine;
+    delete commandProcessor;
+
+
+    cout << "Tested Command & CommandProcessor logging" << endl;
 
     delete observer;
     cout << "Finished, check log file." << endl;

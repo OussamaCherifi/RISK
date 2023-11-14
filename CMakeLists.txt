@@ -9,6 +9,8 @@ include_directories(Map)
 include_directories(Orders)
 include_directories(Player)
 include_directories(LoggingObserver)
+include_directories(CommandProcess)
+include_directories(GameUtils)
 
 add_executable(A1_COMP345
         Cards/Cards.cpp
@@ -30,4 +32,9 @@ add_executable(A1_COMP345
         LoggingObserver/LoggingObserver.cpp
         LoggingObserver/LoggingObserver.h
         LoggingObserver/LoggingObserverDriver.cpp
+        CommandProcess/commandProcessing.cpp
+        CommandProcess/commandProcessing.h
+        CommandProcess/commandProcessingDriver.cpp
+        GameUtils/gameutil.cpp
+        GameUtils/gameutil.h
 )
