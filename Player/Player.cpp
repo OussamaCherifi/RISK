@@ -204,15 +204,17 @@ void Player::issueOrder(){
     int deployIndex, territoryIndex, numUnits;
     bool territoryFound = false, correctNum = false;
 
-    cout << "\nIt is " << this->getPlayerName() << "'s turn to issue Orders!" << endl;
+    int tempNum = *reinforcementPool;
+
+    cout << "\nIt is " << playerName << "'s turn to issue Orders!" << endl;
     cout << "Let's start by deploying army units from your reinforcement pool. " << endl;
 
-    while (*getReinforcementPool() > 0){
-        cout << "You have " << *reinforcementPool << " army units in your reinforcement pool." << endl;
+    while (tempNum > 0){
+        cout << "You have " << tempNum << " army units in your reinforcement pool." << endl;
 
         cout << "Here are your territories to defend: " << endl;
         for (int i = 0; i < toDefend().size(); i++){
-            cout << i << "- " << toDefend()[i]->getName() << endl;
+            cout << i << "- " << toDefend()[i]->getName()  << " - " << toDefend()[i]->getArmies() << " troop(s)" << endl;
         }
 
         while(!territoryFound){
@@ -232,7 +234,7 @@ void Player::issueOrder(){
             cout << "How many army units do you wish to deploy?";
             cin >> numUnits;
 
-            if (numUnits > 0 && numUnits <= *reinforcementPool)
+            if (numUnits > 0 && numUnits <= tempNum)
                 correctNum = true;
             else {
                 cout << "Invalid number. Please enter another number." << endl;
@@ -240,8 +242,7 @@ void Player::issueOrder(){
         }
 
         territoryFound = false; correctNum = false;
-        int *ptrNum = new int(*reinforcementPool - numUnits);
-        setReinforcementPool(ptrNum);
+        tempNum -= numUnits;
         cout << "A Deploy Order of " <<  numUnits << " unit(s) to " << toDefend()[territoryIndex]->getName() << " will be issued." << endl;
         auto *deployOrder = new Deploy(this, toDefend()[territoryIndex], numUnits);
         ordersList->addList(deployOrder);
@@ -268,7 +269,7 @@ void Player::issueOrder(){
             if (playerChoice == 1) {
                 cout << "Here are your territories to defend: " << endl;
                 for (int i = 0; i < toDefend().size(); i++) {
-                    cout << i << "- " << toDefend()[i]->getName() << endl;
+                    cout << i << "- " << toDefend()[i]->getName() << " - " << toDefend()[i]->getArmies() << " troop(s)" << endl;
                 }
 
                 while (!sourceFound) {
@@ -313,12 +314,12 @@ void Player::issueOrder(){
             } else if (playerChoice == 2) {
                 cout << "Here are your territories you own: " << endl;
                 for (int i = 0; i < toDefend().size(); i++) {
-                    cout << i << "- " << territoryList[i]->getName() << endl;
+                    cout << i << "- " << toDefend()[i]->getName() << " - " << toDefend()[i]->getArmies() << " troop(s)"<< endl;
                 }
 
                 cout << "Here are the territories to attack: " << endl;
                 for (int i = 0; i < toAttack().size(); i++) {
-                    cout << i << "- " << toAttack()[i]->getName() << endl;
+                    cout << i << "- " << toAttack()[i]->getName() << " - " << toAttack()[i]->getArmies() << " troop(s)"<< endl;
                 }
 
                 while (!sourceFound) {

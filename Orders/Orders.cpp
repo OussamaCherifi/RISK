@@ -109,12 +109,11 @@ void Deploy::execute()
 {
     if (validate())
     {
-        int* numofReinforcements= (playerDep->getReinforcementPool());
+        int numofReinforcements= *(playerDep->getReinforcementPool());
         targetTerritory->addArmies(*numOfArmies);
-        playerDep->setReinforcementPool(numofReinforcements);
+        playerDep->setReinforcementPool(new int(numofReinforcements - *numOfArmies));
         Notify(this);
-        cout<<"Armies left :"<<*numofReinforcements<<endl;
-        delete numofReinforcements;
+        cout<<"Armies left :"<<*playerDep->getReinforcementPool()<<endl;
     }
     else{
         cout<<"Could not execute order Deploy"<<endl;

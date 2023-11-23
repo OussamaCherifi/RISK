@@ -194,15 +194,10 @@ void GameEngine::executeOrdersPhase(){
     cout << "\n -- EXECUTE ORDERS PHASE -- " << endl;
     for(Player *p : players){
         cout << "Executing " << p->getPlayerName() << "'s orders list..." << endl;
-//        for(Orders *o : p->getOrdersList()->getListOfOrders()){
-//            o->execute();
-//        }
+        for(Orders *o : p->getOrdersList()->getListOfOrders()){
+            o->execute();
+        }
     }
-
-    cout << "For testing purposes, giving all Player 3 territories to Player 1 to show what happens when a player owns all territories" << endl;
-    players[0]->getTerritoryList().push_back(players[1]->getTerritoryList()[0]);
-    players[0]->getTerritoryList().push_back(players[1]->getTerritoryList()[1]);
-    players[1]->getTerritoryList().clear();
 
 }
 
