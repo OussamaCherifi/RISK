@@ -221,9 +221,43 @@ void Player::printToAttack() {
     }
 }
 
+int Player::getUserNum(int max){
+    bool correctNum = false;
+    int numUnits;
+    while(!correctNum){
+        cout << "How many army units do you wish to deploy?";
+        cin >> numUnits;
+
+        if (numUnits > 0 && numUnits <= max)
+            correctNum = true;
+        else {
+            cout << "Invalid number. Please enter another number." << endl;
+        }
+    }
+
+    return numUnits;
+}
+
+int Player::getUserTerritoryIndex(vector<Territory *> list){
+    bool territoryFound = false;
+    int index;
+    while(!territoryFound){
+        cin >> index;
+
+        if(index >= 0 && index < list.size()){
+            territoryFound = true;
+        }
+        else {
+            cout << "Territory not found. Please re-enter the valid territory index." << endl;
+        }
+    }
+
+    return index;
+}
+
 void Player::issueOrder(){
-    int deployIndex, territoryIndex, numUnits;
-    bool territoryFound = false, correctNum = false;
+    //deploy phase
+    int territoryIndex, numUnits;
 
     int tempNum = *reinforcementPool;
 
@@ -233,40 +267,25 @@ void Player::issueOrder(){
     while (tempNum > 0){
         cout << "You have " << tempNum << " army units in your reinforcement pool." << endl;
 
-        printToDefend();
+        //print the player's list of territories
+        printTerritoryList();
 
-        while(!territoryFound){
-            cout << "Enter the index of territory you wish to deploy army units:";
-            cin >> deployIndex;
+        //get user input for which territory they want to deploy armies to
+        cout << "Enter the index of territory you wish to deploy army units:";
+        territoryIndex = getUserTerritoryIndex(toDefend());
 
-            if(deployIndex >= 0 && deployIndex < toDefend().size()){
-                territoryFound = true;
-                territoryIndex = deployIndex;
-            }
-            else {
-                cout << "Territory not found. Please re-enter the valid territory index." << endl;
-            }
-        }
+        //get user input for num of armies to deploy
+        numUnits = getUserNum(tempNum);
 
-        while(!correctNum){
-            cout << "How many army units do you wish to deploy?";
-            cin >> numUnits;
-
-            if (numUnits > 0 && numUnits <= tempNum)
-                correctNum = true;
-            else {
-                cout << "Invalid number. Please enter another number." << endl;
-            }
-        }
-
-        territoryFound = false; correctNum = false;
         tempNum -= numUnits;
-        cout << "A Deploy Order of " <<  numUnits << " unit(s) to " << toDefend()[territoryIndex]->getName() << " will be issued." << endl;
-        auto *deployOrder = new Deploy(this, toDefend()[territoryIndex], numUnits);
+        cout << "A Deploy Order of " <<  numUnits << " unit(s) to " << territoryList[territoryIndex]->getName() << " will be issued." << endl;
+        auto *deployOrder = new Deploy(this, territoryList[territoryIndex], numUnits);
         ordersList->addList(deployOrder);
     }
 
     cout << "\nGreat, all your reinforcement troops have been deployed." << endl;
+
+    // advance phase
     cout << "Now let's issue Advance orders!" << endl;
 
     bool playerDone = false;
@@ -274,7 +293,6 @@ void Player::issueOrder(){
     while(!playerDone) {
         string playerInput;
         int playerChoice, sourceIndex, targetIndex, numArmies;
-        bool sourceFound = false, targetFound = false, validAdvanceNum = false;
 
         cout << "Do you wish to issue Advance orders? Enter \"YES\" or \"NO\"" << endl;
         cout << "Any other input would be considerd as \"NO\"" << endl;
@@ -285,87 +303,37 @@ void Player::issueOrder(){
             cin >> playerChoice;
 
             if (playerChoice == 1) {
+                //print toDefend list
                 printToDefend();
 
-                while (!sourceFound) {
-                    cout << "Enter the index of the territory you want to move troops from";
-                    cin >> sourceIndex;
+                //get user source territory
+                cout << "Enter the index of the territory you want to move troops from";
+                sourceIndex = getUserTerritoryIndex(toDefend());
 
-                    if (sourceIndex >= 0 && sourceIndex < toDefend().size()) {
-                        sourceFound = true;
-                    } else {
-                        cout << "Territory not found." << endl;
-                    }
-                }
+                //get user target territory
+                cout << "Enter the index of the territory you want to move troops to";
+                targetIndex = getUserTerritoryIndex(toDefend());
 
-                while (!targetFound) {
-                    cout << "Enter the index of the territory you want to move troops to";
-                    cin >> targetIndex;
+                //get num of armies to move
+                numUnits = getUserNum(toDefend()[sourceIndex]->getArmies());
 
-                    if (targetIndex >= 0 && targetIndex < toDefend().size()) {
-                        targetFound = true;
-                    } else {
-                        cout << "Territory not found." << endl;
-                    }
-                }
-
-                while (!validAdvanceNum) {
-                    cout << "How many army units do you wish to move?";
-                    cin >> numUnits;
-
-                    if (numUnits > 0 && numUnits <= toDefend()[sourceIndex]->getArmies())
-                        validAdvanceNum = true;
-                    else {
-                        cout << "Invalid number. Please enter another number." << endl;
-                    }
-                }
-
-                targetFound = false;
-                sourceFound = false;
                 cout << "An Advance Order of " << numUnits << " army units from " << toDefend()[sourceIndex]->getName() << " to "
                      << toDefend()[targetIndex]->getName() << " will be issued." << endl;
                 auto *advanceOrder = new Advance(this, toDefend()[sourceIndex], toDefend()[targetIndex], numArmies);
                 ordersList->addList(advanceOrder);
+
             } else if (playerChoice == 2) {
                 printTerritoryList();
                 printToAttack();
 
-                while (!sourceFound) {
-                    cout << "Enter the index of the territory you want to move troops from";
-                    cin >> sourceIndex;
+                cout << "Enter the index of the territory you want to move troops from";
+                sourceIndex = getUserTerritoryIndex(toDefend());
 
-                    if (sourceIndex >= 0 && sourceIndex < toDefend().size()) {
-                        sourceFound = true;
-                    } else {
-                        cout << "Territory not found." << endl;
-                    }
-                }
+                cout << "Enter the index of the territory you want to move troops to";
+                targetIndex = getUserTerritoryIndex(toAttack());
 
+                numUnits = getUserNum(toDefend()[sourceIndex]->getArmies());
 
-                while (!targetFound) {
-                    cout << "Enter the index of the territory you want to move troops to";
-                    cin >> targetIndex;
-
-                    if (targetIndex >= 0 && targetIndex < toAttack().size()) {
-                        targetFound = true;
-                    } else {
-                        cout << "Territory not found." << endl;
-                    }
-                }
-
-                while (!validAdvanceNum) {
-                    cout << "How many army units do you wish to move?";
-                    cin >> numUnits;
-
-                    if (numUnits > 0 && numUnits <= toDefend()[sourceIndex]->getArmies())
-                        validAdvanceNum = true;
-                    else {
-                        cout << "Invalid number. Please enter another number." << endl;
-                    }
-                }
-
-                targetFound = false;
-                sourceFound = false;
                 cout << "An Advance Order of " << numUnits << " army units from " << territoryList[sourceIndex]->getName()
                      << " to " << toAttack()[targetIndex]->getName() << " will be issued." << endl;
                 auto *advanceOrder = new Advance(this, toDefend()[sourceIndex], toDefend()[targetIndex], numArmies);

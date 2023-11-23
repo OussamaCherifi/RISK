@@ -67,6 +67,8 @@ class Player
         void printTerritoryList();
         void printToDefend();
         void printToAttack();
+        static int getUserNum(int max);
+        int getUserTerritoryIndex(vector<Territory *> list);
         void issueOrder();
 
         //calculate if the player should get bonus reinforcement for owning continents
