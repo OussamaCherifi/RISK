@@ -64,6 +64,9 @@ class Player
 
         vector<Territory*> toDefend();
         vector<Territory*> toAttack();
+        void printTerritoryList();
+        void printToDefend();
+        void printToAttack();
         void issueOrder();
 
         //calculate if the player should get bonus reinforcement for owning continents
