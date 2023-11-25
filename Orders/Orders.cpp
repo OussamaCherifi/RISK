@@ -33,6 +33,7 @@ void OrdersList::addList(Orders *O)
     Notify(this);
 }
 
+
 vector<Orders *> OrdersList::getListOfOrders() {
     return listOfOrders;
 }
@@ -81,6 +82,13 @@ void::OrdersList::move(int start, int end)
     }
 }
 
+void OrdersList::clearList() {
+    for (Orders *order : listOfOrders) {
+        delete order;
+    }
+    listOfOrders.clear();
+}
+
 ostream &OrdersList::displayOrderList(ostream &myOrderList)
 {
     myOrderList << "Orders List: \n";
@@ -109,11 +117,12 @@ void Deploy::execute()
 {
     if (validate())
     {
+        cout << "Executing Deploy order: " << endl;
         int numofReinforcements= *(playerDep->getReinforcementPool());
         targetTerritory->addArmies(*numOfArmies);
         playerDep->setReinforcementPool(new int(numofReinforcements - *numOfArmies));
         Notify(this);
-        cout<<"Armies left :"<<*playerDep->getReinforcementPool()<<endl;
+        cout<<"Deploy done: Armies left :"<<*playerDep->getReinforcementPool()<<endl;
     }
     else{
         cout<<"Could not execute order Deploy"<<endl;
@@ -150,10 +159,11 @@ void Advance::execute()
 {
     if (validate())
     {
+        cout << "Executing Advance order: " << endl;
         if(targetTerritory->getPlayer()->getID()==playerAdv->getID()){
             sourceTerritory->removeArmies(*numOfArmies);
             targetTerritory->addArmies(*numOfArmies);
-            cout<<"Advance successful"<<endl;
+            cout<<"Advance done: Advance successful"<<endl;
         }
         else{
             if (playerAdv->isDiplomaticRelation(targetTerritory->getPlayer())){
@@ -217,8 +227,9 @@ bool Advance::validate() {
             return false;
         }
     }
-    else
+    else {
         return false;
+    }
 }
 Advance &Advance::operator=(const Advance &something) {
     if (this != &something) {this->data = something.data;}

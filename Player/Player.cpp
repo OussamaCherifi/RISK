@@ -168,16 +168,12 @@ vector<Territory*> Player::toAttack(){
     vector<Territory *> attackList;
 
     for(Territory *t : territoryList){
-//        cout << t->getName() << " has " << t->getAdjacentTerritories()->size() << " adjacents." << endl;
         for(int i = 0; i < t->getAdjacentTerritories()->size(); i++) {
             Territory *adjacent = t->getAdjacentTerritories()->at(i);
-//            cout << "An adjacent territory is " << adjacent->getName();
-//            cout << " and it is owned by " << adjacent->getPlayer()->getPlayerName() << endl;
-//            cout << "My ID is " << id << " and the adjacent's owner's ID is " << adjacent->getPlayer()->getID() << endl;
+
             //check if player owns the territory, if yes break
             if (adjacent->getPlayer()->getID() == id) {
                 continue;
-//                cout << "player owns this territory" << endl;
             }
                 //check if the territory is already in the attacklist, if yes break
             else {
@@ -190,7 +186,6 @@ vector<Territory*> Player::toAttack(){
                 }
                 if (alreadyInList) {
                     continue;
-//                    cout << "Territory is already in attackList" << endl;
                 } else {
                     attackList.push_back(adjacent);
                 }
@@ -336,13 +331,13 @@ void Player::issueOrder(){
 
                 cout << "An Advance Order of " << numUnits << " army units from " << territoryList[sourceIndex]->getName()
                      << " to " << toAttack()[targetIndex]->getName() << " will be issued." << endl;
-                auto *advanceOrder = new Advance(this, toDefend()[sourceIndex], toDefend()[targetIndex], numArmies);
+                auto *advanceOrder = new Advance(this, toDefend()[sourceIndex], toAttack()[targetIndex], numArmies);
                 ordersList->addList(advanceOrder);
             }
 
 
             else{
-                cout << "Invalid choice. Please enter \"1\" to defend or \"2\" to attack." << endl;
+                cout << "Invalid choice." << endl;
             }
         }
 
@@ -367,55 +362,55 @@ void Player::issueOrder(){
             cout << i << "- " << hand->getCard(i).getTypeAsString() << endl;
         }
 
-        cout << "Enter the index of the card you want to play" << endl;
-        cin >> cardIndex;
-
-        //For Testing Purposes
-        cardIndex = 1;
-        cout << "An Airlift order will be played!" << endl;
-        cout << "Here are your territories you own: " << endl;
-        for (int i = 0; i < toDefend().size(); i++) {
-            cout << i << "- " << territoryList[i]->getName() << endl;
-        }
-        bool sourceFound = false, targetFound = false, validNum = false;
-        int sourceIndex, targetIndex, numCardUnits;
-        while (!sourceFound) {
-            cout << "Enter the index of the territory you want to move troops from";
-            cin >> sourceIndex;
-
-            if (sourceIndex >= 0 && sourceIndex < toDefend().size()) {
-                sourceFound = true;
-            } else {
-                cout << "Territory not found." << endl;
-            }
-        }
-
-        while (!targetFound) {
-            cout << "Enter the index of the territory you want to move troops to";
-            cin >> targetIndex;
-
-            if (targetIndex >= 0 && targetIndex < toDefend().size()) {
-                targetFound = true;
-            } else {
-                cout << "Territory not found." << endl;
-            }
-        }
-
-        while (!validNum) {
-            cout << "How many army units do you wish to move?";
-            cin >> numCardUnits;
-
-            if (numCardUnits > 0 && numCardUnits <= toDefend()[sourceIndex]->getArmies())
-                validNum = true;
-            else {
-                cout << "Invalid number. Please enter another number." << endl;
-            }
-        }
-
-        cout << "An Airlift Order of " << numCardUnits << " army units from " << territoryList[sourceIndex]->getName()
-             << " to " << toDefend()[targetIndex]->getName() << " will be issued." << endl;
-        Airlift *airlift = new Airlift(this, territoryList[sourceIndex], territoryList[targetIndex], numCardUnits);
-        ordersList->addList(airlift);
+//        cout << "Enter the index of the card you want to play" << endl;
+//        cin >> cardIndex;
+//
+//        //For Testing Purposes
+//        cardIndex = 1;
+//        cout << "An Airlift order will be played!" << endl;
+//        cout << "Here are your territories you own: " << endl;
+//        for (int i = 0; i < toDefend().size(); i++) {
+//            cout << i << "- " << territoryList[i]->getName() << endl;
+//        }
+//        bool sourceFound = false, targetFound = false, validNum = false;
+//        int sourceIndex, targetIndex, numCardUnits;
+//        while (!sourceFound) {
+//            cout << "Enter the index of the territory you want to move troops from";
+//            cin >> sourceIndex;
+//
+//            if (sourceIndex >= 0 && sourceIndex < toDefend().size()) {
+//                sourceFound = true;
+//            } else {
+//                cout << "Territory not found." << endl;
+//            }
+//        }
+//
+//        while (!targetFound) {
+//            cout << "Enter the index of the territory you want to move troops to";
+//            cin >> targetIndex;
+//
+//            if (targetIndex >= 0 && targetIndex < toDefend().size()) {
+//                targetFound = true;
+//            } else {
+//                cout << "Territory not found." << endl;
+//            }
+//        }
+//
+//        while (!validNum) {
+//            cout << "How many army units do you wish to move?";
+//            cin >> numCardUnits;
+//
+//            if (numCardUnits > 0 && numCardUnits <= toDefend()[sourceIndex]->getArmies())
+//                validNum = true;
+//            else {
+//                cout << "Invalid number. Please enter another number." << endl;
+//            }
+//        }
+//
+//        cout << "An Airlift Order of " << numCardUnits << " army units from " << territoryList[sourceIndex]->getName()
+//             << " to " << toDefend()[targetIndex]->getName() << " will be issued." << endl;
+//        Airlift *airlift = new Airlift(this, territoryList[sourceIndex], territoryList[targetIndex], numCardUnits);
+//        ordersList->addList(airlift);
 
 //        hand->getCard(cardIndex).play(this, deck);
     }

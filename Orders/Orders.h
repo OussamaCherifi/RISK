@@ -36,6 +36,7 @@ public:
     void addList(Orders *something);
     void remove(int i);
     void move(int start, int end);
+    void clearList();
 
     string stringToLog() override;
     ostream &displayOrderList(ostream &myOrderList);

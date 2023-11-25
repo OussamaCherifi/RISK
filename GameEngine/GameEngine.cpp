@@ -197,7 +197,9 @@ void GameEngine::executeOrdersPhase(){
         for(Orders *o : p->getOrdersList()->getListOfOrders()){
             o->execute();
         }
+        p->getOrdersList()->clearList();
     }
+
 
 }
 
