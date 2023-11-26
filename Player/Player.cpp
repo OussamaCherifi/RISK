@@ -270,7 +270,7 @@ void Player::issueOrder(){
 
     int tempNum = *reinforcementPool;
 
-    cout << "\nIt is " << playerName << "'s turn to issue Orders!" << endl;
+    cout << "It is " << playerName << "'s turn to issue Orders!" << endl;
     cout << "Let's start by deploying army units from your reinforcement pool. " << endl;
 
     while (tempNum > 0){

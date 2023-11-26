@@ -1,4 +1,5 @@
 #include "Cards.h"
+#include "GameEngine.h"
 #include <random>
 #include <chrono>
 using namespace std;
@@ -15,18 +16,36 @@ CardType Cards::getType() const{
 }
 //plays the card, the orders made by different cards will be implemented in future assignment
 void Cards::play(Player *player, Deck *deck) const{
-    Orders* order = nullptr;
+    Orders* order;
+    int terrIndex, sourceIndex, targetIndex, numArmies;
     switch(type) {
         case BOMB:
-            order= new Bomb();
+            player->printToAttack();
+            cout << "Enter the index of the territory you want to bomb" << endl;
+            terrIndex = player->getUserTerritoryIndex(player->toAttack());
+            order= new Bomb(player, player->toAttack()[terrIndex]);
             break;
         case BLOCKADE:
-            order = new Blockade();
+            player->printTerritoryList();
+            cout << "Enter the index of the territory you want to blockade" << endl;
+            terrIndex = player->getUserTerritoryIndex(player->getTerritoryList());
+            order = new Blockade(player, player->getTerritoryList()[terrIndex]);
             break;
         case AIRLIFT:
-            order= new Airlift();
+            player->printTerritoryList();
+            cout << "Enter the index of the territory you want to move troops from";
+            sourceIndex = player->getUserTerritoryIndex(player->getTerritoryList());
+            cout << "Enter the index of the territory you want to move troops to";
+            targetIndex = player->getUserTerritoryIndex(player->getTerritoryList());
+            numArmies = Player::getUserNum(player->getTerritoryList()[sourceIndex]->getArmies());
+            order= new Airlift(player, player->getTerritoryList()[sourceIndex], player->getTerritoryList()[targetIndex], numArmies);
             break;
-        case DIPLOMACY:
+        case NEGOTIATE:
+            cout << "Here are the players in the game:" << endl;
+            //run through to attack territories and create a vector of enemy players
+            //print the list with their index
+            //get userindex
+            //create Negotiate order
             order = new Negotiate();
             break;
         default:
@@ -47,8 +66,8 @@ string Cards::getTypeAsString() const{
             return "Blockade";
         case AIRLIFT:
             return "Airlift";
-        case DIPLOMACY:
-            return "Diplomacy";
+        case NEGOTIATE:
+            return "Negotiate";
         default:
             return "Not Valid";
     }

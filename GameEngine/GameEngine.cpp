@@ -135,7 +135,7 @@ void GameEngine::mainGameLoop(){
     bool playerHasAllTerritories = false;
 
     while(!playerHasAllTerritories){
-        cout << "\n -- PLAYER INFO -- " << endl;
+        cout << "\n -- ROUND INFO -- " << endl;
         for(Player *p: players){
             cout << p->getPlayerName() << " owns " << p->getTerritoryList().size() << " territories." << endl;
         }
