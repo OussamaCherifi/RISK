@@ -20,6 +20,7 @@ private:
     CardType type;
 public:
     Cards(CardType t);
+    ~Cards() = default;
     Cards(const Cards& c1);
     void play(Player *player, Deck *deck) const;
     CardType getType() const;

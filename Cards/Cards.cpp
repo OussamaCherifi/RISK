@@ -17,18 +17,22 @@ CardType Cards::getType() const{
 //plays the card, the orders made by different cards will be implemented in future assignment
 void Cards::play(Player *player, Deck *deck) const{
     Orders* order;
-    int terrIndex, sourceIndex, targetIndex, numArmies;
+    int terrIndex, sourceIndex, targetIndex, numArmies, userIndex;
+    bool alreadyInList = false, correctNum = false;
+    vector<Player *> enemies;
     switch(type) {
         case BOMB:
             player->printToAttack();
             cout << "Enter the index of the territory you want to bomb" << endl;
             terrIndex = player->getUserTerritoryIndex(player->toAttack());
+            cout << "A Bomb Order of to " << player->toAttack()[terrIndex]->getName() << " will be issued." << endl;
             order= new Bomb(player, player->toAttack()[terrIndex]);
             break;
         case BLOCKADE:
             player->printTerritoryList();
             cout << "Enter the index of the territory you want to blockade" << endl;
             terrIndex = player->getUserTerritoryIndex(player->getTerritoryList());
+            cout << "A Blockade Order of to " << player->getTerritoryList()[terrIndex]->getName() << " will be issued." << endl;
             order = new Blockade(player, player->getTerritoryList()[terrIndex]);
             break;
         case AIRLIFT:
@@ -38,23 +42,50 @@ void Cards::play(Player *player, Deck *deck) const{
             cout << "Enter the index of the territory you want to move troops to";
             targetIndex = player->getUserTerritoryIndex(player->getTerritoryList());
             numArmies = Player::getUserNum(player->getTerritoryList()[sourceIndex]->getArmies());
+            cout << "An Airlift Order of " <<  numArmies << " unit(s) from " << player->getTerritoryList()[targetIndex]->getName() << " to " << player->getTerritoryList()[sourceIndex]->getName() << " will be issued." << endl;
             order= new Airlift(player, player->getTerritoryList()[sourceIndex], player->getTerritoryList()[targetIndex], numArmies);
             break;
         case NEGOTIATE:
-            cout << "Here are the players in the game:" << endl;
             //run through to attack territories and create a vector of enemy players
+            for(Territory *t : player->toAttack()){
+                Player *enemy = t->getPlayer();
+                for(Player *p : enemies){
+                    if(enemy->getID() == p->getID()){
+                        alreadyInList = true;
+                        break;
+                    }
+
+                }
+                if(alreadyInList) continue;
+                else enemies.push_back(enemy);
+            }
+
             //print the list with their index
+            cout << "Here are the players in the game:" << endl;
+            for (int i = 0; i < enemies.size(); i++){
+                cout << i << "- " << enemies[i]->getPlayerName() << endl;
+            }
+
             //get userindex
+            while(!correctNum){
+                cout << "How many army units do you wish to deploy?";
+                cin >> userIndex;
+
+                if (userIndex > 0 && userIndex <= enemies.size() - 1)
+                    correctNum = true;
+                else {
+                    cout << "Invalid index. Please enter another number." << endl;
+                }
+            }
             //create Negotiate order
-            order = new Negotiate();
+            cout << "A Negotiate Order to " << enemies[userIndex]->getPlayerName() << " will be issued" << endl;
+            order = new Negotiate(player, enemies[userIndex]);
             break;
         default:
             cout<<"Unknown card type played"<<endl;
             return;
     }
     player->getOrdersList()->addList(order);
-    deck->addCard(*this);
-    cout<<"A "<< getTypeAsString()<<" card was played."<<endl;
 }
 string Cards::getTypeAsString() const{
     switch(type) {
@@ -113,6 +144,7 @@ void Hand::addCard(const Cards& card){
 // remove a card from your hand
 void Hand::removeCard(int index){
     if (index>=0 && index<hands.size()){
+//        delete hands[index];
         hands.erase(hands.begin() + index);
     }
 }

@@ -137,7 +137,7 @@ void testOrderExecution(){
     cout << "Territory Germany is now owned by: " << Germany.getPlayer()->getPlayerName() << endl;
 
     // Negotiate order (assuming player1 has a diplomacy card)
-    Cards diplomacyCard(DIPLOMACY);
+    Cards diplomacyCard(NEGOTIATE);
     player1.getHand()->addCard(diplomacyCard);
 
     Negotiate negotiateOrder(&player1, &player2);

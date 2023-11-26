@@ -195,6 +195,7 @@ void GameEngine::executeOrdersPhase(){
     for(Player *p : players){
         cout << "Executing " << p->getPlayerName() << "'s orders list..." << endl;
         for(Orders *o : p->getOrdersList()->getListOfOrders()){
+            cout << endl;
             o->execute();
         }
         p->getOrdersList()->clearList();
