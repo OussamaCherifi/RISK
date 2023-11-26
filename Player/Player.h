@@ -61,6 +61,7 @@ class Player
         void setDeck(Deck deck);
         //add territories to the collection
         void addTerritory(Territory* t);
+        void removeTerritory(Territory *t);
 
         vector<Territory*> toDefend();
         vector<Territory*> toAttack();

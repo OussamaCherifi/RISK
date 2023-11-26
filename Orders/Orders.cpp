@@ -163,19 +163,21 @@ void Advance::execute()
         if(targetTerritory->getPlayer()->getID()==playerAdv->getID()){
             sourceTerritory->removeArmies(*numOfArmies);
             targetTerritory->addArmies(*numOfArmies);
-            cout<<"Advance done: Advance successful"<<endl;
+            cout<<"Advance successful from " << sourceTerritory->getName() << " to " << targetTerritory->getName() <<endl;
         }
         else{
             if (playerAdv->isDiplomaticRelation(targetTerritory->getPlayer())){
                 cout<<"Cannot attack this turn, diplomatic relations"<<endl;
             }
             else {
-                int *attackingArmies = numOfArmies;
+                int attackingArmies = *numOfArmies;
                 int defendingArmies = targetTerritory->getArmies();
 
-                while (*attackingArmies > 0 && defendingArmies > 0) {
+                cout << sourceTerritory->getName() << " is attacking " << targetTerritory->getName() << endl;
+
+                while (attackingArmies > 0 && defendingArmies > 0) {
                     // Battle simulation
-                    for (int i = 0; i < *attackingArmies; ++i) {
+                    for (int i = 0; i < attackingArmies; ++i) {
                         if (rand() % 100 < 60) {
                             // Attacker kills one defending army
                             --defendingArmies;
@@ -193,8 +195,10 @@ void Advance::execute()
                 // Check if the attacker conquered the territory
                 if (defendingArmies <= 0) {
                     // Attacker captures the territory
-                    targetTerritory->setPlayer(playerAdv);
-                    targetTerritory->setArmies(attackingArmies);
+                    targetTerritory->getPlayer()->removeTerritory(targetTerritory); // remove the territory from the attackee
+                    targetTerritory->setPlayer(playerAdv); //set the player in the territory
+                    playerAdv->addTerritory(targetTerritory); //add this territory to the new player's list
+                    targetTerritory->setArmies(new int(attackingArmies));
                     cout << "Territory conquered by attacker" << endl;
 
                     // Player receives a card for conquering a territory
@@ -224,10 +228,12 @@ bool Advance::validate() {
             return true;
         }
         else{
+            cout << "Error: territories are not adjacent" << endl;
             return false;
         }
     }
     else {
+        cout << "Error: territory is not yours" << endl;
         return false;
     }
 }

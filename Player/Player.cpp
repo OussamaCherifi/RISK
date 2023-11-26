@@ -120,6 +120,20 @@ void Player::addTerritory(Territory* t){
     territoryList.push_back(t);
 }
 
+void Player::removeTerritory(Territory *t) {
+    int index = -1;
+    for(int i = 0; i < territoryList.size(); i++){
+        if(t->getName() == territoryList[i]->getName()){
+            index = i;
+            break;
+        }
+    }
+    if(index != -1)
+        territoryList.erase(territoryList.begin() + index);
+    else
+        cout << "Error: could not remove territory" << endl;
+}
+
 vector<Territory*> Player::toDefend(){
     return territoryList;
 }
@@ -287,7 +301,7 @@ void Player::issueOrder(){
 
     while(!playerDone) {
         string playerInput;
-        int playerChoice, sourceIndex, targetIndex, numArmies;
+        int playerChoice, sourceIndex, targetIndex;
 
         cout << "Do you wish to issue Advance orders? Enter \"YES\" or \"NO\"" << endl;
         cout << "Any other input would be considerd as \"NO\"" << endl;
@@ -314,7 +328,7 @@ void Player::issueOrder(){
 
                 cout << "An Advance Order of " << numUnits << " army units from " << toDefend()[sourceIndex]->getName() << " to "
                      << toDefend()[targetIndex]->getName() << " will be issued." << endl;
-                auto *advanceOrder = new Advance(this, toDefend()[sourceIndex], toDefend()[targetIndex], numArmies);
+                auto *advanceOrder = new Advance(this, toDefend()[sourceIndex], toDefend()[targetIndex], numUnits);
                 ordersList->addList(advanceOrder);
 
             } else if (playerChoice == 2) {
@@ -329,9 +343,10 @@ void Player::issueOrder(){
 
                 numUnits = getUserNum(toDefend()[sourceIndex]->getArmies());
 
+
                 cout << "An Advance Order of " << numUnits << " army units from " << territoryList[sourceIndex]->getName()
                      << " to " << toAttack()[targetIndex]->getName() << " will be issued." << endl;
-                auto *advanceOrder = new Advance(this, toDefend()[sourceIndex], toAttack()[targetIndex], numArmies);
+                auto *advanceOrder = new Advance(this, toDefend()[sourceIndex], toAttack()[targetIndex], numUnits);
                 ordersList->addList(advanceOrder);
             }
 
