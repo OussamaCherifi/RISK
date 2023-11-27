@@ -11,6 +11,7 @@ include_directories(Player)
 include_directories(LoggingObserver)
 include_directories(CommandProcess)
 include_directories(GameUtils)
+include_directories(PlayerStrategies)
 
 add_executable(A1_COMP345
         Cards/Cards.cpp
@@ -37,4 +38,6 @@ add_executable(A1_COMP345
         CommandProcess/commandProcessingDriver.cpp
         GameUtils/gameutil.cpp
         GameUtils/gameutil.h
+        PlayerStrategies/PlayerStrategies.h
+        PlayerStrategies/PlayerStrategies.cpp
 )

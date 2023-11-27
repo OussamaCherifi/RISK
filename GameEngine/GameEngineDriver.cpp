@@ -3,6 +3,7 @@
 #include <vector>
 #include <GameEngine.h>
 #include <Map.h>
+#include "PlayerStrategies.h"
 
 
 using namespace std;
@@ -92,18 +93,21 @@ void testMainGameLoop(){
     p1->setName("Player 1");
     p1->setID(1);
     p1->setDeck(deck);
+    p1->setPS(new HumanPlayerStrategy(p1));
     p1->getHand()->addCard(p1->getDeck()->draw());
     p1->getHand()->addCard(p1->getDeck()->draw());
     Player *p2 = new Player();
     p2->setName("Player 2");
     p2->setID(2);
     p2->setDeck(deck);
+    p2->setPS(new HumanPlayerStrategy(p2));
     p2->getHand()->addCard(p1->getDeck()->draw());
     p2->getHand()->addCard(p1->getDeck()->draw());
     Player *p3 = new Player();
     p3->setName("Player 3");
     p3->setID(3);
     p3->setDeck(deck);
+    p3->setPS(new HumanPlayerStrategy(p3));
     p3->getHand()->addCard(p1->getDeck()->draw());
     p3->getHand()->addCard(p1->getDeck()->draw());
 

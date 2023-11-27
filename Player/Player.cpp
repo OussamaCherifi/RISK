@@ -61,6 +61,9 @@ void Player::setDeck(Deck *deck) {
     this->deck = deck;
 }
 
+void Player::setPS(PlayerStrategy *playerStrategy){
+    ps = playerStrategy;
+}
 //getter
 string Player::getPlayerName() {
     return playerName;
@@ -142,10 +145,6 @@ void Player::removeTerritory(Territory *t) {
         cout << "Error: could not remove territory" << endl;
 }
 
-vector<Territory*> Player::toDefend(){
-    return territoryList;
-}
-
 int Player::calculateContinentBonus(Map *mapCreated){
     int bonus = 0;
 
@@ -184,37 +183,6 @@ int Player::calculateContinentBonus(Map *mapCreated){
     }
 
     return bonus*5;
-}
-
-vector<Territory*> Player::toAttack(){
-    vector<Territory *> attackList;
-
-    for(Territory *t : territoryList){
-        for(int i = 0; i < t->getAdjacentTerritories()->size(); i++) {
-            Territory *adjacent = t->getAdjacentTerritories()->at(i);
-
-            //check if player owns the territory, if yes break
-            if (adjacent->getPlayer()->getID() == id) {
-                continue;
-            }
-                //check if the territory is already in the attacklist, if yes break
-            else {
-                bool alreadyInList = false;
-                for (Territory *terr: attackList) {
-                    if (terr->getName() == adjacent->getName()) {
-                        alreadyInList = true;
-                        break;
-                    }
-                }
-                if (alreadyInList) {
-                    continue;
-                } else {
-                    attackList.push_back(adjacent);
-                }
-            }
-        }
-    }
-    return attackList;
 }
 
 void Player::printTerritoryList(){
@@ -272,137 +240,15 @@ int Player::getUserTerritoryIndex(vector<Territory *> list){
     return index;
 }
 
+vector<Territory*> Player::toDefend(){
+    return ps->toDefend();
+}
+
+vector<Territory*> Player::toAttack(){
+    return ps->toAttack();
+}
+
 void Player::issueOrder(){
-    //deploy phase
-    int territoryIndex, numUnits;
-
-    int tempNum = *reinforcementPool;
-
-    cout << "It is " << playerName << "'s turn to issue Orders!" << endl;
-    cout << "Let's start by deploying army units from your reinforcement pool. " << endl;
-
-    while (tempNum > 0){
-        cout << "You have " << tempNum << " army units in your reinforcement pool." << endl;
-
-        //print the player's list of territories
-        printTerritoryList();
-
-        //get user input for which territory they want to deploy armies to
-        cout << "Enter the index of territory you wish to deploy army units:";
-        territoryIndex = getUserTerritoryIndex(toDefend());
-
-        //get user input for num of armies to deploy
-        numUnits = getUserNum(tempNum);
-
-        tempNum -= numUnits;
-        cout << "A Deploy Order of " <<  numUnits << " unit(s) to " << territoryList[territoryIndex]->getName() << " will be issued." << endl;
-        auto *deployOrder = new Deploy(this, territoryList[territoryIndex], numUnits);
-        ordersList->addList(deployOrder);
-    }
-
-    cout << "\nGreat, all your reinforcement troops have been deployed." << endl;
-
-    // advance phase
-    cout << "Now let's issue Advance orders!" << endl;
-
-    bool playerDone = false;
-
-    while(!playerDone) {
-        string playerInput;
-        int playerChoice, sourceIndex, targetIndex;
-
-        cout << "Do you wish to issue Advance orders? Enter \"YES\" or \"NO\"" << endl;
-        cout << "Any other input would be considerd as \"NO\"" << endl;
-        cin >> playerInput;
-
-        if (playerInput == "YES") {
-            cout << "Enter \"1\" to defend and \"2\" to attack" << endl;
-            cin >> playerChoice;
-
-            if (playerChoice == 1) {
-                //print toDefend list
-                printToDefend();
-
-                //get user source territory
-                cout << "Enter the index of the territory you want to move troops from";
-                sourceIndex = getUserTerritoryIndex(toDefend());
-
-                //get user target territory
-                cout << "Enter the index of the territory you want to move troops to";
-                targetIndex = getUserTerritoryIndex(toDefend());
-
-                //get num of armies to move
-                numUnits = getUserNum(toDefend()[sourceIndex]->getArmies());
-
-                cout << "An Advance Order of " << numUnits << " army units from " << toDefend()[sourceIndex]->getName() << " to "
-                     << toDefend()[targetIndex]->getName() << " will be issued." << endl;
-                auto *advanceOrder = new Advance(this, toDefend()[sourceIndex], toDefend()[targetIndex], numUnits);
-                ordersList->addList(advanceOrder);
-
-            } else if (playerChoice == 2) {
-                printTerritoryList();
-                printToAttack();
-
-                cout << "Enter the index of the territory you want to move troops from";
-                sourceIndex = getUserTerritoryIndex(toDefend());
-
-                cout << "Enter the index of the territory you want to move troops to";
-                targetIndex = getUserTerritoryIndex(toAttack());
-
-                numUnits = getUserNum(toDefend()[sourceIndex]->getArmies());
-
-
-                cout << "An Advance Order of " << numUnits << " army units from " << territoryList[sourceIndex]->getName()
-                     << " to " << toAttack()[targetIndex]->getName() << " will be issued." << endl;
-                auto *advanceOrder = new Advance(this, toDefend()[sourceIndex], toAttack()[targetIndex], numUnits);
-                ordersList->addList(advanceOrder);
-            }
-
-
-            else{
-                cout << "Invalid choice." << endl;
-            }
-        }
-
-        else{
-            playerDone = true;
-        }
-
-    }
-
-    int cardIndex;
-    string cardInput;
-    bool correctIndex = false;
-    if(hand->getCardNum() == 0) cout << "You do not own any cards" << endl;
-    else {
-        //Print cards
-        cout << "Here are the cards in your hand: " << endl;
-        for (int i = 0; i < hand->getCardNum(); i++) {
-            cout << i << "- " << hand->getCard(i).getTypeAsString() << endl;
-        }
-
-        cout << "Do you wish to play a card? Enter \"YES\" or \"NO\"" << endl;
-        cout << "Any other input would be considerd as \"NO\"" << endl;
-        cin >> cardInput;
-
-        if (cardInput == "YES") {
-            while(!correctIndex){
-                cout << "Enter the index of the player you want to negotiate with:";
-                cin >> cardIndex;
-
-                if (cardIndex >= 0 && cardIndex <= hand->getCardNum())
-                    correctIndex = true;
-                else {
-                    cout << "Invalid index. Please enter another number." << endl;
-                }
-            }
-
-            hand->getCard(cardIndex).play(this, deck);
-            deck->addCard(hand->getCard(cardIndex)); //puts it back to the deck
-            hand->removeCard(cardIndex); //removes it from player's hand
-        }
-
-    }
-    
+    ps->issueOrder();
 }
 // tiffany

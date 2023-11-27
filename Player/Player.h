@@ -5,6 +5,7 @@
 #include "Cards.h"
 #include "Map.h"
 #include "Orders.h"
+#include "PlayerStrategies.h"
 
 using namespace std;
 
@@ -18,7 +19,8 @@ class OrdersList;
 
 class Deck;
 
-//create players
+class PlayerStrategy;
+
 class Player 
 { 
     private:
@@ -31,6 +33,7 @@ class Player
         int *reinforcementPool;
         set<Player* > diplomaticRelations;
         Deck *deck;
+        PlayerStrategy *ps;
     public:
         //constructors
         Player();
@@ -88,6 +91,7 @@ class Player
 
         // setters
         void setName(const std::string& newName);
+        void setPS(PlayerStrategy *playerStrategy);
 };
 
 void testPlayers();
