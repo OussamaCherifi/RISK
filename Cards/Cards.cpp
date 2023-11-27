@@ -68,10 +68,10 @@ void Cards::play(Player *player, Deck *deck) const{
 
             //get userindex
             while(!correctNum){
-                cout << "How many army units do you wish to deploy?";
+                cout << "Enter the index of the player you want to negotiate with:";
                 cin >> userIndex;
 
-                if (userIndex > 0 && userIndex <= enemies.size() - 1)
+                if (userIndex >= 0 && userIndex <= enemies.size() - 1)
                     correctNum = true;
                 else {
                     cout << "Invalid index. Please enter another number." << endl;
@@ -91,8 +91,6 @@ string Cards::getTypeAsString() const{
     switch(type) {
         case BOMB:
             return "Bomb";
-        case REINFORCEMENT:
-            return "Reinforcement";
         case BLOCKADE:
             return "Blockade";
         case AIRLIFT:
@@ -110,7 +108,7 @@ Deck::Deck(){
     cards = vector<Cards>();
     //create and shuffle deck
     for (int j=0; j<5; j++) {
-        for (int i = 0; i < 5; ++i) {
+        for (int i = 0; i < 4; ++i) {
             cards.emplace_back(static_cast<CardType>(i));
         }
     }

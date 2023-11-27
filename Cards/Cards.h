@@ -12,7 +12,7 @@ class Player;
 
 //create Warzone card types
 
-enum CardType {BOMB, BLOCKADE, REINFORCEMENT, AIRLIFT, NEGOTIATE, UNKNOWN};
+enum CardType {BOMB, BLOCKADE, AIRLIFT, NEGOTIATE, UNKNOWN};
 class Deck;
 
 class Cards{

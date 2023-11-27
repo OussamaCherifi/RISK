@@ -162,6 +162,9 @@ void GameEngine::mainGameLoop(){
 void GameEngine::reinforcementPhase(){
     cout << " \n-- REINFORCEMENT PHASE -- " << endl;
     for (Player *p : players){
+        //make sure the players have no diplomatic relations in a new round
+        p->clearDiplomaticRelations();
+
         int numReinforcement = floor(p->getTerritoryList().size() / 3);
         int bonus = p->calculateContinentBonus(map);
 
@@ -199,6 +202,7 @@ void GameEngine::executeOrdersPhase(){
             o->execute();
         }
         p->getOrdersList()->clearList();
+        cout << endl;
     }
 
 

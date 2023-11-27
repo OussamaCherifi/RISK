@@ -57,8 +57,8 @@ void Player::setReinforcementPool(int *num){
 void Player::setID(int num) {
     this->id = num;
 }
-void Player::setDeck(Deck deck) {
-    this->deck = &deck;
+void Player::setDeck(Deck *deck) {
+    this->deck = deck;
 }
 
 //getter
@@ -72,6 +72,14 @@ int *Player::getReinforcementPool(){
 
 int Player::getID() {
     return id;
+}
+
+set<Player *> Player::getDiplomaticRelations() {
+    return diplomaticRelations;
+}
+
+void Player::clearDiplomaticRelations(){
+    diplomaticRelations.clear();
 }
 
 //stream insertion operator
@@ -367,10 +375,6 @@ void Player::issueOrder(){
     if(hand->getCardNum() == 0) cout << "You do not own any cards" << endl;
     else {
 
-        //For testing purposes
-        Cards *testCard = new Cards(static_cast<CardType>(5));
-        hand->addCard(*testCard);
-
         //Print cards
         cout << "Here are the cards in your hand: " << endl;
         for (int i = 0; i < hand->getCardNum(); i++) {
@@ -381,7 +385,9 @@ void Player::issueOrder(){
         cin >> cardIndex;
 
         hand->getCard(cardIndex).play(this, deck);
-        hand->removeCard(cardIndex);
+        deck->addCard(hand->getCard(cardIndex)); //puts it back to the deck
+        hand->removeCard(cardIndex); //removes it from player's hand
+
     }
     
 }

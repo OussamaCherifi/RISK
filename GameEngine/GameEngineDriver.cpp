@@ -85,16 +85,27 @@ void testMainGameLoop(){
     map->territories->push_back(t7);
     map->territories->push_back(t8);
 
+    //Create the deck of cards
+    Deck *deck = new Deck();
     //create players and manually assign territories
     Player *p1 = new Player();
     p1->setName("Player 1");
     p1->setID(1);
+    p1->setDeck(deck);
+    p1->getHand()->addCard(p1->getDeck()->draw());
+    p1->getHand()->addCard(p1->getDeck()->draw());
     Player *p2 = new Player();
     p2->setName("Player 2");
     p2->setID(2);
+    p2->setDeck(deck);
+    p2->getHand()->addCard(p1->getDeck()->draw());
+    p2->getHand()->addCard(p1->getDeck()->draw());
     Player *p3 = new Player();
     p3->setName("Player 3");
     p3->setID(3);
+    p3->setDeck(deck);
+    p3->getHand()->addCard(p1->getDeck()->draw());
+    p3->getHand()->addCard(p1->getDeck()->draw());
 
     //assign players and armies to territories
     p1->addTerritory(t1);
@@ -135,11 +146,6 @@ void testMainGameLoop(){
     players.push_back(p1);
     players.push_back(p2);
     players.push_back(p3);
-
-    //create a deck and manually give a card to a player
-    Deck deck;
-    Cards card = deck.draw();
-    p1->getHand()->addCard(card);
 
     //create the GameEngine
     GameEngine *gameEngine = new GameEngine(players, map);

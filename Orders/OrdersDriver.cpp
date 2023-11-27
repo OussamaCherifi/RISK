@@ -38,7 +38,7 @@ void testOrderExecution(){
     // Create players and territories for testing
     Player player1;
     Player player2;
-    Deck deck1;
+    Deck *deck1 = new Deck();
 
     player1.setName("John");
     player2.setName("Mark");

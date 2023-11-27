@@ -199,7 +199,7 @@ void Advance::execute()
                     targetTerritory->setPlayer(playerAdv); //set the player in the territory
                     playerAdv->addTerritory(targetTerritory); //add this territory to the new player's list
                     targetTerritory->setArmies(new int(attackingArmies));
-                    cout << "Territory conquered by attacker" << endl;
+                    cout << targetTerritory->getName() << " is conquered by " << playerAdv->getPlayerName() << endl;
 
                     // Player receives a card for conquering a territory
                     if (playerAdv && playerAdv->getHand() && playerAdv->getDeck()) {
@@ -254,8 +254,9 @@ void Bomb::execute()
 {
     if (validate())
     {
+        cout << "Executing Bomb order: " << endl;
         targetTerritory->removeHalfArmies();
-        cout<<"Territory bombed"<<endl;
+        cout << targetTerritory->getName() << " has been bombed!"<<endl;
         Notify(this);
     }
     else{
@@ -286,10 +287,11 @@ void Blockade::execute()
 {
     if (validate())
     {
+        cout << "Executing Blockade order: " << endl;
         targetTerritory->doubleArmies();
         //give the ownership of territory to the neutral player
         Notify(this);
-        cout<<"Blockade Active"<<endl;
+        cout<<"A Blockade has been put on " << targetTerritory->getName() << endl;
     }
     else{
         cout<<"Could not execute order Blockade"<<endl;
@@ -321,9 +323,10 @@ void Airlift::execute()
 {
     if (validate())
     {
+        cout << "Executing Airlift order: " << endl;
         sourceT->removeArmies(*numOfArmies);
         targetT->addArmies(*numOfArmies);
-        cout<<"Airlift Successful"<<endl;
+        cout<<"Airlift Successful from " << sourceT->getName() << " to " << targetT->getName() <<endl;
         Notify(this);
     }
     else{
@@ -354,6 +357,7 @@ void Negotiate::execute()
 {
     if (validate())
     {
+        cout << "Executing Negotiate order: " << endl;
         playerNeg->addDiplomaticRelation(targetP);
         targetP->addDiplomaticRelation(playerNeg);
         cout<<"Negotiation successful"<<endl;

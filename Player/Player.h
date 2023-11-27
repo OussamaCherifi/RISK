@@ -54,11 +54,14 @@ class Player
         int *getReinforcementPool();
         Deck *getDeck();
         int getID();
+        set<Player *> getDiplomaticRelations();
+        void clearDiplomaticRelations();
+
 
         //setters
         void setReinforcementPool(int *num);
         void setID(int num);
-        void setDeck(Deck deck);
+        void setDeck(Deck *deck);
         //add territories to the collection
         void addTerritory(Territory* t);
         void removeTerritory(Territory *t);
