@@ -204,7 +204,7 @@ void Advance::execute()
                     // Player receives a card for conquering a territory
                     if (playerAdv && playerAdv->getHand() && playerAdv->getDeck()) {
                         playerAdv->getHand()->addCard((playerAdv->getDeck())->draw());
-                        cout << "Player received a card;" << endl;
+                        cout << "Player received a card" << endl;
                     }
                     else{
                         cout<<"Error with pointer"<<endl;

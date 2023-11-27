@@ -371,22 +371,36 @@ void Player::issueOrder(){
     }
 
     int cardIndex;
-    cout << "\nYou can now play one card from your hand." << endl;
+    string cardInput;
+    bool correctIndex = false;
     if(hand->getCardNum() == 0) cout << "You do not own any cards" << endl;
     else {
-
         //Print cards
         cout << "Here are the cards in your hand: " << endl;
         for (int i = 0; i < hand->getCardNum(); i++) {
             cout << i << "- " << hand->getCard(i).getTypeAsString() << endl;
         }
 
-        cout << "Enter the index of the card you want to play" << endl;
-        cin >> cardIndex;
+        cout << "Do you wish to play a card? Enter \"YES\" or \"NO\"" << endl;
+        cout << "Any other input would be considerd as \"NO\"" << endl;
+        cin >> cardInput;
 
-        hand->getCard(cardIndex).play(this, deck);
-        deck->addCard(hand->getCard(cardIndex)); //puts it back to the deck
-        hand->removeCard(cardIndex); //removes it from player's hand
+        if (cardInput == "YES") {
+            while(!correctIndex){
+                cout << "Enter the index of the player you want to negotiate with:";
+                cin >> cardIndex;
+
+                if (cardIndex >= 0 && cardIndex <= hand->getCardNum())
+                    correctIndex = true;
+                else {
+                    cout << "Invalid index. Please enter another number." << endl;
+                }
+            }
+
+            hand->getCard(cardIndex).play(this, deck);
+            deck->addCard(hand->getCard(cardIndex)); //puts it back to the deck
+            hand->removeCard(cardIndex); //removes it from player's hand
+        }
 
     }
     
