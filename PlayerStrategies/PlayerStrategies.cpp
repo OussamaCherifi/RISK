@@ -50,7 +50,6 @@ void HumanPlayerStrategy::issueOrder() {
 
     int tempNum = *(p->getReinforcementPool());
 
-    cout << "It is " << p->getPlayerName() << "'s turn to issue Orders!" << endl;
     cout << "Let's start by deploying army units from your reinforcement pool. " << endl;
 
     while (tempNum > 0){
@@ -175,4 +174,29 @@ void HumanPlayerStrategy::issueOrder() {
         }
 
     }
+}
+
+string HumanPlayerStrategy::getType() {
+    return "HUMAN";
+}
+
+NeutralPlayerStrategy::NeutralPlayerStrategy(Player *player) {
+    p = player;
+}
+
+vector<Territory *> NeutralPlayerStrategy::toAttack() {
+    vector<Territory *> attacklist;
+    return attacklist; //returns an empty list since cannot attack
+}
+
+vector<Territory *> NeutralPlayerStrategy::toDefend() {
+    return p->getTerritoryList();
+}
+
+void NeutralPlayerStrategy::issueOrder() {
+    cout << "Neutral players do not issue orders or play cards" << endl;
+}
+
+string NeutralPlayerStrategy::getType() {
+    return "NEUTRAL";
 }

@@ -81,6 +81,10 @@ set<Player *> Player::getDiplomaticRelations() {
     return diplomaticRelations;
 }
 
+PlayerStrategy *Player::getPS() {
+    return ps;
+}
+
 void Player::clearDiplomaticRelations(){
     diplomaticRelations.clear();
 }

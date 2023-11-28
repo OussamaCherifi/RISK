@@ -16,14 +16,25 @@ public:
     virtual vector<Territory *> toAttack() = 0;
     virtual vector<Territory *> toDefend() = 0;
     virtual void issueOrder() = 0;
+    virtual string getType() = 0;
 };
 
 class HumanPlayerStrategy: public PlayerStrategy{
 public:
-    HumanPlayerStrategy();
     HumanPlayerStrategy(Player *player);
     vector<Territory *> toAttack();
     vector<Territory *> toDefend();
     void issueOrder();
+    string getType();
+};
+
+class NeutralPlayerStrategy: public PlayerStrategy{
+public:
+    NeutralPlayerStrategy(Player *player);
+    vector<Territory *> toAttack();
+    vector<Territory *> toDefend();
+    void issueOrder();
+    string getType();
+
 };
 #endif

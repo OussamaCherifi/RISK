@@ -100,7 +100,7 @@ void testMainGameLoop(){
     p2->setName("Player 2");
     p2->setID(2);
     p2->setDeck(deck);
-    p2->setPS(new HumanPlayerStrategy(p2));
+    p2->setPS(new NeutralPlayerStrategy(p2));
     p2->getHand()->addCard(p1->getDeck()->draw());
     p2->getHand()->addCard(p1->getDeck()->draw());
     Player *p3 = new Player();
@@ -116,8 +116,8 @@ void testMainGameLoop(){
     t1->setPlayer(p1);
     t1->setArmies(new int(3));
 
-    p1->addTerritory(t2);
-    t2->setPlayer(p1);
+    p2->addTerritory(t2);
+    t2->setPlayer(p2);
     t2->setArmies(new int(3));
 
     p1->addTerritory(t3);

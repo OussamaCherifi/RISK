@@ -170,6 +170,12 @@ void Advance::execute()
                 cout<<"Cannot attack this turn, diplomatic relations"<<endl;
             }
             else {
+                //if the target territory is owned by a neutral player, set them to aggressive
+                if(targetTerritory->getPlayer()->getPS()->getType() == "NEUTRAL") {
+                    cout << "Neutral player was attacked! They are now Aggressive." << endl;
+//                    targetTerritory->getPlayer()->setPS(new AggressivePlayerStrategy(targetTerritory->getPayer()));
+                }
+
                 int attackingArmies = *numOfArmies;
                 int defendingArmies = targetTerritory->getArmies();
 

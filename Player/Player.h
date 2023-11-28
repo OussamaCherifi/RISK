@@ -58,6 +58,8 @@ class Player
         Deck *getDeck();
         int getID();
         set<Player *> getDiplomaticRelations();
+        PlayerStrategy *getPS();
+
         void clearDiplomaticRelations();
 
 
