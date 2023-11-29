@@ -158,7 +158,7 @@ void HumanPlayerStrategy::issueOrder() {
 
         if (cardInput == "YES") {
             while(!correctIndex){
-                cout << "Enter the index of the player you want to negotiate with:";
+                cout << "Enter the index of the card you want to play:";
                 cin >> cardIndex;
 
                 if (cardIndex >= 0 && cardIndex <= p->getHand()->getCardNum())
