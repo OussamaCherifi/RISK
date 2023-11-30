@@ -200,3 +200,50 @@ void NeutralPlayerStrategy::issueOrder() {
 string NeutralPlayerStrategy::getType() {
     return "NEUTRAL";
 }
+
+CheaterPlayerStrategy::CheaterPlayerStrategy(Player *player) {
+    p = player;
+}
+
+vector<Territory *> CheaterPlayerStrategy::toAttack() {
+    vector<Territory *> attackList;
+
+    for (Territory *t : p->getTerritoryList()) {
+        for (int i = 0; i < t->getAdjacentTerritories()->size(); i++) {
+            Territory *adjacent = t->getAdjacentTerritories()->at(i);
+
+            //check if player owns the territory, if yes break
+            if (adjacent->getPlayer()->getID() == p->getID()) {
+                continue;
+            }
+                //check if the territory is already in the attacklist, if yes break
+            else {
+                bool alreadyInList = false;
+                for (Territory *terr: attackList) {
+                    if (terr->getName() == adjacent->getName()) {
+                        alreadyInList = true;
+                        break;
+                    }
+                }
+                if (alreadyInList) {
+                    continue;
+                } else {
+                    attackList.push_back(adjacent);
+                }
+            }
+        }
+    }
+    return attackList;
+}
+
+vector<Territory *> CheaterPlayerStrategy::toDefend() {
+    return {};  // return empty list since cheater player does not defend
+}
+
+void CheaterPlayerStrategy::issueOrder() {
+    cout << "Cheater players do not issue orders or play cards" << endl;
+}
+
+string CheaterPlayerStrategy::getType() {
+    return "CHEATER";
+}
