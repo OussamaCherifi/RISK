@@ -140,16 +140,20 @@ void GameEngine::mainGameLoop(){
             cout << p->getPlayerName() << " owns " << p->getTerritoryList().size() << " territories." << endl;
         }
         cout << "-------------------\n" << endl;
+        // check for losers
         for (int i = 0; i < players.size(); i++){
-            if (players[i]->getTerritoryList().size() == numTerr){
-                cout << players[i]->getPlayerName() << " has won!" << endl;
-                playerHasAllTerritories = true;
-                return;
-            }
-            else if (players[i]->getTerritoryList().empty()){
+            if (players[i]->getTerritoryList().empty()){
                 cout << players[i]->getPlayerName() << " has no more territories! Removing them from the game." << endl;
                 delete players[i];
                 players.erase(players.begin() + i);
+            }
+        }
+        // check for winners
+        for (Player *p : players){
+            if (p->getTerritoryList().size() == numTerr){
+                cout << p->getPlayerName() << " has won!" << endl;
+                playerHasAllTerritories = true;
+                return;
             }
         }
             reinforcementPhase();
