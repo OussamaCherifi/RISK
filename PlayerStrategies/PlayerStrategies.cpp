@@ -233,13 +233,13 @@ void AggressivePlayerStrategy::issueOrder() {
              return a->getArmies() > b->getArmies();
          }
     );
-    Territory *strongestTerritory;
-    Territory *targetTerritory;
+    Territory *strongestTerritory = nullptr;
+    Territory *targetTerritory = nullptr;
     for (Territory *t: sortedTerritories) {
-        strongestTerritory = t;
         // if the territory is not adjacent to an enemy territory, skip it
         for (Territory *adjacent: *t->getAdjacentTerritories())
             if (adjacent->getPlayer()->getID() != p->getID()) {
+                strongestTerritory = t;
                 targetTerritory = adjacent;
                 break;
             }
