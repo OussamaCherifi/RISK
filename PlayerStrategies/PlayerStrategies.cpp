@@ -180,35 +180,14 @@ string HumanPlayerStrategy::getType() {
     return "HUMAN";
 }
 
-NeutralPlayerStrategy::NeutralPlayerStrategy(Player *player) {
+AggressivePlayerStrategy::AggressivePlayerStrategy(Player *player) {
     p = player;
 }
 
-vector<Territory *> NeutralPlayerStrategy::toAttack() {
-    vector<Territory *> attacklist;
-    return attacklist; //returns an empty list since cannot attack
-}
-
-vector<Territory *> NeutralPlayerStrategy::toDefend() {
-    return p->getTerritoryList();
-}
-
-void NeutralPlayerStrategy::issueOrder() {
-    cout << "Neutral players do not issue orders or play cards" << endl;
-}
-
-string NeutralPlayerStrategy::getType() {
-    return "NEUTRAL";
-}
-
-CheaterPlayerStrategy::CheaterPlayerStrategy(Player *player) {
-    p = player;
-}
-
-vector<Territory *> CheaterPlayerStrategy::toAttack() {
+vector<Territory *> AggressivePlayerStrategy::toAttack() {
     vector<Territory *> attackList;
 
-    for (Territory *t : p->getTerritoryList()) {
+    for (Territory *t: p->getTerritoryList()) {
         for (int i = 0; i < t->getAdjacentTerritories()->size(); i++) {
             Territory *adjacent = t->getAdjacentTerritories()->at(i);
 
@@ -236,11 +215,185 @@ vector<Territory *> CheaterPlayerStrategy::toAttack() {
     return attackList;
 }
 
+vector<Territory *> AggressivePlayerStrategy::toDefend() {
+    return p->getTerritoryList();
+}
+
+void AggressivePlayerStrategy::issueOrder() {
+    int reinforcements = *(p->getReinforcementPool());
+    vector<Territory *> sortedTerritories = p->getTerritoryList();
+
+    if (sortedTerritories.empty()) {
+        cout << "Aggressive player has no territories/orders to make" << endl;
+        return;
+    }
+
+    sort(sortedTerritories.begin(), sortedTerritories.end(),
+         [](Territory *a, Territory *b) {
+             return a->getArmies() > b->getArmies();
+         }
+    );
+    Territory *strongestTerritory;
+    Territory *targetTerritory;
+    for (Territory *t: sortedTerritories) {
+        strongestTerritory = t;
+        // if the territory is not adjacent to an enemy territory, skip it
+        for (Territory *adjacent: *t->getAdjacentTerritories())
+            if (adjacent->getPlayer()->getID() != p->getID()) {
+                targetTerritory = adjacent;
+                break;
+            }
+        if (targetTerritory == nullptr)
+            continue;
+    }
+    if (targetTerritory == nullptr or strongestTerritory == nullptr) {
+        cout << "Aggressive player has no territories/orders to make" << endl;
+        return;
+    }
+    auto *deployOrder = new Deploy(p, strongestTerritory, reinforcements);
+    p->getOrdersList()->addList(deployOrder);
+    cout << "\t+ Deploy to " << strongestTerritory->getName() <<
+         " (" << strongestTerritory->getArmies() + reinforcements << " total)" << endl;
+    // advance half of all nearby armies to the territory
+    for (Territory *adjacent: *strongestTerritory->getAdjacentTerritories()) {
+        if (adjacent->getPlayer()->getID() != p->getID()) {
+            if (adjacent->getArmies() == 1)  // skip if there is only one army
+                continue;
+            auto *advanceOrder = new Advance(p, adjacent, strongestTerritory, adjacent->getArmies() / 2);
+            p->getOrdersList()->addList(advanceOrder);
+            cout << "\t+ Advance (defend) from " << adjacent->getName() << " to " << strongestTerritory->getName()
+                 << endl;
+        }
+    }
+
+    // advance into target territory
+    auto *advanceOrder = new Advance(p, strongestTerritory, targetTerritory, strongestTerritory->getArmies() - 1);
+    p->getOrdersList()->addList(advanceOrder);
+    cout << "\t+ Advance (attack) from " << strongestTerritory->getName() << " to " << targetTerritory->getName()
+         << endl;
+}
+
+string AggressivePlayerStrategy::getType() {
+    return "AGGRESSIVE";
+}
+
+
+BenevolentPlayerStrategy::BenevolentPlayerStrategy(Player *player) {
+    p = player;
+}
+
+vector<Territory *> BenevolentPlayerStrategy::toAttack() {
+    vector<Territory *> attackList;
+    return attackList; //returns an empty list since cannot attack
+}
+
+vector<Territory *> BenevolentPlayerStrategy::toDefend() {
+    return p->getTerritoryList();
+}
+
+void BenevolentPlayerStrategy::issueOrder() {
+
+    int reinforcements = *(p->getReinforcementPool());
+    vector<Territory *> sortedTerritories = p->getTerritoryList();
+    sort(sortedTerritories.begin(), sortedTerritories.end(),
+         [](Territory *a, Territory *b) {
+             return a->getArmies() < b->getArmies();
+         });
+    map<Territory *, int> pendingReinforcements;
+
+    if (sortedTerritories.empty()) {
+        cout << "Benevolent player has no territories/orders to make" << endl;
+        return;
+    }
+
+    for (Territory *t: sortedTerritories) {
+        cout << t->getName() << " (" << t->getArmies() << " armies)" << endl;
+    }
+
+    while (reinforcements > 0) {
+        // Sort the territories based on the original army count plus the pending reinforcements.
+        sort(sortedTerritories.begin(), sortedTerritories.end(),
+             [&pendingReinforcements](Territory *a, Territory *b) {
+                 return (a->getArmies() + pendingReinforcements[a]) < (b->getArmies() + pendingReinforcements[b]);
+             }
+        );
+
+        Territory *t = sortedTerritories[0];
+
+        // Simulate the deployment by incrementing the pending reinforcements.
+        pendingReinforcements[t]++;
+        auto *deployOrder = new Deploy(p, t, 1);
+        p->getOrdersList()->addList(deployOrder);
+        cout << "\t+ Deploy to " << t->getName() << " (" << t->getArmies() + pendingReinforcements[t] << " total)"
+             << endl;
+
+        reinforcements--;
+    }
+
+    Territory *weakestTerritory = sortedTerritories[0];
+    Territory *strongestTerritory = sortedTerritories[sortedTerritories.size() - 1];
+    if ((strongestTerritory->getArmies() - weakestTerritory->getArmies()) >= 2) {
+        auto *advanceOrder = new Advance(p, strongestTerritory, weakestTerritory, strongestTerritory->getArmies() - 1);
+        p->getOrdersList()->addList(advanceOrder);
+        cout << "\t+ Advance from " << strongestTerritory->getName() << " to " << weakestTerritory->getName() << endl;
+    }
+}
+
+string BenevolentPlayerStrategy::getType() {
+    return "BENEVOLENT";
+}
+
+NeutralPlayerStrategy::NeutralPlayerStrategy(Player *player) {
+    p = player;
+}
+
+vector<Territory *> NeutralPlayerStrategy::toAttack() {
+    vector<Territory *> attacklist;
+    return attacklist; //returns an empty list since cannot attack
+}
+
+vector<Territory *> NeutralPlayerStrategy::toDefend() {
+    return p->getTerritoryList();
+}
+
+void NeutralPlayerStrategy::issueOrder() {
+    cout << "Neutral players do not issue orders or play cards" << endl;
+}
+
+string NeutralPlayerStrategy::getType() {
+    return "NEUTRAL";
+}
+
+CheaterPlayerStrategy::CheaterPlayerStrategy(Player *player) {
+    p = player;
+}
+
+vector<Territory *> CheaterPlayerStrategy::toAttack() {
+    vector<Territory *> attackList;
+    return attackList;
+}
+
 vector<Territory *> CheaterPlayerStrategy::toDefend() {
-    return {};  // return empty list since cheater player does not defend
+    vector<Territory *> defendList;
+    return defendList;
+}
+
+void CheaterPlayerStrategy::cheat() {
+    for (Territory *t: p->getTerritoryList()) {
+        for (auto adjacent: *t->getAdjacentTerritories()) {
+            //check if player owns the territory, if yes break
+            if (adjacent->getPlayer()->getID() == p->getID()) {
+                continue;
+            } else {
+                adjacent->setPlayer(p);
+                p->addTerritory(adjacent);
+            }
+        }
+    }
 }
 
 void CheaterPlayerStrategy::issueOrder() {
+    this->cheat();
     cout << "Cheater players do not issue orders or play cards" << endl;
 }
 

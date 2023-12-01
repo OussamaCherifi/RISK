@@ -1,5 +1,5 @@
-#ifndef PLAYERSTRATEGIES_H
-#define PLAYERSTRATEGIES_H
+#ifndef PLAYER_STRATEGIES_H
+#define PLAYER_STRATEGIES_H
 
 #include<vector>
 #include "Player.h"
@@ -25,68 +25,71 @@ public:
 
 class HumanPlayerStrategy : public PlayerStrategy {
 public:
-    HumanPlayerStrategy(Player *player);
+    explicit HumanPlayerStrategy(Player *player);
 
-    vector<Territory *> toAttack();
+    vector<Territory *> toAttack() override;
 
-    vector<Territory *> toDefend();
+    vector<Territory *> toDefend() override;
 
-    void issueOrder();
+    void issueOrder() override;
 
-    string getType();
+    string getType() override;
 };
 
 class AggressivePlayerStrategy : public PlayerStrategy {
 public:
-    AggressivePlayerStrategy(Player *player);
+    explicit AggressivePlayerStrategy(Player *player);
 
-    vector<Territory *> toAttack();
+    vector<Territory *> toAttack() override;
 
-    vector<Territory *> toDefend();
+    vector<Territory *> toDefend() override;
 
-    void issueOrder();
+    void issueOrder() override;
 
-    string getType();
+    string getType() override;
 };
 
 class BenevolentPlayerStrategy : public PlayerStrategy {
 public:
-    BenevolentPlayerStrategy(Player *player);
+    explicit BenevolentPlayerStrategy(Player *player);
 
-    vector<Territory *> toAttack();
+    vector<Territory *> toAttack() override;
 
-    vector<Territory *> toDefend();
+    vector<Territory *> toDefend() override;
 
-    void issueOrder();
+    void issueOrder() override;
 
-    string getType();
+    string getType() override;
 };
 
 class NeutralPlayerStrategy : public PlayerStrategy {
 public:
-    NeutralPlayerStrategy(Player *player);
+    explicit NeutralPlayerStrategy(Player *player);
 
-    vector<Territory *> toAttack();
+    vector<Territory *> toAttack() override;
 
-    vector<Territory *> toDefend();
+    vector<Territory *> toDefend() override;
 
-    void issueOrder();
+    void issueOrder() override;
 
-    string getType();
+    string getType() override;
 
 };
 
 class CheaterPlayerStrategy : public PlayerStrategy {
 public:
-    CheaterPlayerStrategy(Player *player);
+    explicit CheaterPlayerStrategy(Player *player);
 
-    vector<Territory *> toAttack();
+    vector<Territory *> toAttack() override;
 
-    vector<Territory *> toDefend();
+    vector<Territory *> toDefend() override;
 
-    void issueOrder();
+    void issueOrder() override;
 
-    string getType();
+    string getType() override;
+
+    void cheat();  // take all adjacent territories to the player's
+
 };
 
 #endif
