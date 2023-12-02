@@ -408,6 +408,9 @@ void CheaterPlayerStrategy::cheat() {
             if (adjacent->getPlayer()->getID() == p->getID()) {
                 continue;
             } else {
+                Player *enemy = adjacent->getPlayer();
+                enemy->removeTerritory(adjacent);
+                cout << "Cheater took " << adjacent->getName() << " from " << enemy->getPlayerName() << endl;
                 adjacent->setPlayer(p);
                 p->addTerritory(adjacent);
             }
