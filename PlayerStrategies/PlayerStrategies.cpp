@@ -233,6 +233,11 @@ void AggressivePlayerStrategy::issueOrder() {
              return a->getArmies() > b->getArmies();
          }
     );
+
+    for (Territory *t: sortedTerritories) {
+        cout << t->getName() << " - " << t->getArmies() << " troop(s)" << endl;
+    }
+
     Territory *strongestTerritory = nullptr;
     Territory *targetTerritory = nullptr;
     for (Territory *t: sortedTerritories) {
