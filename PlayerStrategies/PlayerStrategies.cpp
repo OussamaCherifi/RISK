@@ -271,6 +271,29 @@ void AggressivePlayerStrategy::issueOrder() {
     p->getOrdersList()->addList(advanceOrder);
     cout << "\t+ Advance (attack) from " << strongestTerritory->getName() << " to " << targetTerritory->getName()
          << endl;
+
+    if (p->getHand()->getCardNum() == 0) {
+        cout << "Aggressive player has no cards." << endl;
+        return;
+    }
+    // play all bomb cards
+    vector<int> usedCards;
+    for (int i = 0; i < p->getHand()->getCardNum(); i++) {
+        Cards currentCard = p->getHand()->getCard(i);
+        // if a card is a bomb, play it
+        if (currentCard.getType() == BOMB) {
+            cout << "\t+ Playing bomb card on " << targetTerritory->getName() << endl;
+            Orders *order = new Bomb(p, targetTerritory);
+            p->getOrdersList()->addList(order);
+            usedCards.push_back(i);  // add card index to the used cards list
+        }
+    }
+    // remove used cards from player's hand
+    for (const int &i: usedCards) {
+        p->getHand()->removeCard(i);
+        p->getDeck()->addCard(p->getHand()->getCard(i)); //puts it back to the deck
+    }
+
 }
 
 string AggressivePlayerStrategy::getType() {
