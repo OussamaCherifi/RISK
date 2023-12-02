@@ -42,4 +42,5 @@ add_executable(A1_COMP345
         PlayerStrategies/PlayerStrategies.h
         PlayerStrategies/PlayerStrategies.cpp
         Tournament/TournamentDriver.cpp
+        PlayerStrategies/PlayerStrategyDriver.cpp
 )

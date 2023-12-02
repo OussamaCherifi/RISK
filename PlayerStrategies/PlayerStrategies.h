@@ -92,4 +92,6 @@ public:
 
 };
 
+void testPlayerStrategies();
+
 #endif
