@@ -368,6 +368,7 @@ void BenevolentPlayerStrategy::issueOrder() {
     }
 
     if(p->getHand()->getCardNum() == 0) cout << p->getPlayerName() << " does not own any cards" << endl;
+    else if (sortedTerritories.size() <= 3) cout << "All weakest territories have been defended. No card needed to be played." << endl;
     else {
         //removes all cards that are not for defending
         for(int i = 0; i < p->getHand()->getCardNum(); i++){
