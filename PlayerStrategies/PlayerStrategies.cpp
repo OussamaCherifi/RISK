@@ -256,7 +256,7 @@ void AggressivePlayerStrategy::issueOrder() {
          " (" << strongestTerritory->getArmies() + reinforcements << " total)" << endl;
     // advance half of all nearby armies to the territory
     for (Territory *adjacent: *strongestTerritory->getAdjacentTerritories()) {
-        if (adjacent->getPlayer()->getID() != p->getID()) {
+        if (adjacent->getPlayer()->getID() == p->getID()) {
             if (adjacent->getArmies() == 1)  // skip if there is only one army
                 continue;
             auto *advanceOrder = new Advance(p, adjacent, strongestTerritory, adjacent->getArmies() / 2);
