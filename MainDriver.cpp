@@ -23,8 +23,8 @@ int main() {
 //    testMainGameLoop();
 //    testLoggingObserver();
 
-//        cout << ">>> Warzone - Assignment 3 <<<" << endl;
-//        testPlayerStrategies();
+        cout << ">>> Warzone - Assignment 3 <<<" << endl;
+        testPlayerStrategies();
 }
 
 /*

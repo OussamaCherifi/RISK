@@ -331,7 +331,7 @@ void BenevolentPlayerStrategy::issueOrder() {
     }
 
     for (Territory *t: sortedTerritories) {
-        cout << t->getName() << " (" << t->getArmies() << " armies)" << endl;
+        cout << t->getName() << " - " << t->getArmies() << " troop(s)" << endl;
     }
 
     while (reinforcements > 0) {
@@ -404,6 +404,9 @@ vector<Territory *> NeutralPlayerStrategy::toDefend() {
 }
 
 void NeutralPlayerStrategy::issueOrder() {
+    for (Territory *t: p->getTerritoryList()) {
+        cout << t->getName() << " - " << t->getArmies() << " troop(s)" << endl;
+    }
     cout << "Neutral players do not issue orders or play cards" << endl;
 }
 

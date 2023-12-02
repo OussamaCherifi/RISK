@@ -87,20 +87,20 @@ void testPlayerStrategies() {
     p3->setPS(new AggressivePlayerStrategy(p3));
     p3->getHand()->addCard(p3->getDeck()->draw());
     p3->getHand()->addCard(p3->getDeck()->draw());
-//    Player *p4 = new Player();
-//    p1->setName("Player 4");
-//    p1->setID(4);
-//    p1->setDeck(deck);
-//    p1->setPS(new AggressivePlayerStrategy(p4));
-//    p1->getHand()->addCard(p4->getDeck()->draw());
-//    p1->getHand()->addCard(p4->getDeck()->draw());
-//    Player *p5 = new Player();
-//    p1->setName("Player 5");
-//    p1->setID(5);
-//    p1->setDeck(deck);
-//    p1->setPS(new CheaterPlayerStrategy(p5));
-//    p1->getHand()->addCard(p5->getDeck()->draw());
-//    p1->getHand()->addCard(p5->getDeck()->draw());
+    Player *p4 = new Player();
+    p4->setName("Player 4");
+    p4->setID(4);
+    p4->setDeck(deck);
+    p4->setPS(new NeutralPlayerStrategy(p4));
+    p4->getHand()->addCard(p4->getDeck()->draw());
+    p4->getHand()->addCard(p4->getDeck()->draw());
+    Player *p5 = new Player();
+    p5->setName("Player 5");
+    p5->setID(5);
+    p5->setDeck(deck);
+    p5->setPS(new CheaterPlayerStrategy(p5));
+    p5->getHand()->addCard(p5->getDeck()->draw());
+    p5->getHand()->addCard(p5->getDeck()->draw());
 
     //assign players and armies to territories
     p1->addTerritory(t1);
@@ -119,8 +119,8 @@ void testPlayerStrategies() {
     t4->setPlayer(p2);
     t4->setArmies(new int(3));
 
-    p1->addTerritory(t5);
-    t5->setPlayer(p1);
+    p4->addTerritory(t5);
+    t5->setPlayer(p4);
     t5->setArmies(new int(3));
 
     p1->addTerritory(t6);
@@ -131,8 +131,8 @@ void testPlayerStrategies() {
     t7->setPlayer(p3);
     t7->setArmies(new int(1));
 
-    p3->addTerritory(t8);
-    t8->setPlayer(p3);
+    p5->addTerritory(t8);
+    t8->setPlayer(p5);
     t8->setArmies(new int(1));
 
     //create a vector of players and add the players
@@ -141,8 +141,8 @@ void testPlayerStrategies() {
     players.push_back(p1);
     players.push_back(p2);
     players.push_back(p3);
-//    players.push_back(p4);
-//    players.push_back(p5);
+    players.push_back(p4);
+    players.push_back(p5);
 
     //create the GameEngine
     GameEngine *gameEngine = new GameEngine(players, map);
