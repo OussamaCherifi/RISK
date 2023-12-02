@@ -173,7 +173,7 @@ void Advance::execute()
                 //if the target territory is owned by a neutral player, set them to aggressive
                 if(targetTerritory->getPlayer()->getPS()->getType() == "NEUTRAL") {
                     cout << "Neutral player was attacked! They are now Aggressive." << endl;
-//                    targetTerritory->getPlayer()->setPS(new AggressivePlayerStrategy(targetTerritory->getPayer()));
+                    targetTerritory->getPlayer()->setPS(new AggressivePlayerStrategy(targetTerritory->getPlayer()));
                 }
 
                 int attackingArmies = *numOfArmies;
