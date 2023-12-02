@@ -91,7 +91,7 @@ void testPlayerStrategies() {
     p4->setName("Player 4");
     p4->setID(4);
     p4->setDeck(deck);
-    p4->setPS(new NeutralPlayerStrategy(p4));
+    p4->setPS(new HumanPlayerStrategy(p4));
     p4->getHand()->addCard(p4->getDeck()->draw());
     p4->getHand()->addCard(p4->getDeck()->draw());
     Player *p5 = new Player();
@@ -123,8 +123,8 @@ void testPlayerStrategies() {
     t5->setPlayer(p4);
     t5->setArmies(new int(3));
 
-    p1->addTerritory(t6);
-    t6->setPlayer(p1);
+    p2->addTerritory(t6);
+    t6->setPlayer(p2);
     t6->setArmies(new int(3));
 
     p3->addTerritory(t7);
