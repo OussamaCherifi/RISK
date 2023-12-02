@@ -19,10 +19,12 @@ int main() {
 //    testGameStates();
 //startupPhase();
 //
-    cout << ">>> Warzone - Assignment 2 <<<" << endl;
-    testMainGameLoop();
+//    cout << ">>> Warzone - Assignment 2 <<<" << endl;
+//    testMainGameLoop();
 //    testLoggingObserver();
 
+//        cout << ">>> Warzone - Assignment 3 <<<" << endl;
+//        testPlayerStrategies();
 }
 
 /*

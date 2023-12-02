@@ -276,7 +276,7 @@ void AggressivePlayerStrategy::issueOrder() {
         cout << "Aggressive player has no cards." << endl;
         return;
     }
-    // play all bomb cards
+    // play a bomb card if player has one
     vector<int> usedCards;
     for (int i = 0; i < p->getHand()->getCardNum(); i++) {
         Cards currentCard = p->getHand()->getCard(i);
@@ -286,6 +286,7 @@ void AggressivePlayerStrategy::issueOrder() {
             Orders *order = new Bomb(p, targetTerritory);
             p->getOrdersList()->addList(order);
             usedCards.push_back(i);  // add card index to the used cards list
+            break;
         }
     }
     // remove used cards from player's hand
@@ -359,6 +360,29 @@ void BenevolentPlayerStrategy::issueOrder() {
         auto *advanceOrder = new Advance(p, strongestTerritory, weakestTerritory, strongestTerritory->getArmies() - 1);
         p->getOrdersList()->addList(advanceOrder);
         cout << "\t+ Advance from " << strongestTerritory->getName() << " to " << weakestTerritory->getName() << endl;
+    }
+
+    if(p->getHand()->getCardNum() == 0) cout << p->getPlayerName() << " does not own any cards" << endl;
+    else {
+        //removes all cards that are not for defending
+        for(int i = 0; i < p->getHand()->getCardNum(); i++){
+            if(p->getHand()->getCard(i).getType() != AIRLIFT)
+                p->getHand()->removeCard(i);
+        }
+        //play the first card of the player's hand (an airlift card)
+        //since the weakest territory would have already been defended by the strongest during advance,
+        //take next weakest with next strongest
+        Territory *nextWeakestTerritory = sortedTerritories[1];
+        Territory *nextStrongestTerritory = sortedTerritories[sortedTerritories.size() - 2];
+        if ((nextStrongestTerritory->getArmies() - nextWeakestTerritory->getArmies()) >= 2) {
+            auto *cardOrder = new Airlift(p, nextStrongestTerritory, nextWeakestTerritory, nextStrongestTerritory->getArmies() - 1);
+            p->getOrdersList()->addList(cardOrder);
+            cout << "\t+ Airlift from " << nextStrongestTerritory->getName() << " to " << nextWeakestTerritory->getName() << endl;
+        }
+
+        //remove the played card
+        p->getHand()->removeCard(0);
+
     }
 }
 

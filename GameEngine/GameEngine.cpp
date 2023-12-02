@@ -192,7 +192,7 @@ void GameEngine::reinforcementPhase(){
 void GameEngine::issueOrdersPhase(){
     cout << "\n -- ISSUE ORDERS PHASE -- " << endl;
     for (Player *p : players){
-        cout << "\n It is " << p->getPlayerName() << "\'s turn to issue Orders! " << endl;
+        cout << "\nIt is " << p->getPlayerName() << "\'s turn to issue Orders! " << endl;
         p->issueOrder();
     }
     
