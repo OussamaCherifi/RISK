@@ -6,7 +6,7 @@
 #include "Player.h"
 #include "LoggingObserver.h"
 #include "Cards.h"
-
+#include "../CommandProcess/commandProcessing.h"
 
 using namespace std;
 
@@ -15,6 +15,8 @@ class Transition;
 class State;
 
 class GameEngine;
+
+class CommandProcessor;
 
 class Transition {
 public:
@@ -107,16 +109,23 @@ public:
     void issueOrdersPhase();
     void executeOrdersPhase();
 
+    //Assignment 2, part 2 - Oussama
+    void startupPhase(GameEngine* engine, string userInput);
+    void readingFromFile(GameEngine* engine, string userInput);
+    void readingFromConsole();
+
 private:
     State *mCurrentState;
     list<State *> *mStates;
     vector<Player*> players; // players in the game
     Map *map; // pointer to the map
+
+    CommandProcessor* CommandProcessor;
 };
 
 void testGameStates();
 
-void startupPhase();
+void testStartupPhase();
 
 void testMainGameLoop();
 

@@ -15,7 +15,7 @@ int main() {
 //    testPlayers();
 //    testOrdersLists();
 //    testCards();
-
+    testStartupPhase();
 //    testGameStates();
 //startupPhase();
 //
@@ -23,8 +23,8 @@ int main() {
 //    testMainGameLoop();
 //    testLoggingObserver();
 
-        cout << ">>> Warzone - Assignment 3 <<<" << endl;
-        testPlayerStrategies();
+//        cout << ">>> Warzone - Assignment 3 <<<" << endl;
+//        testPlayerStrategies();
 }
 
 /*

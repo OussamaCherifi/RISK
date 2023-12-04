@@ -37,10 +37,10 @@ add_executable(A1_COMP345
         CommandProcess/commandProcessing.cpp
         CommandProcess/commandProcessing.h
         CommandProcess/commandProcessingDriver.cpp
-        GameUtils/gameutil.cpp
-        GameUtils/gameutil.h
         PlayerStrategies/PlayerStrategies.h
         PlayerStrategies/PlayerStrategies.cpp
         Tournament/TournamentDriver.cpp
         PlayerStrategies/PlayerStrategyDriver.cpp
+        extraMethods/extraMethods.cpp
+        extraMethods/extraMethods.h
 )

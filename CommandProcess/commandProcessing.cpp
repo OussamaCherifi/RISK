@@ -1,7 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include "commandProcessing.h"
-#include "../GameUtils/gameutil.h"
+#include "../extraMethods/extraMethods.h"
+
 using namespace std;
 
 int FileCommandProcessorAdapter::current = 0;
@@ -97,6 +98,7 @@ CommandProcessor::~CommandProcessor()
 {
     delete commands;
 }
+
 string CommandProcessor::readCommand()
 {
     cout << "enter command" << endl;
@@ -104,6 +106,7 @@ string CommandProcessor::readCommand()
     getline(cin, command);
     return command;
 }
+
 Command *CommandProcessor::saveCommand(string *command, string *effect)
 {
     auto *updatedCommand = new Command(command, effect);
@@ -130,6 +133,7 @@ Command *CommandProcessor::getCommand(GameEngine &ge)
         }
     }
 }
+
 bool CommandProcessor::validate(const string &commandString, GameEngine &gameEngine)
 {
     return gameEngine.handle(commandString);
@@ -216,3 +220,4 @@ string FileCommandProcessorAdapter::readCommand()
         return "";
     }
 }
+

@@ -3,10 +3,10 @@
 
 using namespace std;
 
-
+//
 //void testCommandProcessor() {
 //    auto* gameEngine = new GameEngine();
-//    gameEngine->startupPhase();
+//    // gameEngine->startupPhase();
 //    delete gameEngine;
 //}
 //

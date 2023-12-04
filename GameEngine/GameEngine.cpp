@@ -4,6 +4,8 @@
 #include <vector>
 #include <math.h>
 #include <GameEngine.h>
+#include "../extraMethods/extraMethods.h"
+#include "../CommandProcess/commandProcessing.h"
 
 using namespace std;
 
@@ -189,14 +191,41 @@ void GameEngine::reinforcementPhase(){
     }
 }
 
+
+void GameEngine:: readingFromFile(GameEngine* engine, string userInput){
+
+    // Tokenize input
+    std::vector<std::string> inputTokens = splitString(userInput);
+    std::string firstArgument = inputTokens.at(0);
+
+    if(firstArgument == "-file") {
+        CommandProcessor = new FileCommandProcessorAdapter();
+        // Downcast commandProcessor to FileCommandProcessorAdapter to call readLineFromFile
+        auto *fileCommandProcessor = dynamic_cast<FileCommandProcessorAdapter *>(CommandProcessor);
+        fileCommandProcessor->getFileLineReader()->readLineFromFile(inputTokens.at(1));
+    }
+    // While the currentState is not ASSIGN_REINFORCEMENTS
+    while(mCurrentState->getStateName() != "assign-reinforcement"){
+        Command* command = CommandProcessor->getCommand(*this);
+        string* whatToExecute = command->getCommand();
+        cout << whatToExecute;
+    }
+
+    // Print all commands
+    cout << endl << "Printing entered commands..." << endl;
+    cout << *CommandProcessor;
+
+}
+
+
 void GameEngine::issueOrdersPhase(){
     cout << "\n -- ISSUE ORDERS PHASE -- " << endl;
     for (Player *p : players){
         cout << "\nIt is " << p->getPlayerName() << "\'s turn to issue Orders! " << endl;
         p->issueOrder();
     }
-    
 }
+
 
 void GameEngine::executeOrdersPhase(){
     cout << "\n -- EXECUTE ORDERS PHASE -- " << endl;
@@ -209,8 +238,19 @@ void GameEngine::executeOrdersPhase(){
         p->getOrdersList()->clearList();
         cout << endl;
     }
+}
 
+void GameEngine::startupPhase(GameEngine* engine, string userInput) {
+    // Tokenize input
+    std::vector<std::string> inputTokens = splitString(userInput);
+    std::string firstArgument = inputTokens.at(0);
 
+    if (firstArgument == "-console") {
+        engine->readingFromConsole();
+    }
+    else if (firstArgument == "-file") {
+        engine->readingFromFile(engine,userInput);
+    }
 }
 
 // Transition
@@ -246,14 +286,46 @@ ostream &operator<<(ostream &os, GameEngine *gameEngine) {
     return os;
 }
 
-void startupPhase() {
+void GameEngine:: readingFromConsole(){
 
     std::string choice;
     GameEngine* game = new GameEngine();
     MapLoader driver = MapLoader();
     Map *mapTest = new Map();
+    vector<Cards> cards;
     Deck deck;
     Hand hand;
+
+    // 4) have each player draw() 2 cards
+    cout << "Instantiating deck..." << endl;
+    Cards* card5 = new Cards(BOMB);
+    Cards* card2 = new Cards(BOMB);
+    Cards* card1 = new Cards(BOMB);
+    Cards* card3 = new Cards(BOMB);
+    Cards* card4 = new Cards(BOMB);
+    Cards* card05 = new Cards(BOMB);
+    Cards* card02 = new Cards(BLOCKADE);
+    Cards* card01 = new Cards(BLOCKADE);
+    Cards* card03 = new Cards(AIRLIFT);
+    Cards* card04 = new Cards(AIRLIFT);
+    Cards* card003 = new Cards(AIRLIFT);
+    Cards* card004 = new Cards(AIRLIFT);;
+
+    deck.addCard(*card5);
+    deck.addCard(*card2);
+    deck.addCard(*card1);
+    deck.addCard(*card3);
+    deck.addCard(*card4);
+    deck.addCard(*card4);
+    deck.addCard(*card05);
+    deck.addCard(*card02);
+    deck.addCard(*card01);
+    deck.addCard(*card03);
+    deck.addCard(*card04);
+    deck.addCard(*card003);
+    deck.addCard(*card004);
+    cout << "Deck complete! there are" << deck.getCardNum() << "Cards in deck:" << endl;
+
 
     // Create a vector to store Player objects that are created
     std::vector<Player*> playerList;
@@ -305,22 +377,22 @@ void startupPhase() {
 
         }
 
-        //user chooses to validate the current loaded map
+            //user chooses to validate the current loaded map
         else if (userInput == "validateMap") {
-                std::cout << "Validating map\n";
-                    if (mapTest->validate()) {
-                        cout << "Map from " << mapTest << " is valid!" << endl;
-                    } else {
-                        cout << "Map from " << mapTest << " is invalid!" << endl;
+            std::cout << "Validating map\n";
+            if (mapTest->validate()) {
+                cout << "Map from " << mapTest << " is valid!" << endl;
+            } else {
+                cout << "Map from " << mapTest << " is invalid!" << endl;
             }
 
 
         }
 
-        //user chooses to add a player into the game
+            //user chooses to add a player into the game
         else if (userInput.compare(0, expected_prefix_addplayer.size(), expected_prefix_addplayer) == 0 &&
-                       userInput.size() > expected_prefix_addplayer.size() &&
-                       userInput[userInput.size() - 1] == '>') {
+                 userInput.size() > expected_prefix_addplayer.size() &&
+                 userInput[userInput.size() - 1] == '>') {
             if (open_bracket != std::string::npos && close_bracket != std::string::npos &&
                 open_bracket < close_bracket) {
 
@@ -341,93 +413,94 @@ void startupPhase() {
 
                 }
 
-                 if(playerList.size() >= 6){
+                if(playerList.size() >= 6){
 
-                     cout << "You have reached the maximum capacity of players allowed in the game. "<< "\nCurrent player count: " << playerList.size() << "\n"<<std::endl;
+                    cout << "You have reached the maximum capacity of players allowed in the game. "<< "\nCurrent player count: " << playerList.size() << "\n"<<std::endl;
 
                 }
-                }
-
             }
+
+        }
 
         else if (userInput == "gamestart") {
 
-                if(playerList.size() < 2){
-                    std::cout << "Add another player name. A minimum of 2 players are required :\n";
+            if(playerList.size() < 2){
+                std::cout << "Add another player name. A minimum of 2 players are required :\n";
 
+            }
+
+            else if(playerList.size() >= 2 ){
+
+                // Distribute territories to players as well as give them 50 armies in their reinforcement pool
+                int currentPlayerIndex = 0;
+                for (Territory* territory : *mapTest->territories) {
+
+                    Player* currentPlayer = playerList[currentPlayerIndex];
+
+                    vector<Territory*>& playerTerritories = currentPlayer->getTerritoryList();
+
+                    playerTerritories.push_back(territory);
+
+                    int armies = 50;
+
+                    //give armies
+                    currentPlayer->setReinforcementPool(&armies);
+
+                    // Move to the next player to add his territory
+                    currentPlayerIndex = (currentPlayerIndex + 1) % playerList.size();
                 }
 
-                else if(playerList.size() >= 2 ){
-
-                    // Distribute territories to players as well as give them 50 armies in their reinforcement pool
-                    int currentPlayerIndex = 0;
-                    for (Territory* territory : *mapTest->territories) {
-
-                        Player* currentPlayer = playerList[currentPlayerIndex];
-
-                        vector<Territory*>& playerTerritories = currentPlayer->getTerritoryList();
-
-                        playerTerritories.push_back(territory);
-
-                        int armies = 50;
-
-                        //give armies
-                        currentPlayer->setReinforcementPool(&armies);
-
-                        // Move to the next player to add his territory
-                        currentPlayerIndex = (currentPlayerIndex + 1) % playerList.size();
-                    }
-
-                    // Loop over players
-                    for (Player* currentPlayer : playerList) {
-                        //players draw cards
-                        for (int i = 0; i < 2; ++i) {
-                            Cards card = deck.draw();
-                            currentPlayer->getHand()->addCard(card);
+                // Loop over players
+                for (Player* currentPlayer : playerList) {
+                    //players draw cards
+                    for (int i = 0; i < 2; ++i) {
+                        Cards card = deck.draw();
+                        currentPlayer->getHand()->addCard(card);
 //                            cout << "Drew a " << card.getTypeAsString() << " card." << endl;
 //                            cout << "Deck size: " << deck.getCardNum() << endl;
-                        }
                     }
-
-                    // Display the result
-                    for (Player* player : playerList) {
-                        cout << "Player " << player->getPlayerName()<< " owns territories: ";
-                        cout << "Number of armies " << *(player->getReinforcementPool()) <<" ";
-                        cout << "cards " << player->getHand()->getCardNum() <<" ";
-                        cout << "Deck size: " << deck.getCardNum() << endl;
-
-                        for (Territory* territory : player->getTerritoryList()) {
-                            std::cout << territory->getName() << ", ";
-                        }
-                        std::cout << std::endl;
-                    }
-
-
-
                 }
 
-                //play();
+                // Display the result
+                for (Player* player : playerList) {
+                    cout << "Player " << player->getPlayerName()<< " owns territories: ";
+                    cout << "Number of armies " << *(player->getReinforcementPool()) <<" ";
+                    cout << "cards " << player->getHand()->getCardNum() <<" ";
+                    cout << "Deck size: " << deck.getCardNum() << endl;
+
+                    for (Territory* territory : player->getTerritoryList()) {
+                        std::cout << territory->getName() << ", ";
+                    }
+                    std::cout << std::endl;
+                }
+
+
+
+            }
+
+            //play();
 
         }
 
         else if (userInput == "5") {
-                    mapTest->territories->clear();
-                    delete mapTest;
-                    std::cout << "Exiting\n";
+            mapTest->territories->clear();
+            delete mapTest;
+            std::cout << "Exiting\n";
 
 
 
         }
 
         else {
-                std::cout << "Invalid choice. Please enter a valid option.\n";
+            std::cout << "Invalid choice. Please enter a valid option.\n";
 
         }
 
         continue;
-        }
-
     }
+
+}
+
 
 
 

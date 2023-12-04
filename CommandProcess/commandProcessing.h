@@ -30,18 +30,20 @@ class Command : public Subject, public ILoggable {
 };
 
 class CommandProcessor : public Subject, public ILoggable{
-    public:
-     CommandProcessor();
+public:
+    CommandProcessor();
     CommandProcessor(const CommandProcessor& something);
     ~CommandProcessor();
     string stringToLog();
+
     Command * getCommand(GameEngine& ge);
     friend std::ostream& operator<<(std::ostream& os, const CommandProcessor& processor);
     static bool validate(const std::string& command, GameEngine& gameEngine);
-    private:
-    std::vector<Command*>* commands; 
 
-    protected:
+private:
+    std::vector<Command*>* commands;
+
+protected:
     virtual std::string readCommand();
     Command* saveCommand(std::string* command, std::string* effect);
 };
@@ -59,16 +61,16 @@ class FileLineReader  {
     std::vector <std::string*>* lines; 
 };
 class FileCommandProcessorAdapter : public CommandProcessor {
-    public : 
+public :
     FileCommandProcessorAdapter();
     FileCommandProcessorAdapter(const FileCommandProcessorAdapter& something);
     ~FileCommandProcessorAdapter();
-     std::string readCommand() override;
+    std::string readCommand() override;
     friend std::ostream& operator<<(std::ostream& os, const FileCommandProcessorAdapter& adapter);
     FileLineReader* getFileLineReader();
 
-    private:
-    static int current; 
+private:
+    static int current;
     FileLineReader* flr;
 };
 

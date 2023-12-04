@@ -1,0 +1,7 @@
+loadmap mapFileTest.txt
+validatemap
+addplayer<Player-1>
+addplayer<Player-2>
+addplayer<Player-3>
+addplayer<Player-4>
+gamestart

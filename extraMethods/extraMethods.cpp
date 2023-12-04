@@ -1,4 +1,5 @@
-#include "gameutil.h"
+
+#include "extraMethods.h"
 
 std::vector<std::string> splitString(const std::string& s) {
     std::vector<std::string> tokens;
