@@ -305,35 +305,33 @@ string Tournament::validateTournament(vector<string> input) {
 
     //assessing size of our input command
     if(input.size() != 9) {
-        result = "invalid tournament input";
-        return result;
+        return "invalid user input";
+
     }
 
     //assessing input command
     if(input[1] != "-M" || input[3] != "-P" || input[5] != "-G" || input[7] != "-D") {
-        result = "invalid tournament input";
-        return result;
+        return "invalid user input";
+
     }
 
     //assesing number of maps
     vector<string> maps = tokenize(input[2], ',');
     if (maps.size() < 1 || maps.size() > 5) {
-        result = "invalid number of tournament maps";
-        return result;
+        return "invalid number of maps";
+
     }
 
     //assessing number of players (2-4)
     vector<string> players = tokenize(input[4], ',');
     if (players.size() < 2 || players.size() > 4) {
-        result = "invalid number of tournament players";
-        return result;
+        return "invalid number of players";
     }
 
     //checking player types
     for(int i = 0; i < players.size(); i++) {
         if (players[i] != "AGGRESSIVE" && players[i] != "BENEVOLENT" && players[i] != "CHEATER" && players[i] != "NEUTRAL") {
-            result = "invalid player types";
-            return result;
+            return "invalid player types";
         }
     }
 
@@ -341,26 +339,23 @@ string Tournament::validateTournament(vector<string> input) {
     try {
         int numOfGames = stoi(input[6]);
         if(numOfGames < 1 || numOfGames > 5) {
-            result = "invalid number of tournament games";
-            return result;
+            return "Invalid number of tournament";
+
         }
     }
     catch(int n) {
-        result = "invalid input for number of games";
-        return result;
+        return "invalid number of games";
     }
 
     // check num of turns is between 10 and 50
     try {
         int numOfTurns = stoi(input[8]);
         if (numOfTurns < 10 || numOfTurns > 50) {
-            result = "invalid number of game turns";
-            return result;
+            return "invalid number of game turns";
         }
     }
     catch (int n) {
-        result = "invalid input for number of game turns";
-        return result;
+        return "invalid input for number of game turns";
     }
 
     return result;
