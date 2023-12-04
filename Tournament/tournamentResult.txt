@@ -1,0 +1,5 @@
+Tournament Mode : 
+M: map1, map2, map3, 
+P: AGGRESSIVE, BENEVOLENT, CHEATER, NEUTRAL, 
+G: 4
+D: 30

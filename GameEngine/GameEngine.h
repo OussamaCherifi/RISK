@@ -114,6 +114,9 @@ public:
     void readingFromFile(GameEngine* engine, string userInput);
     void readingFromConsole();
 
+    //Assignment3, part 2
+    void runTournamentMode();
+
 private:
     State *mCurrentState;
     list<State *> *mStates;
@@ -129,4 +132,5 @@ void testStartupPhase();
 
 void testMainGameLoop();
 
+void testTournament();
 #endif //GAME_ENGINE_H

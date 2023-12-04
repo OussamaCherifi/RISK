@@ -6,6 +6,12 @@
 using namespace std;
 
 int FileCommandProcessorAdapter::current = 0;
+class Tournament;
+class PlayerStrategy;
+class Player;
+
+
+
 
 ostream &operator<<(ostream &os, const Command &command)
 {
@@ -220,4 +226,191 @@ string FileCommandProcessorAdapter::readCommand()
         return "";
     }
 }
+
+void Tournament::processMaps(const vector<std::string>& info) {
+
+    vector<string> m = tokenize(info[2], ',');
+    vector<string*> mapsNames;
+    for(string s : m) {
+        mapsNames.push_back(new string(s));
+    }
+    this->maps = mapsNames;
+    string toPrint = "Tournament Mode : \nM: ";
+    for(int i = 0; i < m.size(); i++) {
+        toPrint += m[i] + ", ";
+    }
+    this->tournametInfo += toPrint + "\n";
+    cout<<tournametInfo<<"\n"<< endl;
+}
+
+void Tournament::porcessStrategy(const vector<std::string>& info){
+
+    string toPrint = "";
+    vector<string> players = tokenize(info[4], ',');
+
+    toPrint += "P: ";
+
+    vector<PlayerStrategy*> playerStrategies;
+    for(int i = 0; i < players.size(); i++) {
+//        string name = players[i] + to_string(i);
+        string name = players[i];
+        Player* p = new Player();
+        p->setName(name);
+
+        if (players[i] == "aggressive") {
+            playerStrategies.push_back(new AggressivePlayerStrategy(p));
+        }
+        else if (players[i] == "neutral") {
+            playerStrategies.push_back(new NeutralPlayerStrategy(p));
+        }
+        else if (players[i] == "benevolent") {
+            playerStrategies.push_back(new BenevolentPlayerStrategy(p));
+        }
+        else if (players[i] == "cheater") {
+            playerStrategies.push_back(new CheaterPlayerStrategy(p));
+        }
+
+        toPrint += name + ", ";
+    }
+    this->playerStrategies = playerStrategies;
+
+    this->tournametInfo += toPrint;
+    cout<<tournametInfo<<"\n"<< endl;
+
+}
+
+Tournament::Tournament(vector<string> info){
+
+    //process maps and strategies:
+    processMaps(info);
+    porcessStrategy(info);
+
+    //setnumGames
+    int numG = stoi(info[6]);
+    this->totalGames = new int(numG);
+    this->tournametInfo += "\nG: " + info[6];
+
+    //set turns
+    int numT = stoi(info[8]);
+    this->turns = new int(numT);
+    this->tournametInfo += "\nD: " + info[8] + "\n";
+
+    cout<<tournametInfo<<"\n"<< endl;
+
+    printDataToFile();
+
+}
+string Tournament::validateTournament(vector<string> input) {
+    string result = "valid";
+
+    //assessing size of our input command
+    if(input.size() != 9) {
+        result = "invalid tournament input";
+        return result;
+    }
+
+    //assessing input command
+    if(input[1] != "-M" || input[3] != "-P" || input[5] != "-G" || input[7] != "-D") {
+        result = "invalid tournament input";
+        return result;
+    }
+
+    //assesing number of maps
+    vector<string> maps = tokenize(input[2], ',');
+    if (maps.size() < 1 || maps.size() > 5) {
+        result = "invalid number of tournament maps";
+        return result;
+    }
+
+    //assessing number of players (2-4)
+    vector<string> players = tokenize(input[4], ',');
+    if (players.size() < 2 || players.size() > 4) {
+        result = "invalid number of tournament players";
+        return result;
+    }
+
+    //checking player types
+    for(int i = 0; i < players.size(); i++) {
+        if (players[i] != "AGGRESSIVE" && players[i] != "BENEVOLENT" && players[i] != "CHEATER" && players[i] != "NEUTRAL") {
+            result = "invalid player types";
+            return result;
+        }
+    }
+
+    //number of games is between 1 and 5
+    try {
+        int numOfGames = stoi(input[6]);
+        if(numOfGames < 1 || numOfGames > 5) {
+            result = "invalid number of tournament games";
+            return result;
+        }
+    }
+    catch(int n) {
+        result = "invalid input for number of games";
+        return result;
+    }
+
+    // check num of turns is between 10 and 50
+    try {
+        int numOfTurns = stoi(input[8]);
+        if (numOfTurns < 10 || numOfTurns > 50) {
+            result = "invalid number of game turns";
+            return result;
+        }
+    }
+    catch (int n) {
+        result = "invalid input for number of game turns";
+        return result;
+    }
+
+    return result;
+
+}
+
+
+void Tournament::printDataToFile() {
+
+    ofstream f;
+    f.open("C:\\Users\\mack\\Desktop\\fall 2023\\345\\A3-COMP345\\Tournament\\tournamentResult.txt");
+
+    f << this->tournametInfo;
+    f.close();
+}
+
+int* Tournament::getTotalGames(){
+    return this->totalGames;
+}
+
+int* Tournament::getTurns(){
+    return this->turns;
+}
+
+
+vector<string*> Tournament::getMaps(){
+    return this->maps;
+}
+
+vector<PlayerStrategy*> Tournament::getStrategies() {
+    return this->playerStrategies;
+}
+
+void Tournament::setMaps(vector<string*> maps){
+    this->maps = maps;
+}
+
+void Tournament::setStrategies(vector<PlayerStrategy*> playerStrat){
+    this->playerStrategies = playerStrat;
+}
+
+
+void Tournament::setTurns(int num){
+    this->turns = new int(num);
+}
+
+void Tournament::setTotalGames(int num){
+    this->totalGames = new int(num);
+}
+
+
+
 

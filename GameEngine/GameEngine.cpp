@@ -198,12 +198,18 @@ void GameEngine:: readingFromFile(GameEngine* engine, string userInput){
     std::vector<std::string> inputTokens = splitString(userInput);
     std::string firstArgument = inputTokens.at(0);
 
+    cout<<firstArgument<<endl;
+
     if(firstArgument == "-file") {
         CommandProcessor = new FileCommandProcessorAdapter();
         // Downcast commandProcessor to FileCommandProcessorAdapter to call readLineFromFile
         auto *fileCommandProcessor = dynamic_cast<FileCommandProcessorAdapter *>(CommandProcessor);
         fileCommandProcessor->getFileLineReader()->readLineFromFile(inputTokens.at(1));
-    }
+    if(fileCommandProcessor->getFileLineReader()->getLines()->empty()) startupPhase(engine, userInput);}
+        else{
+            cout << "Invalid command. Please try again." << endl;
+        startupPhase(engine, userInput);
+            }
     // While the currentState is not ASSIGN_REINFORCEMENTS
     while(mCurrentState->getStateName() != "assign-reinforcement"){
         Command* command = CommandProcessor->getCommand(*this);
@@ -244,6 +250,8 @@ void GameEngine::startupPhase(GameEngine* engine, string userInput) {
     // Tokenize input
     std::vector<std::string> inputTokens = splitString(userInput);
     std::string firstArgument = inputTokens.at(0);
+    cout<<firstArgument<<endl;
+
 
     if (firstArgument == "-console") {
         engine->readingFromConsole();
@@ -286,6 +294,7 @@ ostream &operator<<(ostream &os, GameEngine *gameEngine) {
     return os;
 }
 
+
 void GameEngine:: readingFromConsole(){
 
     std::string choice;
@@ -295,6 +304,7 @@ void GameEngine:: readingFromConsole(){
     vector<Cards> cards;
     Deck deck;
     Hand hand;
+
 
     // 4) have each player draw() 2 cards
     cout << "Instantiating deck..." << endl;
@@ -338,8 +348,8 @@ void GameEngine:: readingFromConsole(){
         std::cout << "2. validateMap\n";
         std::cout << "3. addplayer\n";
         std::cout << "4. gamestart\n";
-        std::cout << "5. press 5 to exit\n";
-        std::cout << "Enter your choice: ";
+        std::cout << "5. tournament\n";
+        std::cout << "6. press 6 to exit\n";
 
         // Get input from the user
         std::cout << "Enter a command: ";
@@ -348,6 +358,8 @@ void GameEngine:: readingFromConsole(){
 
         // Remove spaces from the input
         userInput.erase(std::remove_if(userInput.begin(), userInput.end(), ::isspace), userInput.end());
+
+        cout<<userInput<<endl;
 
         // Check if the input has the format "loadmap<someFile>"
         std::string expected_prefix_loadmap = "loadmap";
@@ -482,12 +494,36 @@ void GameEngine:: readingFromConsole(){
 
         }
 
-        else if (userInput == "5") {
+        else if(userInput == "tournament"){
+
+            std::cout << "Enter Tournament Parameters in the following format: " "\n tournament -M "
+            "<listofmapfiles> -P <listofplayerstrategies> -G <numberofgames> -D <maxnumberofturns> \n";
+
+            std::string tournamentParam;
+
+            std::getline(std::cin, tournamentParam);
+
+            vector<string> tournamentParamtTokenized = tokenize(tournamentParam, ' ');
+
+            Tournament* tournament = new Tournament(tournamentParamtTokenized);
+
+            string isTournamentValid = tournament->validateTournament(tournamentParamtTokenized);
+
+            if(isTournamentValid != "valid") {
+                cout << isTournamentValid << endl;
+                continue;
+            }
+
+            tournament->printDataToFile();
+
+        }
+
+        else if (userInput == "6") {
             mapTest->territories->clear();
             delete mapTest;
             std::cout << "Exiting\n";
 
-
+            break;
 
         }
 
@@ -496,10 +532,21 @@ void GameEngine:: readingFromConsole(){
 
         }
 
-        continue;
+//        continue;
     }
 
 }
+void GameEngine::runTournamentMode(){
+
+
+
+
+
+
+
+
+}
+
 
 
 

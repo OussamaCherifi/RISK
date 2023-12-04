@@ -60,6 +60,7 @@ class Player
         set<Player *> getDiplomaticRelations();
         PlayerStrategy *getPS();
 
+
         void clearDiplomaticRelations();
 
 

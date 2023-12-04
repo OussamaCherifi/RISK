@@ -74,5 +74,39 @@ private:
     FileLineReader* flr;
 };
 
+class Tournament{
+
+private:
+    vector<PlayerStrategy*> playerStrategies;
+    vector<string*> maps;
+    int* totalGames;
+    int* turns;
+    string tournametInfo;
+
+
+public:
+    Tournament(vector<string> Info);
+    vector<PlayerStrategy*> getStrategies();
+    vector<string*> getMaps();
+    int* getTurns();
+    int* getTotalGames();
+
+    void setMaps(vector<string*> maps);
+    void setStrategies(vector<PlayerStrategy*> strategy);
+    void setTurns(int numberOfturns);
+    void setTotalGames(int numberOfGames);
+
+    void printTournamentResult();
+    void processMaps(const vector<string>& gameInfo);
+    void porcessStrategy(const vector<string>& gameInfo);
+    string validateTournament(vector<string> inputArr);
+
+    void printDataToFile();
+
+
+};
+
+
+
 
 #endif 
