@@ -532,10 +532,10 @@ void GameEngine:: readingFromConsole(){
 
         }
 
-//        continue;
     }
 
 }
+
 void GameEngine::runTournamentMode(){
 
 

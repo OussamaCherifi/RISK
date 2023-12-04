@@ -240,7 +240,7 @@ void Tournament::processMaps(const vector<std::string>& info) {
         toPrint += m[i] + ", ";
     }
     this->tournametInfo += toPrint + "\n";
-    cout<<tournametInfo<<"\n"<< endl;
+
 }
 
 void Tournament::porcessStrategy(const vector<std::string>& info){
@@ -275,7 +275,7 @@ void Tournament::porcessStrategy(const vector<std::string>& info){
     this->playerStrategies = playerStrategies;
 
     this->tournametInfo += toPrint;
-    cout<<tournametInfo<<"\n"<< endl;
+
 
 }
 
@@ -301,7 +301,7 @@ Tournament::Tournament(vector<string> info){
 
 }
 string Tournament::validateTournament(vector<string> input) {
-    string result = "valid";
+    vector<string> players = tokenize(input[4], ',');
 
     //assessing size of our input command
     if(input.size() != 9) {
@@ -323,9 +323,9 @@ string Tournament::validateTournament(vector<string> input) {
     }
 
     //assessing number of players (2-4)
-    vector<string> players = tokenize(input[4], ',');
     if (players.size() < 2 || players.size() > 4) {
         return "invalid number of players";
+
     }
 
     //checking player types
@@ -347,7 +347,7 @@ string Tournament::validateTournament(vector<string> input) {
         return "invalid number of games";
     }
 
-    // check num of turns is between 10 and 50
+    //Number of turns is between 10 and 50
     try {
         int numOfTurns = stoi(input[8]);
         if (numOfTurns < 10 || numOfTurns > 50) {
@@ -358,7 +358,7 @@ string Tournament::validateTournament(vector<string> input) {
         return "invalid input for number of game turns";
     }
 
-    return result;
+    return "valid";
 
 }
 
