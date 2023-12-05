@@ -257,16 +257,16 @@ void Tournament::porcessStrategy(const vector<std::string>& info){
         Player* p = new Player();
         p->setName(name);
 
-        if (players[i] == "aggressive") {
+        if (players[i] == "AGGRESSIVE") {
             playerStrategies.push_back(new AggressivePlayerStrategy(p));
         }
-        else if (players[i] == "neutral") {
+        else if (players[i] == "NEUTRAL") {
             playerStrategies.push_back(new NeutralPlayerStrategy(p));
         }
-        else if (players[i] == "benevolent") {
+        else if (players[i] == "BENEVOLENT") {
             playerStrategies.push_back(new BenevolentPlayerStrategy(p));
         }
-        else if (players[i] == "cheater") {
+        else if (players[i] == "CHEATER") {
             playerStrategies.push_back(new CheaterPlayerStrategy(p));
         }
 

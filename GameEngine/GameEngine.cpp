@@ -6,6 +6,7 @@
 #include <GameEngine.h>
 #include "../extraMethods/extraMethods.h"
 #include "../CommandProcess/commandProcessing.h"
+#include <fstream>
 
 using namespace std;
 
@@ -359,7 +360,7 @@ void GameEngine:: readingFromConsole(){
         // Remove spaces from the input
         userInput.erase(std::remove_if(userInput.begin(), userInput.end(), ::isspace), userInput.end());
 
-        cout<<userInput<<endl;
+        cout << userInput << endl;
 
         // Check if the input has the format "loadmap<someFile>"
         std::string expected_prefix_loadmap = "loadmap";
@@ -380,8 +381,7 @@ void GameEngine:: readingFromConsole(){
                 bool loadResult = driver.createMapFromFile(filepath, mapTest);
                 if (loadResult) {
                     cout << "Successful creation of a map from " << mapTest << endl;
-                }
-                else {
+                } else {
                     cout << "Unsuccessful creation of a map from " << mapTest << endl;
                 }
 
@@ -414,42 +414,39 @@ void GameEngine:: readingFromConsole(){
                 if (playerList.size() < 6) {
                     cout << "Loading player with name: " << playerName << std::endl;
                     // Dynamically allocate a new Player object
-                    auto* player1 = new Player();
+                    auto *player1 = new Player();
                     player1->setName(playerName);
 
                     // Store the pointer in playerList
                     playerList.push_back(player1);
 
-                    cout << "You have successfully added player " << playerName << " into the game" <<std::endl;
-                    cout << "Current player count: " << playerList.size() << "\n"<<std::endl;
+                    cout << "You have successfully added player " << playerName << " into the game" << std::endl;
+                    cout << "Current player count: " << playerList.size() << "\n" << std::endl;
 
                 }
 
-                if(playerList.size() >= 6){
+                if (playerList.size() >= 6) {
 
-                    cout << "You have reached the maximum capacity of players allowed in the game. "<< "\nCurrent player count: " << playerList.size() << "\n"<<std::endl;
+                    cout << "You have reached the maximum capacity of players allowed in the game. "
+                         << "\nCurrent player count: " << playerList.size() << "\n" << std::endl;
 
                 }
             }
 
-        }
+        } else if (userInput == "gamestart") {
 
-        else if (userInput == "gamestart") {
-
-            if(playerList.size() < 2){
+            if (playerList.size() < 2) {
                 std::cout << "Add another player name. A minimum of 2 players are required :\n";
 
-            }
-
-            else if(playerList.size() >= 2 ){
+            } else if (playerList.size() >= 2) {
 
                 // Distribute territories to players as well as give them 50 armies in their reinforcement pool
                 int currentPlayerIndex = 0;
-                for (Territory* territory : *mapTest->territories) {
+                for (Territory *territory: *mapTest->territories) {
 
-                    Player* currentPlayer = playerList[currentPlayerIndex];
+                    Player *currentPlayer = playerList[currentPlayerIndex];
 
-                    vector<Territory*>& playerTerritories = currentPlayer->getTerritoryList();
+                    vector<Territory *> &playerTerritories = currentPlayer->getTerritoryList();
 
                     playerTerritories.push_back(territory);
 
@@ -463,7 +460,7 @@ void GameEngine:: readingFromConsole(){
                 }
 
                 // Loop over players
-                for (Player* currentPlayer : playerList) {
+                for (Player *currentPlayer: playerList) {
                     //players draw cards
                     for (int i = 0; i < 2; ++i) {
                         Cards card = deck.draw();
@@ -474,30 +471,27 @@ void GameEngine:: readingFromConsole(){
                 }
 
                 // Display the result
-                for (Player* player : playerList) {
-                    cout << "Player " << player->getPlayerName()<< " owns territories: ";
-                    cout << "Number of armies " << *(player->getReinforcementPool()) <<" ";
-                    cout << "cards " << player->getHand()->getCardNum() <<" ";
+                for (Player *player: playerList) {
+                    cout << "Player " << player->getPlayerName() << " owns territories: ";
+                    cout << "Number of armies " << *(player->getReinforcementPool()) << " ";
+                    cout << "cards " << player->getHand()->getCardNum() << " ";
                     cout << "Deck size: " << deck.getCardNum() << endl;
 
-                    for (Territory* territory : player->getTerritoryList()) {
+                    for (Territory *territory: player->getTerritoryList()) {
                         std::cout << territory->getName() << ", ";
                     }
                     std::cout << std::endl;
                 }
 
 
-
             }
 
             //play();
 
-        }
-
-        else if(userInput == "tournament"){
+        } else if (userInput == "tournament") {
 
             std::cout << "Enter Tournament Parameters in the following format: " "\n tournament -M "
-            "<listofmapfiles> -P <listofplayerstrategies> -G <numberofgames> -D <maxnumberofturns> \n";
+                         "<listofmapfiles> -P <listofplayerstrategies> -G <numberofgames> -D <maxnumberofturns> \n";
 
             std::string tournamentParam;
 
@@ -505,18 +499,70 @@ void GameEngine:: readingFromConsole(){
 
             vector<string> tournamentParamtTokenized = tokenize(tournamentParam, ' ');
 
-            Tournament* tournament = new Tournament(tournamentParamtTokenized);
+            Tournament *tournament = new Tournament(tournamentParamtTokenized);
 
             string isTournamentValid = tournament->validateTournament(tournamentParamtTokenized);
 
-            if(isTournamentValid != "valid") {
+            if (isTournamentValid != "valid") {
                 cout << isTournamentValid << endl;
                 continue;
             }
 
             tournament->printDataToFile();
 
+            vector<string *> maps = tournament->getMaps();
+            vector<PlayerStrategy *> strategies = tournament->getStrategies();
+
+            int *totalGames = tournament->getTotalGames();
+            int *turns = tournament->getTurns();
+            MapLoader driver = MapLoader();
+            Map *maptest = new Map();
+            ofstream f;
+            f.open("C:\\Users\\mack\\Desktop\\fall 2023\\345\\A3-COMP345\\Tournament\\tournamentResult.txt");
+            if (f.is_open()) {
+                for (string *map: maps) {
+                    f << "Map: " << map << endl;
+                    std::string filepath = generateAbsolutePath(*map);
+                    bool loadResult = driver.createMapFromFile(filepath, mapTest);
+                    if (loadResult) {
+                        cout << "Successful creation of a map from " << mapTest << endl;
+                    } else {
+                        cout << "Unsuccessful creation of a map from " << mapTest << endl;
+
+                    }
+                }
+
+                int gamesPlayed = 0;
+                for (PlayerStrategy *strat: strategies) {
+                    auto player1 = new Player();
+                    player1->setPS(strat);
+                    cout << player1->getPS()->getType();
+                }
+                while (gamesPlayed < *totalGames) {
+//                    GameEngine *game = createGameEngine(*map, strategies);
+                    int currentTurn = 0;
+                    while (currentTurn < *turns) {
+                        // Assuming there's a method executeTurn that executes a single turn of the game
+                        reinforcementPhase();
+                        issueOrdersPhase();
+                        executeOrdersPhase();
+                        // Increment the turn count
+                        currentTurn++;
+                    }
+
+                    // Get game results
+//                    string result = game->getGameResult();
+
+                    // Write game result to output file
+//                    f << "Game " << (gamesPlayed + 1) << " Result: " << result << endl;
+                    delete game; // Cleanup for next game
+                    gamesPlayed++;
+                }
+            }
+            f.close();
         }
+
+
 
         else if (userInput == "6") {
             mapTest->territories->clear();
